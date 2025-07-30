@@ -1,0 +1,161 @@
+.appointmentContainer{
+    background-color: white;
+    border: 1px solid var(--border-color);
+    border-radius: 15px;
+    padding:1.5rem 2rem;
+    display:flex;
+    gap:1rem;
+    flex-flow:column;
+    width:100%;
+    height:fit-content;
+    position:relative;
+    overflow:hidden;
+}
+.appointmentTitleContainer{
+    display:flex;
+    line-height:0;
+    align-items: center;
+    gap:1rem;
+    color: var(--primary-color);
+    font-weight:300;
+}
+.titleIcon{
+    font-size:1.5rem;
+}
+.appointmentTitle{
+    font-weight:600;
+}
+.mainContainer{
+    width:100%;
+    display:flex;
+    gap:2rem;
+}
+.columnOne{
+    width:40%;
+    border: 1px solid var(--border-color);
+    border-radius: 15px;
+    display:flex;
+    flex-flow:column;
+    justify-content: center;
+    align-items: center;
+    padding:1rem;
+    text-align:center;
+}
+.therapistLabel{
+    color: rgba(0,0,0,.50);
+    font-weight:600;
+}
+.therapistProfile{
+    max-width:250px;
+    max-height:250px;
+    border-radius:50%;
+    overflow:hidden;
+    margin: 1rem 0;
+}
+.therapistProfile img{
+    height:auto;
+    max-width:100%;
+}
+.therapistName{
+    color: var(--aw-gray);
+}
+.therapistId{
+    background-color: rgba(0,0,0,.21);
+    padding: .25rem .5rem;
+    border-radius:6px;
+    color: rgba(0,0,0,.60);
+    font-size:.8rem;
+}
+.contactInfo{
+    width:90%;
+    display:flex;
+    flex-flow:column;
+    gap:.5rem;
+    text-align:left;
+    margin-top:1.5rem;
+}
+.contactTitle{
+    font-size:1rem;
+    font-weight:500;
+    color:var(--primary-color);
+}
+.contactItem{
+    display:flex;
+    line-height:0;
+    align-items: center;
+    color:var(--aw-gray);
+    gap:1rem;
+}
+.columnTwo{
+    width:60%;
+    height:100%;
+    display:flex;
+    flex-flow:column;
+    justify-content: space-evenly;
+}
+.rowTop{
+    height:50%;
+    display:flex;
+    flex-flow:row;
+    justify-content: space-around;
+}
+.contentLeft{
+    width:100%;
+    display:flex;
+    flex-flow:column;
+    justify-content: space-between;
+    gap:1rem;
+    margin-bottom:1rem;
+}
+.appointmentDataTitle{
+    color: var(--text-gray);
+    font-size:.9rem;
+}
+.appointmentData{
+    font-weight: 500;
+    color: var(--aw-gray);
+    font-size:1.2rem;
+}
+.rowBottom{
+    height:50%;
+    width:100%;
+    display:flex;
+    flex-flow:column;
+    gap:1rem;
+}
+.pxComplaint{
+    height:100%;
+    border:1px solid var(--border-color);
+    border-radius:15px;
+    padding:1rem;
+    color: var(--text-gray);
+}
+.pxComplaintContainer{
+    min-height:150px;
+    height:fit-content;
+}
+.btnContainer{
+    display:flex;
+    width:100%;
+    gap:1rem;
+    /* padding: 0 1rem; */
+}
+.rescheduleBtn{
+    width:50%;
+    border: 1px solid var(--primary-color);
+    padding:1rem;
+    background-color: transparent;
+    font-weight:600;
+    font-size:1.1rem;
+    white-space:nowrap;
+    color: var(--primary-color);
+}
+.cancelBtn{
+    width:50%;
+    border: 1px solid var(--aw-red);
+    background-color: transparent;
+    white-space:nowrap;
+    font-weight:600;
+    font-size:1.1rem;
+    color: var(--aw-red);
+}

@@ -1,0 +1,81 @@
+.faq-section{
+    width:100%;
+    height: auto;
+    margin-bottom:4rem;
+}
+.faq-section-container-one{
+    width:100%;
+    margin:auto;
+    justify-content: center;
+    text-align: center;
+}
+.faq-section-title{
+    color:white;
+    background-color: #E51620;
+    width:fit-content;
+    padding:.5rem 1rem;
+    border-radius: .5rem;
+    margin: 2rem auto;
+    margin-bottom: 1rem;
+    font-weight: 400;
+    text-align: center;
+}
+
+/* faq cards */
+
+.faq-collasible-container{
+    margin-top:3rem;
+}
+.faq-collapsible-cards{
+    display:flex;
+    justify-content: space-between;
+    width:800px;
+    border: 1px solid black;
+    padding: 1rem 2rem;
+    border-radius:1em;
+    margin: 1em auto;
+}
+.collapsible-card{
+    display:flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width:50%;
+    border: 1px solid black;
+    padding: 1rem 2rem;
+    border-radius:1em;
+    position: relative;
+    margin: 1em auto;
+    cursor:pointer;
+}
+.selected-card{
+    color:white;
+    background-color: #1976D5;
+    border-style: none;
+}
+.faq-btn{
+    position: absolute;
+    right:1rem;
+    background:none;
+    transition: transform 0.4s ease, opacity 0.4s ease;
+}
+.faq-btn.active{
+    transform: rotate(180deg);
+    color:white;
+}
+.collapsible-card-text{
+    padding: 0 1rem;
+    text-align: justify;
+    width:90%;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: all 0.4s ease
+}
+.collapsible-card-text.hidden{
+    height:0;
+}
+.collapsible-card-text.active{
+    padding: 1rem;
+    max-height: fit-content; /* Or use JS to dynamically set this */
+    opacity: 1;
+}

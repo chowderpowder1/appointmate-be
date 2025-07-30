@@ -1,0 +1,98 @@
+.about-page-section-one{
+    display:flex;
+    width:80%;
+    height:fit-content;
+    flex-direction:row;
+    margin-top:7rem;
+    margin:0 auto 5rem auto;
+}
+.about-page-text-container{
+    width:50%;
+    height:fit-content;
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding:0;
+}
+.about-page-text-container>p{
+    width:80%;
+    height:fit-content;
+    text-align:justify;
+}
+.about-page-images-container{
+    position:relative;
+    width:50%;
+    height:fit-content;
+}
+.about-page-images-one{
+    position: absolute;
+    left:2em;
+    top:0;
+    min-height: 400px; 
+    width: 500px;       
+    background-size: contain;     
+    background-position: center; 
+    background-repeat: no-repeat;
+    background-image: url(../../assets/about-image-1.png)
+}
+.about-page-images-two{
+    position: absolute;
+    left:22em;
+    top:10em;
+    bottom:0;
+    height: 350px; 
+    width: 300px;       
+    background-size: contain;     
+    background-position: center; 
+    background-repeat: no-repeat;
+    background-image: url(../../assets/about-image-2.png)
+}
+.about-page-header{
+    font-size:4rem;
+    width:45rem;
+}
+.about-page-bottom{
+    width:10%;
+}
+/* Section two */
+.about-page-section-two{
+    display:flex;
+    flex-direction:row;
+    width:100%;
+    height:fit-content;
+    margin:0;
+}
+.about-commitment-image{
+    background-image: url('../../assets//about-commitment-section.png');
+    background-size:cover;
+    width:400px;
+    height:600px;
+    position:relative;
+    border-radius:55px;
+    box-shadow: 0 0px 20px rgba(36, 36, 36, 0.2);
+}
+.about-commitment-image-container{
+    height:700px;
+    width:50%;
+    display:flex;
+    justify-content: center;
+}
+.about-commitment-text-container{
+    width:50%;
+}
+
+.about-commitment-image-comment{
+    position:absolute;
+    height:fit-content;
+    width:400px;
+    background-color: #1863B0;
+    color:white;
+    border-radius:15px;
+    padding:1rem 2rem;
+    flex-shrink:0;
+    font-size: .9em;
+    bottom:50px;
+    right: -200px;
+
+}

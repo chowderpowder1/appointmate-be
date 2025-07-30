@@ -1,0 +1,7 @@
+.dateContainer{
+    border: 1px solid var(--border-color);
+    border-radius:15px;
+    min-height:fit-content;
+    background-color: white;
+    
+}

@@ -1,0 +1,87 @@
+.carouselSlide{
+    background-color: rgb(255, 255, 255, 1);
+    Border-radius:25px;
+    box-shadow: 0 6px 5px rgba(36, 36, 36, 0.3);
+    width:200px;
+    padding: 1rem 2rem;
+    height:250px;
+    min-height:fit-content;
+    margin:1rem;
+    position:relative;
+}
+.carouselReviewContainer{
+    width:100%;
+    height:auto;
+}
+
+/* Patient Card */
+.patientReview{
+    font-weight:600;
+    font-size:1.50rem;
+}
+.patientName{
+    font-weight:600;
+    font-size:1.10rem;
+}
+.patientBranch{
+    font-weight:300;
+    font-size:.85rem;
+}
+.patientProfile{
+    background-image: url(../../assets/niel.JPG);
+    background-size: cover;
+    background-position: center;
+    border-radius:50%;
+    width:50px;
+    height:50px;
+    margin-right:.75rem;
+    flex-shrink:0;
+    position:relative;
+}
+.patientIndicator{
+    position:absolute;
+    right:0;
+    bottom:0;
+    width:20px;
+    height:20px;
+    flex-shrink:0;
+    background-color: orange;
+    border-radius:50%;
+    border: 2px solid #FFFFFF;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    padding:0;
+}
+.patientIndicatorIcon{
+    color:White;
+    padding:0;
+    margin:0;
+    font-size:.7rem;
+}
+.patientInfo{
+    position:absolute;
+    display:flex;
+    flex-direction:row;
+    bottom:20px;
+    justify-content: space-between;
+    width:90%;
+    padding: 0
+}
+.patientRating{
+    display:inline-block;
+    margin-right:1rem;
+}
+.patientSubInfo{
+    display:inline-block;
+    padding:0;
+    margin:0;
+}
+.patientInfoSubContainer{
+    display:flex;
+    flex-direction: row;
+}
+.star{
+    color:gold;
+    margin:2px;
+}

@@ -1,0 +1,28 @@
+.circularStepperContainer{
+    width:100%;
+    border-radius:15px;
+    height:fit-content;
+    border:1px solid var(--border-color);
+    background-color: white;
+    display:flex;
+    gap:1rem;
+    padding:1rem 1.5rem;
+    align-items: center;
+    justify-content: space-around;
+}
+.circularStepper{
+    max-width:200px;
+    max-height:200px;
+}
+.circularStepperTextContainer{
+    width:fit-content;
+}
+.circularStepperTitle{
+    font-size:1.5rem;
+    color: var(--primary-color);
+    margin-top:1rem;
+}
+.circularStepperText{
+    font-size:.9rem;
+    width:70%;
+}

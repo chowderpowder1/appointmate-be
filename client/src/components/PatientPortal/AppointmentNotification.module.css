@@ -1,0 +1,29 @@
+.notificationContainer{
+    width:100%;
+    border: 1px solid var(--border-color);
+    height:fit-content;
+    border-radius:15px;
+    background-color: #D5EAFF;
+    color:var(--primary-color);
+    padding:2rem;
+    display:flex;
+    gap: 2rem;
+    align-items: flex-start;
+}
+.notificationTitle{
+    line-height:1;
+}
+.notificationSubContainer p{
+    width:100%;
+}
+.notificationSubContainer{
+    display:flex;
+    flex-flow:column;
+    gap:.5rem;
+}
+.notificationIconContainer{
+    
+}
+.notificationIcon{
+    font-size:3rem;
+}

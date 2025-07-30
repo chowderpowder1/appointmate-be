@@ -1,0 +1,295 @@
+.container{
+    background-color: var(--aw-white);
+    min-height:100vh;
+    min-width:100%;
+    padding:1rem;
+    display:flex;
+    gap: 1rem;
+}
+.stepperContainer{
+    border:1px solid var(--border-color);
+    background-color: white;
+    width:65%;
+    height:100%;
+    border-radius:15px;
+    padding: 1rem;
+}
+.tabs{
+    width:fit-content;
+    border-radius:10px;
+    flex-shrink:0;
+    background: rgba(0,0,0,.10);
+}
+.tabActive{
+    width:fit-content;
+    height:40px;
+    display:flex;
+    align-items: center;
+    background-color: white;
+    border-radius:10px;
+    border:1px solid var(--primary-color);
+    color:var(--primary-color);
+}
+.tabs ul{
+    
+    height:100%;
+    width:100%;
+    display:flex;
+    justify-content: center;
+    list-style: none;
+    /* gap:1rem; */
+    padding:0;
+}
+.tabs ul li{
+    width:200px;
+    display:flex;
+    justify-content: center;
+    padding:.5rem 1rem;
+    cursor:pointer;
+}
+.stepperSection{
+    margin-top:1rem;
+    border-radius:15px;
+    width:100%;
+    height:fit-content;
+    background-color: #EDF4FC;
+    overflow-y:scroll;
+    padding:2rem;
+    display:flex;
+    justify-content: space-between;
+}
+.stepperSubSection{
+    position:relative;
+    width:1200px;
+    height:800px;
+    display:flex;
+    flex-flow:column;
+    gap: 1rem;
+}
+.detailsContainer{
+    margin: 0 0 0 0;
+    width:fit-content;
+    height:125px;
+    border-radius:15px;
+    background-color: white;
+    /* box-shadow: 0 0px 10px rgba(36, 36, 36, 0.1); */
+    border:1px solid rgba(0,0,0,.10);
+    display:flex;
+    gap: 1rem;
+    padding: 1rem 1rem;
+    align-items: center;
+    flex: 1;
+    flex-flow:row;
+    justify-content: center;
+    text-align: center;
+    position:relative;
+    overflow:hidden;
+}
+.detailsContainer::before{
+    content:'';
+    height:100%;
+    width:15px;
+    background-color: #1976D5;
+    position:absolute;
+    left:0;
+}
+.detailsContainer span{
+    display:flex;
+    flex-flow:column;
+    justify-content: center;
+    height:90%;
+    /* border-right: 1px solid rgba(128, 128, 128, .5); */
+    margin:auto;
+    flex:1;
+    flex-wrap: wrap;
+}
+.verticalDivider{
+    width:10px;
+    height:100%;
+    border-right: 1px solid rgba(128, 128, 128, .5);
+}
+.progressBar{
+    position:absolute;
+    background-color:rgba(0,0,0,.10);
+    inset: 0rem 0 0 4.5rem;
+    height:60%;
+    margin:auto 0;
+    width:5px;
+    display:flex;
+    justify-content: space-between;
+    flex-flow:column;
+    z-index:1;
+}
+.progressBarTest{
+    position:absolute;
+    background-color:rgba(0,0,0,.10);
+    inset: 4rem 0 0 1.5rem;
+    height:100%;
+    width:5px;
+    display:flex;
+    justify-content: flex-start;
+    flex-flow:column;
+    z-index:1;
+}
+.progressBarTestActive{
+    
+    background-color:rgba(255, 0, 0);
+
+}
+.progressBarTwo{
+    /* position:absolute; */
+    background-color:rgba(104, 56, 235);
+    inset: 0rem 0 0 4.5rem;
+    height:50%;
+    /* margin:auto 0; */
+    width:5px;
+    display:flex;
+    justify-content: space-between;
+    flex-flow:column;
+    z-index:2;
+}
+.progressCircle{
+    background-color:white;
+    border:1px solid rgba(0,0,0,.10);
+    width:50px;
+    height:50px;
+    border-radius:50%;
+    flex-shrink:0;
+    z-index:3;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+}
+.row{
+    position:relative;
+    display:flex;
+    flex-flow:row;
+    align-items: center;
+    justify-content: space-around;
+    gap:1rem;
+    overflow:visible;
+}
+.rowTitle{
+    font-size:1.2rem;
+    font-weight:600;
+    color: var(--aw-gray);
+}
+.rowSubText{
+   font-size:.8rem;
+   color: var(--aw-gray);
+}
+.rowStatusIndicator{
+    
+}
+.appointmentNotesContainer{
+    display:flex;
+    flex-flow:row;
+    align-items: center;
+    width:100px;
+    justify-content: center;
+    gap:.5rem;
+}
+.appointmentNotesContainer>*{
+    line-height:0;
+    color:#1976D5;
+}
+.columnTwo{
+    display:flex;
+    flex-flow:column;
+    gap: 1rem;
+    width:25%;
+}
+.scheduledSessionContainer{
+    width:100%;
+    border-radius:15px;
+    height:300px;
+    border:1px solid var(--border-color);
+    background-color: white;
+    padding: 1rem;   
+    position:relative;
+    overflow:hidden;
+
+}
+.sessionData{
+    display:flex;
+    flex-flow:column;
+    gap:1rem;
+    padding: 1rem;   
+    justify-content: center;
+    align-items: flex-start;
+}
+.sessionDataTitle{
+    color:var(--primary-color);
+    font-weight:500;
+}
+.sessionBackground{
+    position:absolute;
+    width:250px;
+    inset: auto 0 -10px auto;
+}
+.sessionBackground img{
+    max-width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+.viewBtn{
+    position:absolute;
+    bottom:20px;
+    right: 20px;
+    cursor:pointer;
+    background-color: #1976D5;
+    color:white;
+    padding:.5rem 1rem;
+    border-radius:8px;
+}
+.rescheduleStatusContainer{
+    width:400px;
+    border-radius:15px;
+    height:160px;
+    border:1px solid var(--border-color);
+    background-color: #F8F8D8;
+    display:flex;
+    padding: 1rem 1rem 3rem 1rem;
+    position:relative;
+    gap:1rem;
+}
+.statusBtnContainer{
+    position:absolute;
+    bottom: 1rem;
+    right: 1rem; 
+    display:flex;
+    gap: 1rem;
+}
+.statusIcon{
+    font-size:1.5rem;
+    margin-top:.5rem;
+}
+.statusTextContainer{
+    display:flex;
+    flex-flow:column;
+    gap: .5rem;
+}
+.statusTitle{
+    line-height:1;
+    font-size:1.2rem;
+    margin:0;
+    padding:0;
+}
+.statusText{
+    font-size:.8rem;
+}
+.statusCancelBtn{
+    background-color: red;
+    color:white;
+    padding: .2rem .5rem;
+    border-radius:8px;
+    cursor:pointer;
+}
+.statusViewBtn{
+    background-color:transparent;
+    color:black;
+    border: 1px solid black;
+    padding: .2rem .5rem;
+    border-radius:8px;
+    cursor:pointer;
+}

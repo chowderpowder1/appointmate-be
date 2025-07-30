@@ -1,0 +1,164 @@
+.appointmentContainer{
+    height:fit-content;
+}
+.appointmentSubContainer{
+    margin:0 5rem;
+    height:auto;
+    display:flex;
+    justify-content: center;
+}
+.formsContainer{
+    width:40%;
+    padding: 3rem 3rem;
+    margin: 0 3rem;
+    border-radius:10px;
+    box-shadow: 0 3px 20px rgba(36, 36, 36, 0.2);
+}
+.titleText{
+    color:#4791DD;
+    font-size:3rem;
+}
+.subText{
+    text-align: justify;
+}
+.infoContainer{
+    width:30%;
+    height:auto;
+    display:flex;
+    flex-direction: column;
+    gap:3rem;
+}
+.branchIconRows p{
+    color: gray;
+    white-space: nowrap;
+}
+.branchIconContainer{
+    display:flex;
+    flex-direction: column;
+    gap:.5rem;
+}
+.branchContainer{
+    display:flex;
+    flex-direction: column;
+    width:100%;
+}
+.branchSlide{
+    max-height:0px;
+    margin:0;
+    width:100%;
+    height:fit-content;
+    opacity:0;
+    transition: all .4s ease-in-out;
+}
+.branchSlideActive{
+    height:300px;
+    opacity:1;
+}
+.branchInfoPanel{
+    width: 100%;
+    height:fit-content;
+    display:flex;
+    gap:1rem;
+    margin: 1rem 0;
+}
+.branchImage{
+    display:inline-block;
+    background-color: #4791DD;
+    border-radius:15px;
+    overflow:hidden;
+    box-shadow: 0 3px 20px rgba(36, 36, 36, 0.3);
+    min-width: 50%;
+    max-width:50%;
+    height:200px;
+}
+.branchImage img{
+    height: 100%;
+    display: block;
+    width: 100%;
+    object-fit: cover;
+    cursor:pointer;
+}
+.branchTitle{
+    font-size:3rem;
+    color:#4791DD;
+    white-space: nowrap;
+}
+.branchTabs{
+    display:inline-flex;
+    gap: 2rem;
+    position:relative;
+    align-items: center;
+    margin-bottom: 3rem;
+}
+.branchItem{
+    cursor:pointer;
+    transition: all 0.3s ease-in-out;
+}
+.activeTab{
+    background-color: #4791DD;    
+    padding: 0rem 1rem;
+    border-radius:15px;
+    color:white;
+}
+.branchTabs .divider{
+    position:absolute;
+    bottom:-20px;
+}
+.branchIconRows{
+    width:100%;
+    display:flex;
+    gap:1rem;
+    align-items: center;
+    color:gray;
+}
+.branchIconContainer p{
+    white-space:nowrap;
+}
+.branchHours{
+    display:flex;
+    flex-direction: column;
+    gap:1rem;
+    height:fit-content;
+    width:100%;
+    color:gray;
+}
+.branchHoursRow{
+    display:flex;
+    justify-content: space-between;
+    gap:1rem;
+}
+.footerContainer{
+    color:white;
+    background-color: #4791DD;
+    width:90%;
+    margin:3rem auto;
+    display:flex;
+    flex-direction:row;
+    padding: 2rem rem;
+    border-radius:15px;
+    justify-content: space-evenly;
+    align-items: center;
+    min-height:200px;
+}
+.footerTitle{
+    font-size:4rem;
+}
+.footerSocials{
+    display:flex;
+    flex-direction: column;
+    gap:1rem;
+    ;
+}
+.footerContact{
+    display:flex;
+    align-items: center;
+    flex-direction:row;
+}
+.footerIcon{
+    font-size:2rem;
+    margin-right:1rem;
+}
+.divider{
+    width:100%;
+    border-top: 1px solid gray;
+}

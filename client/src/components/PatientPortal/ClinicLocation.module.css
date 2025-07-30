@@ -1,0 +1,55 @@
+.locationContainer{
+    background-color: white;
+    border: 1px solid var(--border-color);
+    flex-shrink:0;
+    border-radius:15px;
+    padding:2rem 2rem;
+    gap:1rem;
+    display:flex;
+    flex-flow:column;
+}
+.locationTitleContainer{
+    display:flex;
+    line-height:0;
+    align-items: center;
+    gap:.5rem;
+}
+.locationTitle{
+    color:var(--primary-contrast);
+    font-size:1.5rem;
+    font-weight:600;
+}
+.locationIcon{
+    color:var(--primary-contrast);
+    font-size:1.5rem;
+}
+.locationDataContainer{
+    display:flex;
+    flex-flow:column;
+    gap:1rem;
+}
+.locationDataItem{
+    position:relative;
+}
+.locationDataItemTitle{
+    color: var(--text-gray);
+}
+.locationDataItemText{
+    font-size:1.1rem;
+    font-weight:600;
+    color: var(--aw-gray);
+    width:50%;
+}
+.viewBtn{
+    position: absolute;
+    padding:.5rem 3rem;
+    background-color: transparent;
+    border:1px solid var(--primary-color);
+    color: var(--primary-color);
+    border-radius:10px;
+    font-weight:600;
+    flex-shrink:0;
+    right:0;
+    top:0;
+    min-width:200px;
+}

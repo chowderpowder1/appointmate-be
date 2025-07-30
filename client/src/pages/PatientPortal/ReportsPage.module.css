@@ -1,0 +1,117 @@
+.reportContainer{
+    background-color: var(--aw-white);
+    width:100%;
+    height:100vh;
+    gap:2rem;
+    padding:2rem;
+    display:flex;
+    flex-flow:row;
+}
+.columnOne{
+    width:35%;
+    height:100%;
+    display:flex;
+    flex-flow:column;
+    gap:2rem;
+}
+.reportDownloadableContainer{
+    width:100%;
+    background-color: white;
+    border:1px solid var(--border-color);
+    border-radius:15px;
+    padding:2rem;
+    height:100%;
+    color: var(--text-gray);
+}
+.reportTitle{
+    font-size:1.5rem;
+    color: var(--primary-contrast);
+    font-weight:700;
+}
+.reportTable{
+    margin-top:1rem;
+    display:grid;
+    gap:2rem;
+    width:100%;
+}
+.reportRow{
+    display:grid;
+    width:100%;
+    grid-template-columns: 2fr 1fr 1fr;
+    padding-bottom:2rem;
+    border-bottom:1px solid var(--border-color);
+}
+.reportRow> :last-child{
+    text-align: center;
+}
+.reportFileNameContainer{
+    
+}
+.reportFileName{
+    display:flex;
+    line-height:0;
+    align-items: center;
+    gap:.5rem;
+}
+.columnTwo{
+    background-color: white;
+    width:65%;
+    height:100%;
+    border:1px solid var(--border-color);
+    border-radius:15px;
+    padding:2rem;
+    display:flex;
+    flex-flow:column;
+    gap:2rem;
+}
+.sessionTitleContainer{
+    display:flex;
+    justify-content: space-between;
+}
+.sessionTitle{
+    font-size:1.5rem;
+    color:var(--primary-color);
+}
+.sessionStatusIndicator{
+    background-color: #94CFAE;
+    border: 1px solid #31453A;
+    color:#31453A;
+    padding:.25rem 2rem;
+    border-radius:25px;
+}
+.sessionDataContainer{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+}
+.sessionDataTitle{
+    color:var(--text-gray);
+}
+.sessionDataContainer{
+    height:100px;
+}
+.btnContainer{
+    display:flex;
+    width:50%;
+    margin: auto;
+    gap:1rem;
+    
+}
+.linkBtn{
+    font-size:1.8rem;
+    border:1px solid var(--text-gray);
+    padding:0;
+    height:fit-content;
+    margin:0;
+    padding:.3rem;
+    border-radius:5px;
+    line-height:0;
+    cursor:pointer;
+}
+.downloadBtn{
+    border:1px solid var(--text-gray);
+    font-size:2rem;
+    padding:.2rem;
+    border-radius:5px;
+    line-height:0;
+    cursor:pointer;
+}

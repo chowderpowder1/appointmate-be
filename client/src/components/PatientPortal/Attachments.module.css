@@ -1,0 +1,78 @@
+.attachmentContainer{
+    width:100%;
+    background-color: white;
+    border: 1px solid var(--border-color);
+    border-radius:15px;
+    padding:2rem;
+    gap:1rem;
+    display: flex;
+    flex-flow: column;
+}
+.attachmentTitleContainer{
+    display:flex;
+    align-items: center;
+    position: relative;
+    gap:.5rem;
+}
+.attachmentTitle{
+    color:var(--primary-contrast);
+    font-weight:500;
+    font-size:1.5rem;
+}
+.attachmentIcon{
+    color: var(--primary-contrast);
+    font-size:1.2rem;
+}
+.uploadBtn{
+    display: inline-block;
+    padding: 0.5em ;
+    background-color: transparent;
+    cursor:pointer;
+}
+.uploadedAttachmentsContainer{
+    width:100%;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 2rem;
+    border:1px solid var(--primary-contrast);
+    border-radius: 15px;
+    cursor: pointer;
+    position: relative;
+    overflow:hidden;
+    padding: 1rem 2rem;
+}
+.header, .row{
+    display:contents;
+}
+span{
+    z-index:1;
+}
+.header{
+    color:White;
+}
+.uploadedAttachmentsContainer::before{
+    content:'';
+    width:100%;
+    height:50px;
+    background-color: var(--primary-contrast);
+    position: absolute;
+    z-index:0;
+}
+.uploadIcon{
+    font-size:1rem;
+}
+.uploadBtnContainer{
+    position: absolute;
+    right:0;
+    top:0;
+    display:flex;
+    line-height:0;
+    white-space: nowrap;
+    align-items: center;
+    border: 1px solid var(--primary-contrast);
+    border-radius: 10px;
+    color: var(--primary-contrast);
+    width:fit-content;
+    height:fit-content;
+    padding: .5rem 1rem;
+}

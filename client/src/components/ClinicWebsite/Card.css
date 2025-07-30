@@ -1,0 +1,45 @@
+.services-container{
+    display:grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 20px;
+    width:90%;
+    justify-content: center;
+    align-items: center;
+    margin:1rem 0;
+    margin-left:4rem;
+}
+.services{
+    position: relative;
+    bottom:5rem;
+    width: fit-content;
+    height: 300px;
+    display:flex;
+    flex-direction: column;
+    border-radius:20px;
+    margin: 0 1rem;
+    padding: 4rem 2rem;
+    background-color: rgba(255, 255, 255, 0.151);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease-in-out;
+    
+}
+.services:hover{
+    transform: scale(1.05);
+    transform: translateY(-10px);
+    background-color: rgba(255, 255, 255, 0.4);
+}
+.services h1{
+    margin-bottom:1rem;
+    font-size:1.5rem;
+
+}
+.bi{
+    font-size:4rem;
+    color: #1863B0;
+    margin-bottom:1rem;
+
+}
+.services p{
+    color: rgb(150, 150, 150);
+}

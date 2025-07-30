@@ -1,0 +1,53 @@
+.recordContainer{
+    padding:2rem;
+    background-color: var(--patient-bg);
+    width:100vw;
+    min-height:100vh;
+    display:flex;
+    gap:2rem;
+}
+.columnOne{
+    width:25%;
+}
+.columnTwo{
+    max-width:50%;
+    height:fit-content;
+    position:relative;
+}
+.nextBtn{
+    position: absolute;
+    bottom:30px;
+    right:30px;
+    background-color: var(--primary-contrast);
+    color:white;
+    padding:.5rem 3rem;
+    border-radius:8px;
+}
+.prevBtn{
+    position: absolute;
+    bottom:30px;
+    left:30px;
+    background-color: var(--primary-contrast);
+    color:white;
+    padding:.5rem 3rem;
+    border-radius:8px;
+}
+.slideIndicator{
+    display:flex;
+    gap: .5rem;
+    position: absolute;
+    left:50%;
+    bottom:30px;
+}
+.circle{
+    background-color: var(--border-color);
+    width:15px;
+    height:15px;
+    border-radius: 50%;
+}
+.circle.active{
+    background-color: var(--primary-contrast);
+    width:15px;
+    height:15px;
+    border-radius: 50%;
+}

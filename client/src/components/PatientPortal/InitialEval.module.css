@@ -1,0 +1,38 @@
+.evalContainer{
+    background-color: white;
+    border: 1px solid var(--border-color);
+    border-radius: 15px;
+    padding: 1rem 2rem;
+    min-height:600px;
+    min-width:100%;
+}
+.evalTitle{
+    color: var(--primary-color);
+}
+.evalDataContainer{
+    display:flex;
+    gap:1rem;
+    justify-content: space-around;
+    padding: 1rem 1rem;
+    flex-flow:column;
+}
+.evalDataRow{
+    display:flex;
+    width:100%;
+    gap:2rem;
+}   
+.evalContentLeft{
+    width:40%;
+    border-right:1px solid var(--border-color);
+}
+.evalContentRight{
+    width:40%;
+}
+.evalDataTitle{
+    color: var(--text-gray);
+    font-size:.9rem;
+}
+.evalData{
+    font-weight: 500;
+    font-size:1rem;
+}

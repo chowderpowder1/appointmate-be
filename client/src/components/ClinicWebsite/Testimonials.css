@@ -1,0 +1,120 @@
+.custom-prev,
+.custom-next {
+ color: #1863B0; /* change arrow color */
+  width: 40px;
+  padding:.8rem;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 3px 2px rgba(36, 36, 36, 0.3);
+  border-radius: 50%;
+  flex-shrink:0;
+  cursor:pointer;
+}
+.testimonialIcon{
+    font-size:2rem;
+}
+.testimonial-section{
+    height: fit-content;
+    padding:10rem;
+    display:flex;
+    justify-content: space-evenly;
+    align-items: center;
+    width:100%;
+    background-color:#F6F8FA ;
+}
+.testimonial-section-title{
+    color:white;
+    background-color: #E51620;
+    width:fit-content;
+    padding:.5rem 1rem;
+    border-radius: .5rem;
+    margin-bottom: 1rem;
+    font-weight: 400;
+}
+.testimonial-header-container{
+    width: 40%;
+    margin:0 2rem;
+}
+.testimonial-section-header{
+    font-size:3em;
+}
+
+/* testimonial cards */
+.testimonial-carousel-container{
+    width:40%;
+    height:fit-content;
+    display:flex;
+    align-items: center;
+}
+.testimonial-profile{
+    display:flex;
+    flex-direction:column ;
+}
+.testimonial-card{
+    display:flex;
+    flex-direction:column ;
+    width:100%;
+    height:auto;
+    background-color: white;
+    border-radius: 1em;
+    padding: 2rem 3rem;
+    margin: 0 2rem;
+    box-shadow: 0 6px 10px rgba(36, 36, 36, 0.3);
+    align-content: space-between;
+    transition: transform 4s ease-in-out;
+}
+.testimony-user-container{
+    display:flex;
+    flex-direction: row;
+    margin-top:2em;
+    justify-content: space-between;
+}
+.testimony-user-details{
+    display:flex;
+}
+#testimony-profile-photo{
+    width:45px;
+    height:45px;
+    background-color: #97ABC0;
+    border-radius:2em;
+    margin-right:1em;
+}
+#testimony-comment{
+    font-size:1.25rem;
+    font-weight: 700 ;
+}
+#testimony-name{
+    text-wrap: nowrap;
+    display: block;
+}
+#testimony-branch{
+    text-wrap: nowrap;
+    display: block;
+}
+.carousel-btn{
+    height:fit-content;
+    border-radius: 2em;
+    background-color: white;
+    box-shadow: 0 6px 5px rgba(36, 36, 36, 0.5);
+    color:#1863B0;
+}
+.testimony-rating{
+    display: flex;
+    
+}
+.bi-star-fill{
+    color:rgb(219, 162, 4);
+    margin:0;
+    padding: .10em;
+}
+
+.carousel-container{
+    align-items: center;
+    display:flex;
+    width:40%;
+    height:fit-content;
+    justify-content: space-around;
+}

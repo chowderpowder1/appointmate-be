@@ -1,0 +1,71 @@
+.rescheduleContainer{
+    width:100%;
+    border-radius:15px;
+    height:fit-content;
+    border:1px solid var(--border-color);
+    background-color: #F8F8D8;
+    display:flex;
+    padding: 2rem 2rem 4rem 2rem;
+    position:relative;
+    gap:1rem;
+    line-height:1;
+    align-items: flex-start;
+}
+.statusBtnContainer{
+    position:absolute;
+    bottom: 1rem;
+    right: 1rem; 
+    display:flex;
+    gap: 1rem;
+}
+.statusIcon{
+    font-size:1.5rem;
+}
+.statusTextContainer{
+    display:flex;
+    flex-flow:column;
+    gap: .5rem;
+    width:100%;
+}
+.statusTitle{
+    line-height:1;
+    font-size:1.2rem;
+    margin:0;
+    padding:0;
+}
+.statusText{
+    font-size:.8rem;
+    width:90%;
+    font-size:clamp(.3rem, .8vw, 5rem);
+}
+.statusReminder{
+    display:flex;
+    flex-flow:column;
+    gap:.5rem;
+    margin-top:1rem;
+}
+.statusReminderItem{
+    display:flex;
+    flex-flow:row;
+    line-height:1;
+    align-items: flex-start;
+    gap:.5rem;
+    font-size:.8rem;
+    margin-left:1rem;
+    font-style:italic;
+}
+.statusCancelBtn{
+    background-color: red;
+    color:white;
+    padding: .2rem .5rem;
+    border-radius:8px;
+    cursor:pointer;
+}
+.statusViewBtn{
+    background-color:transparent;
+    color:black;
+    border: 1px solid black;
+    padding: .2rem .5rem;
+    border-radius:8px;
+    cursor:pointer;
+}

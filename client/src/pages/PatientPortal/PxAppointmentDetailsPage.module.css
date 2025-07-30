@@ -1,0 +1,36 @@
+.appointmentContainer{
+    display:flex;
+    background-color: var(--patient-bg);
+    width:100vw;
+    padding:1.5rem;
+    gap:1rem;
+    padding-top:5rem;
+    position:relative;
+}
+.backBtnContainer{
+    display:flex;
+    gap:1rem;
+    flex-flow:row;
+    position:absolute;
+    top:20px;
+    align-items: center;
+    font-size:1.5rem;
+}
+.columnOne{
+    width:70%;
+    display:flex;
+    flex-flow:column;
+    gap:1rem;
+}
+.columnTwo{
+    display:flex;
+    flex-flow:column;
+    gap:1rem;
+    width:25%;
+}
+.notificationContainer{
+
+}
+.checkListContainer{
+    width:400px;
+}

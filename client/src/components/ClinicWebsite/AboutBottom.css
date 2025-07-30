@@ -1,0 +1,37 @@
+.about-page-bottom{
+    text-align: center;
+    display: flex;
+    align-items:center;
+    margin:2rem 0;
+    padding:0;
+    width:100%;
+}
+.about-page-home{
+    justify-content: center;
+    gap:9rem;
+    margin:auto;
+}
+.about-page-bottom-container{
+    width:200px;
+    margin: auto 0;
+    padding: 0;
+    display:flex;
+    flex-direction:column;
+    align-items: center;
+}
+.about-page-bottom >*{
+    margin-right:1.5rem;
+}
+.about-page-bottom-title{
+    font-size:3em;
+    color:#1863B0;
+    text-shadow: 0 6px 10px rgb(24, 99, 176, 0.7);
+}
+.about-page-bottom-text{
+    width:175px;
+}
+.vl{
+    border-left: 1px solid rgb(179, 179, 179);
+    height: 50px;
+}
+

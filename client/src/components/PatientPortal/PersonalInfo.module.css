@@ -1,0 +1,19 @@
+.personalContainer{
+    border: 1px solid var(--border-color);
+    border-radius:15px;
+    background-color: white;
+    padding:1rem;
+    min-height:100vh;
+    display:flex;
+    flex-flow:column;
+    gap:1rem;
+}
+.personalTitle{
+    color:var(--primary-contrast);
+}
+.dataTitle{
+    color:var(--text-gray);
+}
+.data{
+    font-weight:600;
+}

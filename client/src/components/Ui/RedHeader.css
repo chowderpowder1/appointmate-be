@@ -1,0 +1,9 @@
+.red-header-container{
+    color:White;
+    background-color: #E51620;
+    width:fit-content;
+    height:fit-content;
+    white-space: nowrap;
+    border-radius:5px;
+    padding: .5rem 1rem;
+}
