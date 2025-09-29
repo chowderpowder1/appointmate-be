@@ -36,7 +36,7 @@
 .about-carousel-slides{
     padding: 1rem 5rem;
     position:absolute;
-    top:20rem;
+    top:15rem;
     margin:auto;
     width:100%;
     padding:0;
@@ -47,25 +47,26 @@
     padding:2rem;
 }
 .swiper-slide{
-    width:100px;
-    height:fit-content;
+    width:120px;
+    height:480px;
+    min-height:fit-content;
     overflow: hidden;    
     background-color: white;
-    border-radius: 15px;
+    border-radius: 25px;
     box-shadow: 0 0px 20px rgba(36, 36, 36, 0.2);
 }
 .about-carousel-image-container{
     width:100%;
-    height:fit-content;
+    height:200px;
+    overflow:hidden;
 }
 .about-carousel-image{
-    max-width:100%;
-    min-height:150px;
+    width:100%;
+    height:100%;
     border-radius:0 0 20px 20px;
     /* outline: red solid 1px; */
-    background-repeat: no-repeat;
-    background-size: center;
-    background-position: center top;
+    object-fit: cover;
+    object-position:  40% 100%;
 }
 .ca{
     display:flex;

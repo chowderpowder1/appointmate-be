@@ -1,0 +1,214 @@
+.container{
+    padding:1rem 1rem 0 1rem;
+    height:fit-content;    
+    border-radius:10px;
+}
+.subContainer{
+    display:flex;
+    gap:3rem;
+    margin-top:1rem;
+    position: relative;
+    padding-bottom:3rem;
+}
+.assignedPtHeader{
+    display:flex;
+    white-space: nowrap;
+    line-height: 0;
+    align-items: center;
+    font-size:1rem;
+    font-weight:500;
+    color: var(--primary-contrast);
+}
+.pxPhotoContainer{
+    width:50px;
+    height:50px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+.pxPhoto{
+    height:auto;
+    width:100%;
+}
+.pxHeaderContainer{
+    display:flex;
+    gap:2rem;
+}
+.pxDataContainer{
+}
+.rowOne{
+    display:inline-block;
+    width:fit-content;
+    height:100%;
+    white-space: nowrap;
+}
+.rowTwo{
+    display:inline-block;
+    height:fit-content;
+    width:fit-content;
+    /* padding-bottom:3rem; */
+}
+.pxIdContainer{
+    display:flex;
+    gap:5rem;
+    margin-top:1rem;
+}
+.complaintData{
+    border:1px solid var(--border-color);
+    border-radius: 10px;
+    padding:1rem;
+}
+.viewPxBtn{
+    position: absolute;
+    right:0;
+    bottom:0;
+    background-color: var(--primary-contrast);
+    color:white;
+    border-radius: 10px;
+    padding: .2rem 1rem;
+}
+.apptDetailsContainer{
+    display:flex;
+    gap:3rem;
+    margin-top:1rem;
+    position: relative;
+    padding-bottom:3rem;
+    border-top:1px solid var(--border-color);
+    padding-top:1rem;
+    height:fit-content;
+    flex-direction: column;
+}
+.apptStatusContainer{
+    padding:1rem 1rem 3rem 1rem;
+    background-color: #FFFDDC;
+    width:100%;
+    height:fit-content;
+    border:1px solid var(--border-color);
+    border-radius:10px;
+    display:flex;
+    gap:1rem;
+}
+.apptStatusSubcontainer{
+    position:relative;
+    color:var(--aw-gray);
+}
+.apptStatusIcon{
+    font-size:3rem;
+    color:var(--aw-gray);
+}
+.btnContainer{
+    display:flex;
+    position:absolute;
+    bottom:-35px;
+    gap:1rem;
+}
+.actionBtn{
+    background-color: transparent;
+    border:1px solid var(--border-color);
+    border-radius:8px;
+    padding:.2rem .6rem;
+}
+.approveBtn{
+    color:white;
+    background-color: #079042;
+    border:none;
+}
+.apptDataContainer{
+    margin-top:1rem;
+    display:flex;
+    justify-content: space-between;
+}
+.columnTwo{
+    display:flex;
+    gap:1rem;
+}
+.colTwoSubContainer{
+    display:flex;
+    flex-direction: column;
+    gap:2rem;
+    position:relative;
+    width:100%;
+}
+.timeSlotContainer{
+    display:grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr ));
+    grid-gap:.5rem;
+    width:100%;
+
+}
+.timeSlotContainer span{
+    border: 1px solid var(--primary-contrast);
+    color: var(--primary-contrast);
+    font-weight:500;
+    padding: .5rem 1.5rem;
+    border-radius: 10px;
+    cursor:pointer;
+    text-align: center;
+    white-space: nowrap;
+}
+.addApptBtn{
+    position:absolute;
+    background-color: #079042;
+    color:white;
+    width: fit-content;
+    border-radius: 5px;
+    font-weight:300;
+    padding:.5rem 1rem;
+    bottom:-10px;
+    right:0;
+}
+.headerText{
+    color: var(--primary-color);
+    font-weight:500;
+    font-size:1rem;
+    margin-bottom:.5rem;
+}
+.apptIndicator{    
+    display:flex;
+    gap:1rem;
+    margin-top:1rem;
+    width:fit-content;
+    flex-wrap:wrap;
+    position:relative;
+}
+.apptIndicator span{   
+    display:flex;
+    gap:.5rem;
+}
+.apptIndicator p{   
+    font-size:.9rem;
+}
+.bookedIndicator{
+    width:20px;
+    height:20px;
+    border-radius: 7px;
+    flex-grow: 0 ;
+    background-color: var(--primary-contrast);
+}
+.availableIndicator{
+    width:20px;
+    height:20px;
+    border-radius: 7px;
+    flex-grow: 0 ;
+    background-color: transparent;
+    border: 1px solid var(--primary-contrast);
+}
+.unavailableIndicator{
+    width:20px;
+    height:20px;
+    border-radius: 7px;
+    flex-grow: 0 ;
+    background-color: var(--border-color);
+}
+.requestedIndicator{
+    width:20px;
+    height:20px;
+    border-radius: 7px;
+    flex-grow: 0 ;
+    border: 1px solid var(--border-color);
+    background-color: var(--aw-cream);
+}
+.editBtn{
+    position:absolute;
+    bottom:-50px;
+    right:0;
+}

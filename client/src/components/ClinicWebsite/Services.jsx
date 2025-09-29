@@ -14,7 +14,7 @@ const Services = () => {
             <div className="services-background">
                 <div className="services-header-container">
                     <h4 className="services-section-title">Our Services</h4>
-                    <h1 className="services-section-header">Physical Therapy and <br/>Rehabilitation Clinic</h1>
+                    <h1 className="services-section-header">Physical Therapy and Rehabilitation Clinic</h1>
                     <p>We have the latest, safe, and advanced US based Physical Therapy Treatment combined with:</p>
                 </div>
                 

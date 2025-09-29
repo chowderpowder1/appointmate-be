@@ -1,0 +1,56 @@
+.container{
+    width:fit-content;
+    display:flex;
+    align-items: center;
+    margin: 1rem auto;
+    flex-flow:column;
+    gap:2rem;
+}
+.stepperContainer{
+    width:fit-content;
+    display:flex;
+    align-items: center;
+    margin: 1rem auto;
+
+}
+.circle{
+    width:35px;
+    height:35px;
+    background-color: transparent;
+    border: 3px solid var(--border-color);
+    border-radius:50%;
+    flex-shrink:0;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+}
+.checkIcon{
+    color:white;
+}
+.line{
+    width:150px;
+    height:2px;
+    background-color: var(--border-color);
+}
+.doneIndicator{
+    background-color: var(--primary-contrast);
+}
+.activeStep{
+    border: 3px solid var(--primary-contrast);
+}
+.activeLine{
+    background-color: var(--primary-contrast);
+}
+.stepText{
+    position:absolute;
+    font-size:.7rem;
+    white-space:nowrap;
+    left:-40px;
+    bottom:-25px;
+}
+.activeText{
+    color: var(--primary-contrast);
+}
+.textContainer{
+    position: relative;
+}

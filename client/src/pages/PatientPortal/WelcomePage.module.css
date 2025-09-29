@@ -22,12 +22,12 @@
 .homeBtn{
     font-size:1rem;
     position:absolute;
-    border-radius: 50%;
-    border-radius:20px;
-    padding: .5rem 1rem;
+    border-radius: 10px;
+    padding: .5rem .5rem;
     left:1rem;
     top:1rem;
-    background-color: rgb(230, 230, 230);
+    color:white;
+    background-color: var(--primary-contrast);
 }
 .backIcon{
     margin:.2rem;
@@ -58,6 +58,7 @@
     align-items: center;
     flex-direction: column;
     text-align:center;
+    gap:1rem;
 }
 .containerThree{
     height:100vh;
@@ -88,6 +89,9 @@
 }
 .loginFormsContainer{
     width:100%;
+    display:flex;
+    flex-flow:column;
+    gap:2rem;
 }
 .loginForms{
     width:100%;
@@ -170,13 +174,15 @@
 .loginTitle{
     color:#1976D5;
     width:60%;
-    font-weight:500;
-    font-size:2.4rem;
+    font-weight:600;
+    font-size:2.6rem;
     margin:0;
 }
 .loginSubtitle{
     width:70%;
+    font-size:.9rem;
     text-align:center;
+    color:var(--off-black);
 }
 .loginBtn{
     width:50%;
@@ -210,6 +216,64 @@
 .loginQol{
     display:flex;
     justify-content: space-between;
+}
+#rememberMeLabel{
+    padding-left:.5rem;
+}
+.header{
+    color:var(--primary-contrast);
+}
+.loginTextContainer{
+    display:flex;
+    flex-flow:column;
+    align-items: center;
+}
+.headerSubText{
+    width:80%;
+}
+.alternativeLoginTxtContainer{
+    color:var(--aw-gray);
+    width: 100%;
+    white-space: nowrap;
+    align-items: center;
+    display:flex;
+    gap:1rem; 
+}
+.line{
+    width: 100%;
+    height:1px;
+    background-color: var(--aw-gray);
+}
+.alternativeLoginContainer{
+    display:flex;
+    gap:1rem;
+}
+.alternativeLoginBtnContainer{
+    object-fit: contain;
+}
+.googleContainer{
+    display:flex;
+    gap: 1rem;
+    border:1px solid var(--border-color);
+    width:fit-content;
+    padding: .5rem 1rem;
+    border-radius:35px;
+    flex-shrink:0;
+    white-space:nowrap;
+    align-items: center;
+    color:var(--text-gray);
+    cursor:pointer;
+}
+.googleSignIn{
+    
+    width:40px;
+    height:100%;
+}
+.noAccRegLinkText{
+    white-space:nowrap;
+    cursor:pointer;
+    text-decoration: underline;
+    color:var(--primary-contrast);
 }
 /* Swiper */
 /* :global(.swiper-pagination-bullet) {

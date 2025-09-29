@@ -1,0 +1,63 @@
+.container{
+    padding:1rem 1rem;
+    width:50%;
+}
+.tabContainer{
+    display:flex;
+    gap:.5rem;
+    position:absolute;
+    top:-35px;
+    left:10px;
+    z-index:-1;
+}
+.tabItem{
+    background-color:var(--primary-contrast);
+    padding:.5rem;
+    border-radius:10px;
+    color:white;
+    cursor:pointer;
+}
+.dataContainer{
+    position:relative;
+    z-index:2;
+    width:100%;
+}
+.tabActive{
+    background-color: white;
+    color: var(--primary-contrast);
+    border-radius:10px;
+    padding:.5rem 1rem 1rem 1rem;
+    flex-grow:0;
+    cursor: pointer;    
+    z-index:4;
+    border: 1px solid var(--primary-contrast);
+}
+.slidesContainer{
+    max-width: 100%;
+    width:1000px;
+    min-width:fit-content;
+    background-color: white;
+    border:1px solid var(--border-color);
+    border-radius:15px;
+    z-index:3;
+    position: relative;
+    height:300px;
+    height: fit-content;
+    padding:1rem 2rem 2rem 2rem;
+    box-shadow: rgba(0, 0, 0, 0.20) 0px 3px 8px;
+    /* margin:auto; */
+}
+.branchSlide{
+    height:0;
+    max-height:0px;
+    margin:0;
+    display:none;
+    opacity:0;
+    width: fit-content;
+}
+.branchSlideActive{
+    height:auto;
+    width: fit-content;
+    display:block;
+    opacity:1;
+}

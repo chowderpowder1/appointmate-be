@@ -3,16 +3,18 @@
     display: flex;
     align-items:center;
     margin:2rem 0;
-    padding:0;
+    padding:2rem 0;
     width:100%;
+    display:flex;
 }
 .about-page-home{
     justify-content: center;
-    gap:9rem;
+    /* gap:9rem; */
     margin:auto;
 }
 .about-page-bottom-container{
-    width:200px;
+    width:400px;
+    flex-shrink:0;
     margin: auto 0;
     padding: 0;
     display:flex;
@@ -33,5 +35,38 @@
 .vl{
     border-left: 1px solid rgb(179, 179, 179);
     height: 50px;
+}
+@media only screen and (max-width: 1200px){
+    .about-page-bottom-title{
+        font-size:2.6em;
+    }
+    .about-page-bottom-text{
+        width:155px;
+        font-size:.9rem;
+    }
+    .about-page-bottom-container{
+        flex-shrink:1;
+    }
+}
+@media only screen and (max-width: 600px){
+    .about-page-bottom-container{
+        width:120px;
+    }
+    .about-page-bottom-title{
+        font-size:1.5rem;
+    }
+    .about-page-bottom-text{
+        width:125px;
+        font-size:.7rem;
+        white-space:wrap;
+    }
+    .about-page-home{
+        justify-content: center;
+        margin:auto;
+    }
+    .about-page-bottom >*{
+    margin-right:1rem;
+    }
+
 }
 

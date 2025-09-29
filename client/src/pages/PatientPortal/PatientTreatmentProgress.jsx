@@ -9,6 +9,7 @@ import { FaExternalLinkAlt } from "react-icons/fa";
 import 'react-circular-progressbar/dist/styles.css';
 import RedHeader from '../../components/Ui/RedHeader'
 import CircularStepper from '../../components/PatientPortal/CircularStepper'
+import ProgressStepper from '../../components/PatientPortal/ProgressStepper'
 import SessionBg from '../../assets/runningPersonBg.png'
 import RescheduleStatus from '../../components/PatientPortal/RescheduleStatus'
 import { FaCheck } from "react-icons/fa";
@@ -60,7 +61,7 @@ const PatientAppointment = () => {
   ]
   return (
     <div className={TreatmentStyles.container}>
-      <div className={TreatmentStyles.stepperContainer}>
+      {/* <div className={TreatmentStyles.stepperContainer}>
         <div className={TreatmentStyles.tabs}>
           <ul>
             <li className={TreatmentStyles.tabActive}>All Appointments</li>
@@ -147,6 +148,9 @@ const PatientAppointment = () => {
           </>))}
               </div>              
         </div>
+      </div> */}
+      <div className={TreatmentStyles.columnOne}>
+        <ProgressStepper isHome={false}/>
       </div>
       <div className={TreatmentStyles.columnTwo}>
         <CircularStepper/>

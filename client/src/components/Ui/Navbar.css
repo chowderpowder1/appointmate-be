@@ -1,15 +1,16 @@
-nav{
-    
-    width:100%;
-    background: white;
-}
 .nav-container{
+    width:100vw;
+    height:100px;
+    background: white;
     text-align: center;
     align-items: center;
-    width:auto;
     display:flex;
     justify-content: space-between;
     padding:1rem 5rem;
+}
+.navCenter li{
+    list-style: none;
+    white-space:nowrap;
 }
 .logoContainer{
     cursor:pointer;
@@ -41,6 +42,7 @@ nav{
     border-radius: 2rem;
     padding:.75rem 1.5rem;
     cursor:pointer;
+    flex-shrink:0;
 }
 .nav-book-btn:hover{
     filter: brightness(1.2);
@@ -59,6 +61,7 @@ nav{
     width: 50px;
     border-radius:50%;
     background-color: rgb(202, 202, 202, 50%);
+    flex-shrink:0;
 }
 .user-icon{
     display:flex;
@@ -69,6 +72,7 @@ nav{
     height:50px;
     width: 50px;
     background-color: #97ABC0;
+    flex-shrink:0;
 }
 .user-icon:hover{
     outline:1px solid #1863B0;
@@ -99,4 +103,65 @@ nav{
     display:flex; 
     flex-direction: row;
     gap:2rem;
+}
+.hamb{
+    display:none;
+}
+@media only screen and (max-width:500px){
+    .nav-container{
+    padding:1rem 3rem;
+    
+    }
+    .navCenter{
+        width: 100%;
+        max-width: 100%;
+        height: 100vh;
+        overflow-x: hidden;
+        position: fixed;
+        top:0;
+        left:0;
+        padding:0;
+        display:flex;
+        flex-flow:column;
+        align-items: center;
+        max-height:100%;
+        z-index:10;
+        overflow:hidden;
+        background-color: var(--primary-contrast);
+
+    }
+    .nav-book-btn{
+        display:none;
+    }
+    .user-icon{
+        display:none;
+    }
+    .hamb{
+        display:block;
+        cursor:pointer;
+        padding:40px 20px;
+    }
+    .hambLine{
+        background: var(--primary-contrast);
+        display: block;
+        height: 2px;
+        position: relative;
+        width: 24px;
+    }
+    .hambLine::before,
+    .hambLine::after{
+        background: var(--primary-contrast);
+        content: '';
+        display: block;
+        height: 100%;
+        position: absolute;
+        transition: all .2s ease-out;
+        width: 100%;
+    }
+    .hambLine::before{
+        top: 7px;
+    }
+    .hambLine::after{
+        top: -7px;
+    }
 }

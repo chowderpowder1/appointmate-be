@@ -1,0 +1,32 @@
+.container{
+    min-width:fit-content;
+    width:800px;
+    height:auto;
+    background-color: white;
+    border-radius:15px;
+    padding:2rem 2rem 4rem 2rem;
+    position:relative;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+.headerContainer{
+    text-align:center;
+}
+.header{
+    font-size:2.5rem;
+    font-weight:600;
+    color:var(--primary-contrast);
+    letter-spacing:2px ;
+}
+.subHeader{
+    color:var(--aw-gray);
+    font-size:.8rem;
+}
+.btnContainer{
+    position:absolute;
+    bottom:20px;
+    left:0;
+    padding:0 3rem;
+    width:100%;
+    display:flex;
+    justify-content: space-between;
+}

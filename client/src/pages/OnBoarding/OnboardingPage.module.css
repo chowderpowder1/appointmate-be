@@ -1,0 +1,11 @@
+.container{
+    width:100vw;
+    height:100vh;
+    background: #1976D5;
+    background: linear-gradient(298deg, rgba(25, 118, 213, 1) 0%, rgba(142, 181, 222, 1) 77%);
+    display:flex;
+    justify-content: center;
+    align-items: center;
+
+    margin:auto;
+}

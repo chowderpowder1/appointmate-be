@@ -4,6 +4,7 @@ import { createPortal } from 'react-dom';
 import { IoIosCloseCircle } from "react-icons/io";
 
 const Modal = ({open,children, onClose}) => {
+
     if (!open){
         return null;
     } 

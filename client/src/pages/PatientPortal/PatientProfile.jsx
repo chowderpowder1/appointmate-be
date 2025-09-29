@@ -50,25 +50,6 @@ const PatientProfile = () => {
                         <p className='data'>123482028</p>
                     </div>
                 </div>
-                <div className={ProfileStyles.emergencyInfoContainer}>
-                    <div>
-                        <p className='data'>Emergency Info</p>
-                        <div className='divider'></div>
-                    </div>
-
-                     <div>
-                        <p className='dataTitle'>Emergency Contact Person</p>
-                        <p className='data'>Maribel Mariano</p>
-                    </div>
-
-                     <div>
-                        <p className='dataTitle'>Emergency Contact Number</p>
-                        <p className='data'>+63 987 654 3210</p>
-                    </div>
-                </div>
-            </div>
-
-            <div className={ProfileStyles.infoColumnTwo}>
                 <div className={ProfileStyles.personalInfoContainer}>
                     <div>
                         <p className='data'>Personal Information</p>
@@ -102,12 +83,35 @@ const PatientProfile = () => {
                     </div>
 
                 </div>  
+                
+            </div>
+
+            <div className={ProfileStyles.infoColumnTwo}>
+                
+                <div className={ProfileStyles.emergencyInfoContainer}>
+                    <div>
+                        <p className='data'>Emergency Info</p>
+                        <div className='divider'></div>
+                    </div>
+
+                     <div>
+                        <p className='dataTitle'>Emergency Contact Person</p>
+                        <p className='data'>Maribel Mariano</p>
+                    </div>
+
+                     <div>
+                        <p className='dataTitle'>Emergency Contact Number</p>
+                        <p className='data'>+63 987 654 3210</p>
+                    </div>
+                </div>
+
                 <div className={ProfileStyles.contactInfoContainer}>
                     <div>
-                        <p className='data'>Personal Information</p>
+                        <p className='data'>Contact & Address</p>
                         <div className='divider'></div>
                     </div>
                     <div className={ProfileStyles.contactInfoGrid}>
+
                         <div>
                             <p className='dataTitle'>Home Address</p>
                             <p className='data'>Brgy. Sample Address Blk2 </p>
@@ -124,11 +128,10 @@ const PatientProfile = () => {
                             <p className='dataTitle'>Personal Email</p>
                             <p className='data'>belle.mariano@abs-cbn.com</p>
                         </div>
-           
+
                     </div>
-
                 </div>  
-
+                
             </div>
 
         </div>

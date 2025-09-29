@@ -1,0 +1,10 @@
+.container{
+    width:100%;
+}
+.header{
+    font-size:1.2rem;
+    font-weight:600;
+    color:var(--off-black);
+    margin-bottom:1rem;
+
+}

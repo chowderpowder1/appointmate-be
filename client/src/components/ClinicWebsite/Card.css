@@ -3,16 +3,17 @@
     grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
     gap: 20px;
     width:90%;
+    height:fit-content;
     justify-content: center;
     align-items: center;
-    margin:1rem 0;
-    margin-left:4rem;
+    margin:auto;
 }
 .services{
     position: relative;
     bottom:5rem;
     width: fit-content;
-    height: 300px;
+    height:300px;
+    min-height:fit-content;
     display:flex;
     flex-direction: column;
     border-radius:20px;
@@ -32,14 +33,24 @@
 .services h1{
     margin-bottom:1rem;
     font-size:1.5rem;
-
+    color:var(--off-black);
 }
 .bi{
     font-size:4rem;
     color: #1863B0;
     margin-bottom:1rem;
+    flex-shrink: 0;
 
 }
 .services p{
     color: rgb(150, 150, 150);
+}
+@media only screen and (max-width: 450px){
+    .services{
+        padding: 2rem 1rem;
+        text-align: center;
+        align-items: center;
+        gap:.5rem;
+    }
+
 }

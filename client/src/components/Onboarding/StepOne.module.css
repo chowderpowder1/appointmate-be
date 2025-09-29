@@ -1,0 +1,41 @@
+.container{
+    display:flex;
+    flex-flow:row;
+    gap:2rem;
+}
+.leftContainer{
+    display:flex;
+    flex-flow:column;
+    gap:1rem;
+}
+.rightContainer{
+    width:fit-content;
+    display:flex;
+    flex-flow:column;
+    align-items: center;
+    gap:1rem;
+}
+.header{
+    font-size:1.5rem;
+    color:var(--off-black);
+}
+.uploadPhotoContainer{
+    width:100px;
+    height:100px;
+    background-color: var(--primary-contrast);
+    border-radius:50%;
+    box-shadow: rgba(0, 174, 255, 0.418) 0px 3px 18px;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+
+}
+.icon{
+    color:white;
+    font-size:2.5rem;
+}
+.upload input{
+    display:none;
+    overflow:hidden;
+}

@@ -1,0 +1,42 @@
+.headerContainer{
+    width:100%;
+    display:flex;
+    gap:1rem;
+}
+.pxNameContainer{
+    width:60%;
+    display:flex;
+    gap:1rem;
+    border: 1px solid var(--border-color);
+    padding:1rem;
+    /* border-top-right-radius: 15px;
+    border-bottom-right-radius: 15px; */
+    background-color: white;
+    position:relative;
+    overflow: hidden;
+}
+.pxNumberContainer{
+    width:40%;
+    display:flex;
+    gap:1rem;
+    border: 1px solid var(--border-color);
+    padding:1rem;
+    /* border-radius: 15px; */
+    background-color: white;
+    position:relative;
+    overflow: hidden;    
+}
+.pxDataHeader{
+    text-transform: uppercase;
+    font-size:1.1rem;
+    font-weight:600;
+    color:var(--primary-color);
+}
+.lineStyle{
+    position:absolute;
+    left:-5px;
+    top:0px;
+    height:100%;
+    width:10px;
+    background-color: var(--primary-color);
+}

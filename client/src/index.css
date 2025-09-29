@@ -13,14 +13,26 @@
   -moz-osx-font-smoothing: grayscale;
 } */
  :root{
+    /* Colors */
     --primary-color:rgb(66, 140, 216);
     --primary-contrast: #1976D5;
     --aw-white: #F6F8FA;
-    --aw-gray: #575757;
+    --aw-gray: rgba(87, 87, 87, 0.712);
     --aw-red: #E1151E;
     --text-gray: rgba(0,0,0,.60);
-    --border-color: rgba(0, 0, 0,.30);
+    --border-color: rgba(0, 0, 0,.10);
     --patient-bg: #F6F8FA;
+    --aw-cream: #FFFDDC;
+    --aw-green: #079042;
+    --off-black: rgb(65, 65, 65);
+
+    /* Text Sizes  */
+    --desktop-header: ;
+    --mobile-header: 2rem;
+
+    /* 430px Breakpoint */
+    --mobile-header: 1.75rem;
+    --mobile-body: .8rem;
  }
 *{
     box-sizing: border-box;
@@ -67,4 +79,17 @@ button{
 }
 .CircularProgressbar-text {
   font-weight: 700;
+}
+.blue-btn{
+    color:white;
+    background-color: var(--primary-contrast);
+    padding:.3rem .7rem;
+    border-radius: 7px;
+    cursor:pointer;
+    display:flex;
+    gap:.3rem;
+}
+.btn-icon{
+    font-size:1.3rem;
+    line-height:0;
 }

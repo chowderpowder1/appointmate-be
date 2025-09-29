@@ -1,0 +1,89 @@
+.header{
+    font-weight:600;
+    font-size:1.3rem;
+    margin-bottom:1rem;
+}
+.icon{
+    font-size:1.5rem;
+}
+.assignedPtContainer{
+    width:100%;
+    height:fit-content;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding:1rem;
+    gap:1rem;
+    display:flex;
+    flex-direction: column;
+}
+.assignedPtHeader{
+    display:flex;
+    white-space: nowrap;
+    line-height: 0;
+    align-items: center;
+    font-size:1rem;
+    font-weight:500;
+    color: var(--primary-contrast);
+}
+.PtPhotoContainer{
+    width:100px;
+    height:100px;
+    overflow: hidden;
+    border-radius: 50%;
+}
+.PtPhoto{
+    width:100%;
+    height:auto;
+}
+.assignedPtSubcontainer{
+    display:flex;
+    gap:1rem;
+    position: relative;
+    padding-bottom: 2rem;
+}
+.ptDataContainer{
+    display:flex;
+    flex-direction: column;
+    gap:.3rem;
+}
+.ptName{
+    font-size:2rem;
+}
+.ptSpecialization{
+    font-style:italic;
+}
+.ptId{
+    font-style:italic;
+}
+.changePtBtnContainer{
+    position: absolute;
+    right:0;
+    bottom: 0;
+    background-color: var(--primary-contrast);
+    width: fit-content;
+    height: fit-content;
+    color:white;
+    border-radius:10px;
+    padding:.4rem .6rem;
+    font-size:.8rem;
+    line-height: 0;
+    flex-grow: 0;
+    align-items: center;
+    display:flex;
+    gap:.3rem;
+}
+.changePtBtnIcon{
+    font-size:1.2rem;
+}
+.ptContactContainer{
+    display:flex;
+    flex-direction: row;
+    gap:1rem; 
+}
+.ptContactItem{
+    display:flex;
+    gap:.5rem;
+    line-height: 0;
+    align-items: center;
+    color:var(--aw-gray);
+}

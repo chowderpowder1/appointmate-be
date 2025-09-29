@@ -17,13 +17,41 @@ import PatientRecord from './pages/PatientPortal/PatientRecordPage'
 import Reports from './pages/PatientPortal/ReportsPage'
 import TesTest from './pages/TesTest'
 
+import TherapistLayout from './layouts/TherapistLayout'
+import TherapistDashboard from './pages/Therapist/TherapistDashboard'
+import ManageAppointments from './pages/Therapist/ManageAppointments'
+import EditAppointments from './pages/Therapist/EditApptPage'
+import PatientRecordsOverview from './pages/Therapist/PatientRecordsOverviewPage'
+import AddPatientRecord from './pages/Therapist/AddPatientRecordPage'
+import ViewPatientRecord from './pages/Therapist/ViewPxRecordPage'
+import TherapistDocuments from './pages/Therapist/TherapistDocumentsPage'
+import OnboardingPage from './pages/OnBoarding/OnboardingPage'
+
+import FrontDeskLayout from './layouts/FrontDeskLayout'
+import FdDashboard from './pages/FrontDeskPortal/FdDashboard'
+import FdManageAppt from './pages/FrontDeskPortal/FdManageAppt'
+import FdManageDocuments from './pages/FrontDeskPortal/FdManageDocuments'
+
+import AdminLayout from './layouts/AdminLayout'
+import RBAC from './pages/AdminPortal/RbacPage'
+
+import {
+  useQuery,
+  useMutation,
+  useQueryClient,
+  QueryClient,
+  QueryClientProvider,
+} from '@tanstack/react-query'
+
+const queryClient = new QueryClient();
+
 function App() {
   const router = createBrowserRouter(createRoutesFromElements(
   <>
     <Route path='/' element={<MainLayout/>}>
       <Route index element={<Homepage/>}/>
-      <Route path='/about' element={<AboutPage/>}/>
-      <Route path='/services' element=''/>
+      <Route path='about' element={<AboutPage/>}/>
+      <Route path='services' element=''/>
       <Route path='/HMOs' element={<HmoPage/>}/>
       <Route path='/FAQs' element=''/>
       <Route path='/Contact-Us' element=''/>
@@ -38,14 +66,43 @@ function App() {
       <Route path='patient-record' element={<PatientRecord/>}/>
       <Route path='documents' element={<MyDocuments/>}/>
       <Route path='reports' element={<Reports/>}/>
-      <Route path='test' element={<TesTest/>}/>
+      <Route path='test' element={<OnboardingPage/>}/>
+    </Route>
+
+    <Route path='/therapist' element={<TherapistLayout/>}>
+      <Route path='dashboard' element={<TherapistDashboard/>}/>
+      <Route path='manage-appointments' element={<ManageAppointments/>}/>
+      <Route path='manage-appointments/edit-appointment/:id' element={<EditAppointments/>}/>
+      <Route path='patient-records' element={<PatientRecordsOverview/>}/>
+      <Route path='patient-records/add-patient-record' element={<AddPatientRecord/>}/>
+      <Route path='patient-records/view-patient-record/:id' element={<ViewPatientRecord/>}/>
+      <Route path='my-documents' element={<TherapistDocuments/>}/>
+    </Route>
+
+    <Route path='/front-desk' element={<FrontDeskLayout/>}>
+      <Route path='dashboard' element={<FdDashboard/>}/>
+      <Route path='manage-appointments' element={<FdManageAppt/>}/>
+      <Route path='manage-appointments/edit-appointment/:id' element={<EditAppointments/>}/>
+      <Route path='patient-records' element={<PatientRecordsOverview/>}/>
+      <Route path='patient-records/add-patient-record' element={<AddPatientRecord/>}/>
+      <Route path='patient-records/view-patient-record/:id' element={<ViewPatientRecord/>}/>
+      <Route path='manage-documents' element={<FdManageDocuments/>}/>
+      <Route path='manage-documents/view-patient-document/:id' element={<FdManageDocuments/>}/>
+    </Route>
+
+    <Route path='/admin' element={<AdminLayout/>}>
+      <Route path='manage-roles' element={<RBAC/>}/>
     </Route>
 
     <Route path='/Welcome' element={<WelcomePage/>}/>
   </>
   ))
   
-  return ( <RouterProvider router={router}/>)
+  return ( 
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={router}/>
+    </QueryClientProvider>
+)
 }
 
 export default App

@@ -1,0 +1,124 @@
+.container{
+    display:flex;
+    max-width: 100%;
+    width:100%;
+    height:auto;
+    background: #1976D5;
+    background: linear-gradient(90deg, rgba(25, 118, 213, 0.94) 40%, rgba(135, 178, 222, 0.61) 100%);
+    /* border: 1px solid #A1A1A1; */
+    border-radius:1rem;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    align-items: flex-start;
+    cursor:pointer;
+    flex-direction:column;
+    padding:1rem 2rem;
+    gap:1rem;
+}
+.vl{
+    background-color: white;
+    height:100%;
+    width:2px;
+}
+.row{
+    display:flex;
+    width:100%;
+    height:100%;
+    flex-direction:row;
+    color:white;
+}
+.rowTwo{
+    display: flex;
+    width:100%;
+    justify-content: space-between;
+    grid-template-columns: 1fr 3fr 1fr;
+    align-items: center;
+}
+.rowThree{
+    align-items: center;
+}
+.rowTwoColumOne{
+    display:flex;
+    width:50%;
+    height:100%;
+    flex-direction:row;
+    color:white;
+    align-items: center;
+    gap:1rem;
+
+}
+.rowThree{
+    gap:1rem;
+}
+.rowTwoColumTwo{
+    width:50%;
+    border-left:1px solid white;
+    padding-left:2rem;
+}
+.serviceTypeText{
+    font-size:1rem;
+    font-weight:300;
+    letter-spacing: .5px;
+}
+.pxScheduleContainer{
+    height:20px;
+    align-items: center;
+    display:flex;
+    gap:1rem;
+}
+.pxScheduleText{
+    display:flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    gap:1rem;
+    line-height:0;
+    align-items: center;
+}
+.notificationHeader{
+    display:flex;
+    line-height: 0;
+    align-items: center;
+    font-weight: 600;
+    font-size: 1.2rem;
+    gap:1rem;
+}
+.pxImage{
+    display:flex;
+    width:70px;
+    height:70px;
+    border-radius:5rem;
+    justify-content: center;
+    align-items: center;
+    overflow:hidden;
+    gap:1rem;
+}
+.pxImage img{
+    width:75px;
+}
+.pxName{
+    font-weight:500;
+}
+.pxId{
+    font-size:.9rem;
+    font-weight:300;
+}
+.pxBtn{
+    color:#1976D5;
+    font-weight:500;
+    border-radius:8px;
+    line-height:none;
+    cursor:pointer;
+    display:flex;
+    line-height:0;
+    align-items: center;
+    padding:.3rem .8rem;
+    display:flex;
+    width:fit-content;
+    height:fit-content;
+    gap:.5rem;
+}
+.pxBtn p{
+    font-size:.9rem;
+}
+.linkIcon{
+    font-size:1.4rem;
+}

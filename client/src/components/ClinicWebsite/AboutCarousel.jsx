@@ -2,6 +2,11 @@ import React from 'react'
 import AboutCarouselStyles from './AboutCarousel.module.css'
 import { Swiper, SwiperSlide } from 'swiper/react';
 import CarouselBg from '../../assets/about-carousel-background.png'
+import caloocanBranch from '../../assets/branches/awCaloocan.jpeg'
+import lagunaBranch from '../../assets/branches/awLagunajpeg.jpeg'
+import antipoloBranch from '../../assets/branches/awAntipolo.jpeg'
+import zabarteBranch from '../../assets/awZabarte.jpg'
+import valBranch from '../../assets/awValenzuela.jpg'
 import { FaClock } from "react-icons/fa";
 import { FaLocationDot } from "react-icons/fa6";
 import { FaPhoneAlt } from "react-icons/fa";
@@ -26,14 +31,12 @@ const AboutCarousel = () => {
             spaceBetween={40}
             
             // loop={true}
-            slidesPerView={3.5}
+            slidesPerView={4}
             grabCursor={true}
-            onSlideChange={() => console.log('slide change')}
-            onSwiper={(swiper) => console.log(swiper)}
           >
               <SwiperSlide className={AboutCarouselStyles['swiper-slide']}>
                   <div className={AboutCarouselStyles["about-carousel-image-container"]}>
-                    <img src={CarouselBg} className={AboutCarouselStyles['about-carousel-image']}
+                    <img src={zabarteBranch} className={AboutCarouselStyles['about-carousel-image']}
                     alt="" />
                   </div>
                   <div className={AboutCarouselStyles["about-slide-text-container"]}>
@@ -60,12 +63,12 @@ const AboutCarousel = () => {
               </SwiperSlide>
               <SwiperSlide className={AboutCarouselStyles['swiper-slide']}>
                   <div className={AboutCarouselStyles["about-carousel-image-container"]}>
-                    <img src={CarouselBg} className={AboutCarouselStyles['about-carousel-image']}
+                    <img src={lagunaBranch} className={AboutCarouselStyles['about-carousel-image']}
                     alt="" />
                   </div>
                   <div className={AboutCarouselStyles["about-slide-text-container"]}>
                     <h1 className={AboutCarouselStyles['slide-title']}>
-                      Zabarte
+                      Caloocan
                     </h1>
                     <div className={AboutCarouselStyles["ca"]}>
                       <FaClock className={clsx(AboutCarouselStyles['slide-icon'], AboutCarouselStyles['about-clock-icon'])}/> 
@@ -87,12 +90,12 @@ const AboutCarousel = () => {
               </SwiperSlide>
               <SwiperSlide className={AboutCarouselStyles['swiper-slide']}>
                   <div className={AboutCarouselStyles["about-carousel-image-container"]}>
-                    <img src={CarouselBg} className={AboutCarouselStyles['about-carousel-image']}
+                    <img src={antipoloBranch} className={AboutCarouselStyles['about-carousel-image']}
                     alt="" />
                   </div>
                   <div className={AboutCarouselStyles["about-slide-text-container"]}>
                     <h1 className={AboutCarouselStyles['slide-title']}>
-                      Zabarte
+                      Antipolo
                     </h1>
                     <div className={AboutCarouselStyles["ca"]}>
                       <FaClock className={clsx(AboutCarouselStyles['slide-icon'], AboutCarouselStyles['about-clock-icon'])}/> 
@@ -115,7 +118,34 @@ const AboutCarousel = () => {
            
               <SwiperSlide className={AboutCarouselStyles['swiper-slide']}>
                   <div className={AboutCarouselStyles["about-carousel-image-container"]}>
-                    <img src={CarouselBg} className={AboutCarouselStyles['about-carousel-image']}
+                    <img src={caloocanBranch} className={AboutCarouselStyles['about-carousel-image']}
+                    alt="" />
+                  </div>
+                  <div className={AboutCarouselStyles["about-slide-text-container"]}>
+                    <h1 className={AboutCarouselStyles['slide-title']}>
+                      Laguna
+                    </h1>
+                    <div className={AboutCarouselStyles["ca"]}>
+                      <FaClock className={clsx(AboutCarouselStyles['slide-icon'], AboutCarouselStyles['about-clock-icon'])}/> 
+                      <p>
+                        8:00 am to 5:00 pm | M-T-W-S-S
+                      </p>
+                    </div>
+                    <div className={AboutCarouselStyles["ca"]}>
+                      <FaLocationDot className={clsx(AboutCarouselStyles['slide-icon'], AboutCarouselStyles['about-location-icon'])}/> 
+                      <p>
+                        JDC Building Block 5 Lot 9 Zabarte Road, Hobart Village, Barangay Kaligayahan, Quezon City
+                      </p>
+                    </div>
+                    <div className={AboutCarouselStyles["ca"]}>
+                      <FaPhoneAlt className={clsx(AboutCarouselStyles['slide-icon'], AboutCarouselStyles['about-phone-icon'])}/> 
+                      <p>0906 168 3226 | 0981 263 3658</p>
+                    </div>
+                  </div>
+              </SwiperSlide>
+              <SwiperSlide className={AboutCarouselStyles['swiper-slide']}>
+                  <div className={AboutCarouselStyles["about-carousel-image-container"]}>
+                    <img src={valBranch} className={AboutCarouselStyles['about-carousel-image']}
                     alt="" />
                   </div>
                   <div className={AboutCarouselStyles["about-slide-text-container"]}>

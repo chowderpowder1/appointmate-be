@@ -1,0 +1,56 @@
+.container{
+    display:flex;
+    max-width: 100%;
+    width:100%;
+    height:auto;
+    background: #1976D5;
+    background: linear-gradient(-90deg, rgba(25, 118, 213, 0.77) 0%, rgba(79, 72, 8, 0) 39%);
+    /* border: 1px solid #A1A1A1; */
+    border-radius:1rem;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    /* justify-content: space-around; */
+    gap:2rem;
+    justify-content: center;
+    padding:1rem;
+    align-items: center;
+    cursor:pointer;
+}
+.therapistProfile{
+    display:flex;
+    width:130px;
+    height:130px;
+    border-radius:5rem;
+    justify-content: center;
+    align-items: center;
+    overflow:hidden;
+    flex-shrink:0;
+
+}
+.therapistProfile img{
+    width:150px;
+}
+.therapistName{
+    font-size:2rem;
+    font-weight:600;
+}
+.timeIcon{
+    line-height:0;
+    margin-right:.5rem;
+}
+.greetText{
+    height:100%;
+    /* padding:2rem; */
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.greetTime{
+    color:#2E2894;
+    display:flex;
+    gap:1rem;
+    margin-top:1rem;
+    font-size:.9rem;
+}
+.greetIcon{
+    
+}

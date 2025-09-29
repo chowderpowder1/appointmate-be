@@ -24,7 +24,6 @@ const PatientRecordPage = () => {
                         <div className={ toggleState === 2 ? `${RecordStyles.circle}` : `${RecordStyles.circle} ${RecordStyles.active}` }></div>
                         <div className={ toggleState === 1 ? `${RecordStyles.circle}` : `${RecordStyles.circle} ${RecordStyles.active}` }></div>
                     </div>       
-
                 </>
             )}
             { toggleState == 2 &&( 

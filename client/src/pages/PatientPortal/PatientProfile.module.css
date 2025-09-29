@@ -1,7 +1,7 @@
 .profileContainer{
     padding:2rem;
-    width:100vw;
-    height:fit-content;
+    width:100%;
+    height:50%;
     background-color:var(--aw-white);
     display:flex;
     flex-flow:column;
@@ -10,7 +10,7 @@
     position:relative;
     width:100%;
     height:300px;
-    border: 1px solid gray;
+    border: 1px solid var(--border-color);
     border-radius:15px;
     overflow:hidden;
 }
@@ -64,46 +64,66 @@
 }
 .infoContainer{
     display:flex;
-    margin-top:2rem;
+    margin-top:1rem;
     width:100%;
     height:fit-content;
-    gap:2rem;
+    flex-flow:column;
+    gap:1rem;
 }
 .infoColumnOne{
     display:flex;
-    flex-flow:column;
-    gap:2rem;
-    width:30%;
-    height:fit-content;
+    flex-flow:row;
+    gap:1rem;
+    width:100%;
+    height:450px;
 }
-.coverageContainer, .emergencyInfoContainer{
-    height:fit-content;
+.coverageContainer{
+    height:100%;
     padding: 1rem 2rem;
-    border: 1px solid var(--aw-gray);
+    border: 1px solid var(--border-color);
     background-color: white;
     border-radius:15px;
     display:flex;
     flex-flow:column;
     gap: 2rem;
+    flex-grow:1;
 }
-
-
 .infoColumnTwo{
-    width:70%;
+    width:100%;
+    display:flex;
+    flex-flow:row;
+    gap:1rem;
+
+}
+.emergencyInfoContainer{
+    height:100%;
+    padding: 1rem 2rem;
+    border: 1px solid var(--border-color);
+    background-color: white;
+    border-radius:15px;
     display:flex;
     flex-flow:column;
-    gap:2rem;
-
+    gap: 2rem;
+    flex-grow:1;
 }
-.personalInfoContainer{
-    width:100%;
-    min-height:350px;
-    max-height:fit-content;
-    border: 1px solid gray;
+.contactInfoContainer{
+    height:100%;
+    border: 1px solid var(--border-color);
     background-color: white;
     border-radius:15px;
     padding: 1rem 2rem;
+    flex-grow:4;
 }
+
+.personalInfoContainer{
+    height:100%;
+    border: 1px solid var(--border-color);
+    background-color: white;
+    border-radius:15px;
+    padding: 1rem 2rem;
+    flex-grow:4;
+}
+
 .infoGrid{
     height:100%;
     margin: auto;
@@ -123,13 +143,4 @@
     grid-template-rows: 85px;
     /* grid: 100px/ 1fr 1fr 1fr; */
     align-items: center;
-}
-.contactInfoContainer{
-    width:100%;
-    min-height:200px;
-    max-height:fit-content;
-    border: 1px solid gray;
-    background-color: white;
-    border-radius:15px;
-    padding: 1rem 2rem;
 }

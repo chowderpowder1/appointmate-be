@@ -1,0 +1,103 @@
+.beltContainer{
+    display:flex;
+    gap:1rem;
+    width:100%;
+    justify-content: center;
+}
+.apptContainer{
+    width: clamp(180px, 280px, 300px);
+    flex-basis:1 1 2;
+    min-height:125px;
+    height:auto;
+    box-shadow: rgba(0, 0, 0, 0.20) 0px 3px 8px;
+    border-radius:15px;
+    /* border:1px solid var(--border-color); */
+    padding:1rem;
+    display:flex;
+    align-items: center;
+    overflow:hidden;
+}
+.totalApptContainer{
+    background: #3B61D0;
+    background: linear-gradient(311deg, rgba(62, 145, 249, 1) 0%, rgba(59, 97, 208, 1) 100%);
+    display:flex;
+    align-items: center;
+    gap:1rem;
+}
+.dailyApptContainer{
+    background: #2E7D32;
+    background: linear-gradient(311deg, rgba(93, 207, 97, 1) 0%, rgb(64, 165, 69) 100%);
+    display:flex;
+    align-items: center;
+    gap:1rem;
+}
+.pendingAptContainer{
+    background: #edb200;
+    background: linear-gradient(311deg, rgb(250, 231, 57) 0%, rgb(235, 178, 10) 100%);
+    display:flex;
+    align-items: center;
+    gap:1rem;
+}
+.cancelledAptContainer{
+    background: #F44336;
+    background: linear-gradient(311deg, rgb(253, 124, 115) 0%, rgb(187, 6, 6) 100%);
+    display:flex;
+    align-items: center;
+    gap:1rem;
+}
+.rescheduledAptContainer{
+    background: #B7A1E9;
+    background: linear-gradient(311deg, rgba(183, 161, 233, 1) 0%, rgb(107, 64, 206) 100%);
+    display:flex;
+    align-items: center;
+    gap:1rem;
+}
+.apptTitle{
+    color: var(--text-gray);
+    font-weight:300;
+    font-size:.8rem;
+}
+.apptSubtext{
+    font-size:1.5rem;
+    font-weight:500;
+    color: var(--text-gray);
+    /* position:absolute;
+    bottom:0;
+    left:1rem; */
+}
+.iconContainer{
+    width:50px;
+    height:50px;
+    border-radius:50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(255, 255, 255, 0.3);
+    aspect-ratio: 1;
+    color:White;
+}
+.icon{
+    color:white;
+    font-size:1.3rem;
+    
+}
+.containerIcon{
+    position: absolute;
+    right:0;
+    bottom:-20px;
+    min-width:fit-content;
+    width:150px;
+}
+.textContainer{
+    color:white;
+    display:flex;
+    gap:0;
+    align-items: flex-start;
+    height:fit-content;
+    width: fit-content;
+    flex-flow:column;
+}
+
+.textContainer p{
+    color:White;
+}

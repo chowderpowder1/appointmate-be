@@ -1,0 +1,115 @@
+.container{
+    width: fit-content;
+    height:fit-content; /* make 100 */
+    flex-grow:1;
+    position:relative;
+}
+.apptDashboard{
+    background-color: white;
+    width: fit-content;
+    height:fit-content;
+    border-radius:15px;
+    z-index:3;
+}
+.apptListContainer{
+    width:fit-content;
+    height:fit-content;
+    border-radius:15px;
+    border:1px solid var(--border-color);
+    /* display:grid;
+    grid-template-columns: 1.5fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    grid-gap:1rem; */
+    padding:1rem;
+    margin-top:1rem;
+    position: relative;
+}
+/* .apptDataHeader, .apptDataRow{
+    display:contents;
+} */
+.apptDataHeader{
+    display:grid;
+    grid-template-columns: 1.5fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    grid-column: 1/ -1;
+    background-color: rgba(187, 187, 187, 0.20);
+    height: 50px;
+    padding:1rem;
+    border-radius:10px;
+
+    grid-gap:1rem;
+}
+.apptDataHeader span{
+    color: var(--primary-color);
+    font-weight:600;
+    white-space:nowrap;
+    align-self: center;
+    line-height:0;
+}
+.apptDataRow{
+    display:grid;
+    padding:1rem;
+    grid-template-columns: 1.5fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    grid-column: 1/ -1;
+    grid-gap:1rem;   
+}
+.apptDataRow:not(:last-child){
+    border-bottom: 1px solid var(--border-color);
+}
+.apptDataRow span{
+    align-self:center;
+}
+.headerBg{
+    position: absolute;
+    top:13px;
+    left:10px;
+    background-color: rgba(187, 187, 187, 0.30);
+    width:100%;
+    height: 50px;
+    border-radius:10px;
+    z-index:1;
+}
+.pxDataItem{
+    display:flex;
+    flex-direction: row;
+    align-items: center;
+    gap:1rem;
+}
+.pxPhotoContainer{
+    width:50px;
+    height:50px;
+    overflow:hidden;
+    border-radius:50%;
+}
+.pxPhoto{
+    width:100%;
+    height:auto;
+}
+.actionBtnsContainer{
+    display:flex;
+    gap:.5rem;
+}
+.viewBtn{
+    height:fit-content;
+    width: fit-content;
+    background-color: var(--primary-color);
+    color: white;
+    line-height: 0;
+    padding:.3rem;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size:1.2rem;
+}
+.icon{
+    vertical-align: middle;
+    color:white;
+}
+.editBtn{
+    height:fit-content;
+    width: fit-content;
+    background-color: #079042;
+    color: white;
+    line-height: 0;
+    padding:.3rem;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size:1.2rem;
+}

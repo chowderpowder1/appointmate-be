@@ -5,20 +5,21 @@ import Modal from '../../components/Ui/Modal'
 import ClinicPhoto from '../../assets/AwZabarte.jpg'
 const ClinicLocation = () => {
 
-    const [modal, setModal] = useState(false);
-    const activeModal = () => {
-        setModal(!modal);
-    }
+    const [isOpen, setIsOpen] = useState(false);
+
+    // const activeModal = () => {
+    //     setModal(!isOpen);
+    // }
     
   return (
 
     <div className={LocationStyles.locationContainer}>
-        { modal && (
-            <Modal open={modal} onClose={activeModal}> 
-            <img src={ClinicPhoto} alt="" />
-                {/* <button onClick={activeModal}>close</button> */}
-            </Modal>
-        )}
+      
+      <Modal open={isOpen} onClose={() => setIsOpen(false)}> 
+      <img src={ClinicPhoto} alt="" />
+          {/* <button onClick={activeModal}>close</button> */}
+      </Modal>
+
         
       <div className={LocationStyles.locationTitleContainer}>
             <IoLocation className={LocationStyles.locationIcon}/>
@@ -30,7 +31,7 @@ const ClinicLocation = () => {
         <div className={LocationStyles.locationDataItem}>
             <p className={LocationStyles.locationDataItemTitle}>Branch Name:</p>
             <p className={LocationStyles.locationDataItemText}>Accelerated Wellness Zabarte Road Quezon City</p>
-            <button onClick={activeModal} className={LocationStyles.viewBtn}>View Clinic</button>
+            <button onClick={() => setIsOpen(true)} className={LocationStyles.viewBtn}>View Clinic</button>
         </div>
 
         <div className={LocationStyles.locationDataItem}>

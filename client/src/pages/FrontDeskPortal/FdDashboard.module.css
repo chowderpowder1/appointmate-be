@@ -1,0 +1,53 @@
+.container{
+    padding:2rem 5rem;
+    display:flex;
+    flex-direction:column;
+    gap:1rem;
+    height:auto;
+    width:85%;
+    max-width:100%;
+    height:auto;
+    align-items: center;
+    margin: auto;
+}
+.header{
+    text-transform:uppercase;
+    color:var(--primary-contrast);
+}
+.row{
+    display:flex;
+    flex: row;
+    gap:1rem;
+    justify-content: center;
+    width:clamp(min(10vw, 20rem), 1400px, max(70vw, 55rem));
+    max-width:100%;
+    height:auto;
+    margin:auto;
+}
+.apptDataContainer{
+    display:flex;
+    flex: row;
+    justify-content: space-between;
+    gap:1rem;
+    height:auto;
+    width:clamp(min(10vw, 20rem), 1400px, max(70vw, 55rem));
+    max-width:100%;
+    margin:auto;
+}
+.calendarContainer{
+    width:40%;
+    height:450px;
+    display:flex;
+    justify-content: center;
+    min-height:fit-content;
+    padding:1rem;
+    background-color: white;
+    border-radius:15px;
+    flex-grow:0;
+    box-shadow: rgba(0, 0, 0, 0.20) 0px 3px 8px;
+}
+.upcomingApptContainer{
+    width:60%;
+    box-shadow: rgba(0, 0, 0, 0.20) 0px 3px 8px;
+    border-radius:15px;
+}

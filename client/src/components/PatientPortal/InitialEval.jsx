@@ -67,8 +67,6 @@ const InitialEval = () => {
 
           </div>
         </div>
-
-
       </div>
     </div>
   )

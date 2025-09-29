@@ -32,7 +32,7 @@
 .uploadedAttachmentsContainer{
     width:100%;
     display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr;
+    grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr;
     gap: 2rem;
     border:1px solid var(--primary-contrast);
     border-radius: 15px;
@@ -43,6 +43,26 @@
 }
 .header, .row{
     display:contents;
+}
+.row span:nth-child(-n + 2){
+    display:flex;
+    gap:.5rem;
+    align-items: center;
+}
+.removeBntContainer{
+    background-color: red;
+    width:40px;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    height:40px;
+    padding:.5rem;
+    color:white;
+    border-radius:25%;
+    flex-shrink:0;
+}
+.row{
+    color:var(--text-gray);
 }
 span{
     z-index:1;

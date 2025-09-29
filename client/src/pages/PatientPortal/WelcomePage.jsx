@@ -6,6 +6,8 @@ import AwLogo from '../../assets/aw-logo.png'
 import LoginImageOne from '../../assets/loginImageOne.png';
 import LoginImageTwo from '../../assets/loginImageTwo.png';
 import LoginImageThree from '../../assets/loginImageThree.png';
+import googleSignIn from '../../assets/googleSignIn.png'
+import fbSignIn from '../../assets/fbSignIn.png'
 
 //Swiper dependencies
 import { Pagination, Autoplay } from 'swiper/modules';
@@ -18,6 +20,9 @@ import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import { IoIosArrowBack } from "react-icons/io";
+import FormGroup from '@mui/material/FormGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
 
 const LoginPage = () => {
 
@@ -87,14 +92,14 @@ const LoginPage = () => {
           </div>
 <div className={LoginStyles.rightContainer}>
                 
-              <div className={ toggleState === 2 ? `${LoginStyles.containerThree} ${LoginStyles.activeContainer}`: `${LoginStyles.containerThree}`}>
+            <div className={ toggleState === 2 ? `${LoginStyles.containerThree} ${LoginStyles.activeContainer}`: `${LoginStyles.containerThree}`}>
                 <button className={LoginStyles.loginBackBtn} onClick={()=>toggleTab(1)}><IoIosArrowBack className={LoginStyles.backIcon}/></button>
-                <div className={LoginStyles.loginLogoContainer}>
+                <Link to='/admin' className={LoginStyles.loginLogoContainer}>
                     <img className={LoginStyles.loginLogo} src={AwLogo} alt="" />
-                </div>
+                </Link>
                 <div className={LoginStyles.loginTextContainer}>
-                    <h1>Welcome</h1>
-                    <p>Login to book therapy sessions, track your progress, and connect with your care provider.</p>
+                    <h1 className={LoginStyles.header}>Welcome</h1>
+                    <p className={LoginStyles.headerSubText}>Login to book therapy sessions, track your progress, and connect with your care provider.</p>
                 </div>
                 <div className={LoginStyles.loginFormsContainer}>
     
@@ -106,21 +111,49 @@ const LoginPage = () => {
                         marginTop:2,
                      }}
                      component="form">
-                         <TextField id="outlined-basic" label="Email" variant="outlined" />
+                         <TextField id="outlined-basic" label="Email" variant="outlined" type="email"/>
     
-                         <TextField id="outlined-basic" label="Password" variant="outlined" />
+                         <TextField id="outlined-basic" label="Password" variant="outlined" type="password"/>
     
                         <div className={LoginStyles.loginQol}>
                         <form action="">
                             <input type="checkbox" id='rememberMe' name='rememberMe' />
-                            <label htmlFor="rememberMe">Remember Me</label>
+                            <label id={LoginStyles.rememberMeLabel} htmlFor="rememberMe">Remember Me</label>
                         </form>
                         <Link>Forgot Password?</Link>
                      </div>
     
-                        <Button variant="contained">Login</Button>
+                        
+                            <Button sx={{
+                                backgroundColor:'var(-primary-contrast)',
+                                height:'50px'
+                            }}
+                            
+                            variant="contained"><Link to='/patient/dashboard' style={{color:'white', fontWeight:'400', fontSize:'1.1rem', textTransform:'none'}}>Login</Link></Button>
+                        
                      </Box>
-    
+                     <div className={LoginStyles.alternativeLoginTxtContainer}>
+                         <div className={LoginStyles.line}></div>
+                         <p>or continue using</p>
+                         <div className={LoginStyles.line}></div>
+                     </div>
+
+                     <div className={LoginStyles.alternativeLoginContainer}>
+                         <div className={LoginStyles.alternativeLoginBtnContainer}>
+                             <div className={LoginStyles.googleContainer}>
+                                <img className={LoginStyles.googleSignIn} src={googleSignIn} alt="" />
+                                <p>Sign in with Google</p>
+                             </div>
+                         </div>
+                         <div className={LoginStyles.alternativeLoginBtnContainer}>
+                             <div className={LoginStyles.googleContainer}>
+                                <img className={LoginStyles.googleSignIn} src={fbSignIn} alt="" />
+                                <p>Sign in with Facebook</p>
+                             </div>
+                         </div>
+                     </div>
+                     <p>Don't have an Account? <p onClick={() => toggleTab(3)} className={LoginStyles.noAccRegLinkText}>Register Here</p></p>
+
                 </div>
     
               </div>
@@ -140,13 +173,35 @@ const LoginPage = () => {
                     Log in or Sign up to book your appointment. Access your schedule,   records, and more.
                 </p>
     
-                <button className={LoginStyles.loginBtn} onClick={() => toggleTab(2)}>
-                    Login
-                </button>
+                    <Button Button sx={{
+                                    height:'50px',
+                                    fontWeight:500,
+                                    fontSize:'1.1rem',
+                                    textTransform:'none',
+                                    marginTop:'1rem',
+                                    boxShadow:'none'
+
+                    }}
+                                    variant='contained' className={LoginStyles.loginBtn} onClick={() => toggleTab(2)}>
+                        Login
+                    </Button>
+                    <Button Button sx={{
+                                    height:'50px',
+                                    fontWeight:500,
+                                    fontSize:'1.1rem',
+                                    textTransform:'none',
+                                    backgroundColor:'white',
+                                    border:'1px solid var(--primary-contrast)',
+                                    color:'var(--primary-contrast)',
+                                    marginTop:'1rem',
+                                    boxShadow:'none'
+
+                    }}
+                                    variant='contained' className={LoginStyles.loginBtn} onClick={() => toggleTab(3)}>
+                        SignUp
+                    </Button>
     
-                <button className={LoginStyles.signUpBtn} onClick={() => toggleTab(3)}>
-                    Sign Up
-                </button>
+
               </div>
     
               <div className={ toggleState === 3 ? `${LoginStyles.containerFour} ${LoginStyles.activeContainer}`: `${LoginStyles.containerFour}`}>
@@ -155,8 +210,8 @@ const LoginPage = () => {
                     <img className={LoginStyles.loginLogo} src={AwLogo} alt="" />
                 </div>
                 <div className={LoginStyles.loginTextContainer}>
-                    <h1>Create an account</h1>
-                    <p>New here? Create an account to begin your journey to better health with Accelerated Wellness and Pain Clinic.</p>
+                    <h1 className={LoginStyles.header}>Create an account</h1>
+                    <p >New here? Create an account to begin your journey to better health with Accelerated Wellness and Pain Clinic.</p>
                 </div>
                 <Box
                      sx={{
@@ -191,10 +246,25 @@ const LoginPage = () => {
                         <div className={LoginStyles.loginQol}>
     
                      </div>
-    
-                        <Button sx={{padding:'1rem'}} variant="contained">Sign Up</Button>
-                     </Box>
-                    <p>Already have an account? Sign in here.</p>
+                        <FormGroup>
+                        <FormControlLabel sx={{
+                            alignItems:'flex-start',
+                            textAlign:'none',
+                        }}
+                        control={<Checkbox defaultChecked />} label="By proceeding, I confirm that I have read, understood, and accepted the Terms and Conditions." />
+                        </FormGroup>
+                        
+                            <Button sx={{
+                                width:'70%',
+                                height:'50px',
+                                margin:'auto',
+                                fontWeight:500,
+                                fontSize:'1.1rem',
+                                textTransform:'none'
+                            }} variant="contained" onClick={()=>toggleTab(2)}>Sign Up</Button>
+                                                 </Box>
+                        
+                    <p style={{marginTop:'1rem', color:'var(--off-black)'}}>Already have an account? <p className={LoginStyles.noAccRegLinkText} onClick={()=>toggleTab(2)}>Sign in here.</p></p>
     
               </div>
 </div>

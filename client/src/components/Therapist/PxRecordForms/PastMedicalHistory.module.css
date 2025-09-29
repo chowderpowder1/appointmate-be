@@ -1,0 +1,32 @@
+.container{
+    width:100%;
+    height:fit-content;
+    /* border:1px solid var(--border-color);
+    border-radius:5px; */
+    /* padding:1rem; */
+    text-align:left;
+    display:flex;
+    flex-flow:row;
+    gap:1rem;
+}
+.header{
+    font-size:1.3rem;
+    font-weight:500;
+}
+.subHeader{
+    text-transform: uppercase;
+    color:var(--primary-contrast);  
+    text-align: left;
+}
+.subContainer{
+    border:1px solid var(--border-color);
+    border-radius: 5px;
+    padding:1rem;
+    width:100%;
+}
+.subContainerTwo{
+    border:1px solid var(--border-color);
+    border-radius: 5px;
+    padding:1rem;
+    width:60%;
+}

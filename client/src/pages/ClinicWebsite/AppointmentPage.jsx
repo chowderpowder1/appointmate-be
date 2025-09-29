@@ -161,7 +161,7 @@ const AppointmentPage = () => {
                 <span onClick={ ()=> toggleTab(1)} className={`${AppointmentStyles.branchItem} ${activeTab === 1 ? AppointmentStyles.activeTab:''}`}>Caloocan</span>
                 <span onClick={ ()=> toggleTab(2)}  className={`${AppointmentStyles.branchItem} ${activeTab === 2 ? AppointmentStyles.activeTab:''}`}>Manila</span>
                 <span onClick={ ()=> toggleTab(3)}  className={`${AppointmentStyles.branchItem} ${activeTab === 3 ? AppointmentStyles.activeTab:''}`}>Ortigas</span>
-                <div className={AppointmentStyles.divider}></div>
+                <div className={AppointmentStyles.divider}/>
               </div>
 
                 {branchData.map((slide, index)=>(

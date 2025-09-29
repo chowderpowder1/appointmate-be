@@ -1,0 +1,133 @@
+.heroSection{
+    position: relative;
+    color:white;
+    width:100%;
+    min-height:100vh;
+    height:fit-content;
+    margin:0;
+    padding:2rem;
+    background-repeat: no-repeat;
+    background-size:cover;
+    background-image: url("../../assets/hero-image.png");
+    display:flex;
+    align-items: center;
+}
+/* .hero-background{
+    position:absolute;
+    left:0;
+    width:100%;
+    min-height:100vh;
+
+    margin:0;
+    padding:0;
+    overflow-x: hidden;
+    
+} */
+.heroGradient{
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background: #1863B0;
+    background: linear-gradient(90deg,rgba(24, 99, 176, 70%) 10%, rgba(237, 221, 83, 0) 60%);
+}
+.heroText{
+    display:flex;
+    flex-flow:column;
+    gap:2rem;
+    position: relative;
+    z-index:2;
+    width:fit-content;
+    
+}
+.heroText h4{
+    color:white;
+    background-color: #E51620;
+    width:fit-content;
+    padding: 1rem 2rem;
+    border-radius: .5rem;
+    white-space:nowrap;
+}
+.heroText p{
+    width:700px;
+}
+.heroText h1{
+    font-size:5rem;
+    font-weight: 700;
+    width:70%;
+}
+.apptBtn{
+    color:#1863B0;
+    font-weight: 600;
+    background-color: white;
+    width:fit-content;
+    padding:.5rem 1.2rem;
+    border-radius: 2rem;
+    filter: drop-shadow(0 0 0.75rem rgb(0,0,0, 40%));
+    font-size:1rem;
+    display:flex;
+    align-items:center;
+    transition: all 0.3s ease-out;
+}
+.apptBtn:hover{
+    transform: scale(1.05);
+}
+.apptIcon{
+    color:#1863B0;
+    padding:8px 10px;
+    margin-right:.5rem;
+    border-radius: 3rem;
+    font-size:3rem;
+    border-radius:50%;
+    background-color: rgb(202, 202, 202, 50%);
+}
+@media only screen and (max-width: 900px){
+    .heroText h1{
+    font-size:3rem;
+    }
+    .heroText p{
+    width:70%;
+    margin-bottom:2rem;
+    }
+}
+@media only screen and (max-width: 700px){
+    .heroText h1{
+    font-size:2.5rem;
+    }
+    .heroText h4{
+    font-size:.8rem;
+    }
+}
+@media only screen and (max-width: 430px){
+    .heroSection{
+        align-items: flex-start;
+        min-height:700px;
+        overflow:hidden;
+
+    }
+    .heroText{
+        align-items: center;
+        text-align: center;
+    }
+    .heroText h1{
+    font-size:1.5rem;
+    font-weight: 700;
+    }
+    .heroText h4{
+    color:white;
+    font-size:.7rem;
+    background-color: #E51620;
+    width:fit-content;
+    padding: .5rem 1rem;
+    border-radius: .5rem;
+    }
+    .heroText p{
+    width:300px;
+    margin-bottom:2rem;
+    }
+    .apptBtn{
+        font-size:.8rem;
+        padding:.3rem 1rem;
+    }
+}

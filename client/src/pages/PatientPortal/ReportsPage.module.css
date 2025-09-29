@@ -44,9 +44,6 @@
 .reportRow> :last-child{
     text-align: center;
 }
-.reportFileNameContainer{
-    
-}
 .reportFileName{
     display:flex;
     line-height:0;
