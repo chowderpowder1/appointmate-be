@@ -28,18 +28,18 @@ const Navbar = () => {
                 <li>
                     <NavLink to="/about" className={ActiveNav}>About us</NavLink>
                 </li>
-                <li>
+                {/* <li>
                     <NavLink to="/services" className={ActiveNav}>Services</NavLink>
-                </li>
+                </li> */}
                 <li>
                     <NavLink to="/HMOs" className={ActiveNav}>HMOs</NavLink>
                 </li>
-                <li>
+                {/* <li>
                     <NavLink to="/FAQs" className={ActiveNav}>FAQs</NavLink>
                 </li>
                 <li>
                     <NavLink to="/Contact-Us" className={ActiveNav}>Contact Us</NavLink>
-                </li>
+                </li> */}
                 <div className='nav-indicator'></div>
             </div>
             

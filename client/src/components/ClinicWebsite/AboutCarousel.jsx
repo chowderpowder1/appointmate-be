@@ -5,8 +5,8 @@ import CarouselBg from '../../assets/about-carousel-background.png'
 import caloocanBranch from '../../assets/branches/awCaloocan.jpeg'
 import lagunaBranch from '../../assets/branches/awLagunajpeg.jpeg'
 import antipoloBranch from '../../assets/branches/awAntipolo.jpeg'
-import zabarteBranch from '../../assets/awZabarte.jpg'
-import valBranch from '../../assets/awValenzuela.jpg'
+import zabarteBranch from '../../assets/AwZabarte.jpg'
+import valBranch from '../../assets/AwValenzuela.jpg'
 import { FaClock } from "react-icons/fa";
 import { FaLocationDot } from "react-icons/fa6";
 import { FaPhoneAlt } from "react-icons/fa";
