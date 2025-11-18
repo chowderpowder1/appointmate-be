@@ -4,16 +4,13 @@ import axios from 'axios';
 const TesTest = () => {
 
     const [backendData, setBackendData] = useState([{}])
-    
+    // const { data, isLoading, error } = usePxData();
 useEffect(() => {
-      axios.get('http://localhost:8080/auth/again', { withCredentials: true })
+      axios.get('http://localhost:8080/auth/session', { withCredentials: true })
       .then((res)=>{
       console.log(res.data.username);
     })
   }, [])
-
-  
-
   
   return (
 
@@ -26,7 +23,7 @@ useEffect(() => {
         <label for="email">Enter Email</label>
         <input type="text" id="email" name="email" placeholder='email' />
         <label for="password">Enter password</label>
-        <input type="password" id="password" name="password" placeholder='password' />
+        <input type="password" id="password" name="password" placeholder='password'/>
         <button type='submit'>Submit</button>
       </form>
       <h1>Sign up</h1>
@@ -37,6 +34,8 @@ useEffect(() => {
         <input type="password" id="password" name="password" placeholder='password' />
         <button type='submit'>Submit</button>
       </form>
+
+      <p></p>
     </div>
   )
 }

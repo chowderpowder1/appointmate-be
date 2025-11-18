@@ -94,7 +94,9 @@ function App() {
       <Route path='manage-roles' element={<RBAC/>}/>
     </Route>
 
-    <Route path='/Welcome' element={<WelcomePage/>}/>
+    <Route path='/login' element={<WelcomePage/>}/>
+    <Route path='/test' element={<TesTest/>}/>
+
   </>
   ))
   

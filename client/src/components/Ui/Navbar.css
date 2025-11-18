@@ -107,6 +107,23 @@
 .hamb{
     display:none;
 }
+.logout-btn{
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    border:1px solid #1863B0;
+    border-radius:25px;
+    height:50px;
+    width:50px;
+    color:#1863B0;
+    font-size:3rem;
+    flex-shrink:0;
+}
+.logout-btn:hover{
+    background-color:#1863B0;
+    color:white;
+}
 @media only screen and (max-width:500px){
     .nav-container{
     padding:1rem 3rem;

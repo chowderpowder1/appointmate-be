@@ -57,8 +57,8 @@ export default () => {
         spaceBetween={500}
         // loop={true}
         slidesPerView={1.10}
-        onSlideChange={() => console.log('slide change')}
-        onSwiper={(swiper) => console.log(swiper)}
+        // onSlideChange={() => console.log('slide change')}
+        // onSwiper={(swiper) => console.log(swiper)}
     >
         {review.map((slide, index)=>(
 

@@ -10,7 +10,24 @@ import StepThree from './StepThree'
 import StepFour from './StepFour'
 import StepComplete from './StepComplete'
 
+// useContext
+import { useContext } from 'react';
+import StepperContext from './StepperContext';
+import StepperProvider from './StepperContext'
+// const StepperContext = createContext();
+
 const OnboardingContainer = () => {
+
+    // const [formData, setFormData] = useState({
+    //   firstName: '',
+    //   lastName: '',
+    //   email: ''
+    // });
+
+    //  const updateFormData = (field, value) => {
+    //   setFormData(prev => ({ ...prev, [field]: value }));
+    // };
+
     const pages = [StepOne, StepTwo, StepThree, StepFour, StepComplete]
     const [currentStep, setCurrentStep] = useState(0);
     const numberOfSteps = 4;
@@ -18,6 +35,7 @@ const OnboardingContainer = () => {
     const nextBtn = () => setCurrentStep(current => current === numberOfSteps ?  currentStep: currentStep + 1);
     const prevBtn = () => setCurrentStep(current => current === 0 ?  currentStep : currentStep - 1);
   return (
+    // <StepperContext value={{formData, setFormData}}>
     <div className={OnboardingStyles.container}>
         <div className={OnboardingStyles.headerContainer}>
           {currentStep !== numberOfSteps && <> <p className={OnboardingStyles.header}>Let's Get You Started</p>
@@ -32,9 +50,13 @@ const OnboardingContainer = () => {
             <Button variant="contained" onClick={prevBtn}>Previous</Button>
             <Button variant="contained" onClick={nextBtn}>Next</Button>
         </div>}
-        
+        <p></p>
     </div>
+    // </StepperContext>
   )
 }
+// export const useStepperContext = () => {
+//   return useContext(StepperContext);
+// };
 
 export default OnboardingContainer

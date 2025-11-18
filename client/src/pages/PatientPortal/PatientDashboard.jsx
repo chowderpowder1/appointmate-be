@@ -14,7 +14,7 @@ import { IoMdMail } from "react-icons/io";
 import { FaExternalLinkAlt } from "react-icons/fa";
 
 const PatientDashboard = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
   
   return (
     <div className={PDStyles.container}>

@@ -1,5 +1,7 @@
 import { Link } from 'react-router'
 import { useState } from 'react'
+import { useNavigate } from 'react-router'
+
 import LoginStyles from './WelcomePage.module.css'
 import '../ClinicWebsite/SwiperStyles.css'
 import AwLogo from '../../assets/aw-logo.png'
@@ -24,11 +26,72 @@ import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 
+import axios from "axios";
+import Alert from '@mui/material/Alert';
+
 const LoginPage = () => {
-
-    const [toggleState, setToggleState] = useState(1);
+    const redirect = useNavigate();
     const toggleTab = ( index ) => setToggleState(index);
+    const [toggleState, setToggleState] = useState(1);
 
+    const [signUpForm, setsignUpForm] = useState({
+        first_name:"",
+        last_name:"",
+        contact_number:"",
+        email:"",
+        password:"",
+    })
+
+    const [loginForm, setLoginForm] = useState({
+        email:"",
+        password:"",
+    })
+
+    const handleSignUpChange = (e) => {
+      setsignUpForm({
+        ...signUpForm,
+        [e.target.name]: e.target.value,
+      });
+    };
+
+    const handleSignUpSubmit = async (e) =>{
+        e.preventDefault();
+            try{
+                const response = await axios.post(
+                    'http://localhost:8080/auth/signup', 
+                    signUpForm
+                )
+            console.log('Response:', response.data);
+            } catch (error) 
+            {
+                console.error('Error:', error);
+            }
+    }
+
+    const handleLoginChange = (e) => {
+      setLoginForm({
+        ...loginForm,
+        [e.target.name]: e.target.value,
+      });
+    };
+
+    const handleLoginSubmit = async (e) =>{
+        e.preventDefault();
+            try{
+                const response = await axios.post(
+                    'http://localhost:8080/auth/login', 
+                    loginForm,
+                    { withCredentials: true }
+                )
+                
+                    redirect("/");
+
+            console.log('This is Welcome Page - Response:', response);
+            } catch (error) 
+            {
+                console.error('Error:', error);
+            }
+    }
     const loginSwiperData = [
         {
             title: 'Book Appointments Anytime!',
@@ -50,9 +113,7 @@ const LoginPage = () => {
     return (
         
         <div className={LoginStyles.loginContainer}>
-            
           <div className={LoginStyles.containerOne}>
-        
             <Swiper className={LoginStyles.loginSwiper}
                 modules={[Pagination, Autoplay]}
                 pagination={{
@@ -102,8 +163,8 @@ const LoginPage = () => {
                     <p className={LoginStyles.headerSubText}>Login to book therapy sessions, track your progress, and connect with your care provider.</p>
                 </div>
                 <div className={LoginStyles.loginFormsContainer}>
-    
-                     <Box
+                    
+                     <Box method='POST' onSubmit={handleLoginSubmit}
                      sx={{
                         display:'flex',
                         flexDirection:'column',
@@ -111,27 +172,27 @@ const LoginPage = () => {
                         marginTop:2,
                      }}
                      component="form">
-                         <TextField id="outlined-basic" label="Email" variant="outlined" type="email"/>
+                         <TextField onChange={handleLoginChange} name='email' id="outlined-basic" label="Email" variant="outlined" type="email"/>
     
-                         <TextField id="outlined-basic" label="Password" variant="outlined" type="password"/>
+                         <TextField onChange={handleLoginChange} name='password' id="outlined-basic" label="Password" variant="outlined" type="password"/>
     
                         <div className={LoginStyles.loginQol}>
-                        <form action="">
+                        <form action="POST">
                             <input type="checkbox" id='rememberMe' name='rememberMe' />
                             <label id={LoginStyles.rememberMeLabel} htmlFor="rememberMe">Remember Me</label>
                         </form>
                         <Link>Forgot Password?</Link>
                      </div>
-    
+
+                        <Button type='submit' sx={{
+                            backgroundColor:'var(-primary-contrast)',
+                            height:'50px'
+                        }}
                         
-                            <Button sx={{
-                                backgroundColor:'var(-primary-contrast)',
-                                height:'50px'
-                            }}
-                            
-                            variant="contained"><Link to='/patient/dashboard' style={{color:'white', fontWeight:'400', fontSize:'1.1rem', textTransform:'none'}}>Login</Link></Button>
-                        
+                        variant="contained"><Link to='' style={{color:'white', fontWeight:'400', fontSize:'1.1rem', textTransform:'none'}}>Login</Link></Button>
+                    
                      </Box>
+
                      <div className={LoginStyles.alternativeLoginTxtContainer}>
                          <div className={LoginStyles.line}></div>
                          <p>or continue using</p>
@@ -213,7 +274,7 @@ const LoginPage = () => {
                     <h1 className={LoginStyles.header}>Create an account</h1>
                     <p >New here? Create an account to begin your journey to better health with Accelerated Wellness and Pain Clinic.</p>
                 </div>
-                <Box
+                <Box component='form' method='POST' onSubmit={handleSignUpSubmit}
                      sx={{
                         display:'flex',
                         flexDirection:'column',
@@ -222,7 +283,7 @@ const LoginPage = () => {
                         width:'100%',
                         padding:0
                      }}
-                     component="form">
+                     >
                     <Box sx={{
                         display:'flex',
                         justifyContent:'space-between',
@@ -230,18 +291,18 @@ const LoginPage = () => {
                         width:'100%',
                         padding:0
                      }}>
-                             <TextField fullWidth
-                             id="outlined-basic" label="First Name" variant="outlined" />
-                             <TextField fullWidth id="outlined-basic" label="Last Name" variant="outlined" />
+                             <TextField onChange={handleSignUpChange} fullWidth
+                             id="outlined-basic" name="first_name" label="First Name" variant="outlined" />
+                             <TextField onChange={handleSignUpChange} fullWidth name="last_name" id="outlined-basic" label="Last Name" variant="outlined" />
                          </Box>
     
-                         <TextField id="outlined-basic" label="Email" variant="outlined" />
+                         <TextField onChange={handleSignUpChange} id="outlined-basic" name="email" label="Email" variant="outlined" />
     
-                         <TextField id="outlined-basic" label="Contact Number" variant="outlined" />
+                         <TextField onChange={handleSignUpChange} id="outlined-basic" name="contact_number" label="Contact Number" variant="outlined" />
     
-                         <TextField id="outlined-basic" label="Password" variant="outlined" type={'password'} />
+                         <TextField onChange={handleSignUpChange} id="outlined-basic" name="password" label="Password" variant="outlined" type={'password'} />
     
-                         <TextField id="outlined-basic" label="Confirm Password" variant="outlined" type={'password'} />
+                         <TextField onChange={handleSignUpChange} id="outlined-basic" label="Confirm Password" variant="outlined" type={'password'} />
     
                         <div className={LoginStyles.loginQol}>
     
@@ -261,7 +322,7 @@ const LoginPage = () => {
                                 fontWeight:500,
                                 fontSize:'1.1rem',
                                 textTransform:'none'
-                            }} variant="contained" onClick={()=>toggleTab(2)}>Sign Up</Button>
+                            }} variant="contained" type="submit" >Sign Up</Button>
                                                  </Box>
                         
                     <p style={{marginTop:'1rem', color:'var(--off-black)'}}>Already have an account? <p className={LoginStyles.noAccRegLinkText} onClick={()=>toggleTab(2)}>Sign in here.</p></p>

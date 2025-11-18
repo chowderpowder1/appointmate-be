@@ -1,4 +1,5 @@
-import { React, useRef } from 'react'
+import { React, useRef, useContext } from 'react'
+
 import OneStyles from './StepOne.module.css'
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
@@ -13,6 +14,7 @@ import FormLabel from '@mui/material/FormLabel';
 
 const StepOne = () => {
 
+    const { formData, updateFormData } = useStepperContext();
     const fileInputRef = useRef();
 
     const handleClick = () => {
@@ -30,7 +32,9 @@ const StepOne = () => {
             <Box display='flex' sx={{
                 gap:'1rem'
             }}>
-                <TextField id="outlined-basic" label="First Name" variant="outlined" />
+                <TextField id="outlined-basic" label="First Name" variant="outlined" value={formData.firstName}
+                onChange={(e) => updateFormData('firstName', e.target.value)}
+      />
                 <TextField id="outlined-basic" label="Last Name" variant="outlined" />
                 <TextField id="outlined-basic" label="Middle Initial" variant="outlined" />
             </Box>

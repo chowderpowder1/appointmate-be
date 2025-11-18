@@ -27,12 +27,20 @@ import { IoIosMail } from "react-icons/io";
 import AwZabarte from '../../assets/AwZabarte.jpg'
 import AwValenzuela from '../../assets/AwValenzuela.jpg'
 
+import { useUsers } from '../../queries/users'
+
 const AppointmentPage = () => {
+  const {data, error, loading} = useUsers(); 
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error.message}</div>;
+
   const [ activeTab, setActiveTab ] = useState(0);
 
   const toggleTab = (index) => {
     setActiveTab(index);
   }
+  
+  // console.log(data);
 
   const branchData = [
     {
@@ -82,10 +90,10 @@ const AppointmentPage = () => {
                 gap:2
               }}
           >
-            <TextField fullWidth id="outlined-basic" label="First Name" variant="outlined" />
-            <TextField fullWidth id="outlined-basic" label="Last Name" variant="outlined" />
-            <TextField fullWidth id="outlined-basic" label="Email" variant="outlined" />
-            <TextField fullWidth id="outlined-basic" label="Contact Number" variant="outlined" />
+            <TextField slotProps={{input: {readOnly: true,}}} value={data?.first_name || ''} fullWidth id="outlined-basic" label="First Name" variant="outlined" />
+            <TextField slotProps={{input: {readOnly: true,}}} value={data?.last_name || ''} fullWidth id="outlined-basic" label="Last Name" variant="outlined" />
+            <TextField slotProps={{input: {readOnly: true,}}} value={data?.email || ''} fullWidth id="outlined-basic" label="Email" variant="outlined" />
+            <TextField slotProps={{input: {readOnly: true,}}} value={data?.contact_number || ''} fullWidth id="outlined-basic" label="Contact Number" variant="outlined" />
               <Box sx={{
                 width:'100%',
                 display:'flex',
@@ -110,9 +118,9 @@ const AppointmentPage = () => {
                 label="Select Branch">
                 {/* onChange={handleChange} */}
               
-                <MenuItem value={10}>Ten</MenuItem>
-                <MenuItem value={20}>Twenty</MenuItem>
-                <MenuItem value={30}>Thirty</MenuItem>
+                <MenuItem value={10}>Quezon City</MenuItem>
+                <MenuItem value={20}>Antipolo</MenuItem>
+                <MenuItem value={30}>Baguio</MenuItem>
               </Select>
               </FormControl>
             <FormControl fullWidth>
@@ -124,9 +132,9 @@ const AppointmentPage = () => {
                 label="Choose Physical Therapist">
                 {/* onChange={handleChange} */}
               
-                <MenuItem value={10}>Ten</MenuItem>
-                <MenuItem value={20}>Twenty</MenuItem>
-                <MenuItem value={30}>Thirty</MenuItem>
+                <MenuItem value={10}>Ronaldo</MenuItem>
+                <MenuItem value={20}>Jualito</MenuItem>
+                <MenuItem value={30}>Maria</MenuItem>
               </Select>
               </FormControl>
               <p>Mode of Payment:</p>
@@ -137,9 +145,9 @@ const AppointmentPage = () => {
                 id="demo-simple-select"
                 label="HMO">
                 {/* onChange={handleChange} */}
-                <MenuItem value={10}>Ten</MenuItem>
-                <MenuItem value={20}>Twenty</MenuItem>
-                <MenuItem value={30}>Thirty</MenuItem>
+                <MenuItem value={10}>CocoLife</MenuItem>
+                <MenuItem value={20}>SunLife</MenuItem>
+                
               </Select>
                 <Button sx={{width:'300px', color: 'gray', borderColor:'gray'}} variant="outlined">Cash</Button>
               </FormControl>

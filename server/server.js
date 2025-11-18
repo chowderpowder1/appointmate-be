@@ -6,6 +6,7 @@ import notFound from './middleware/notFound.js';
 import dotenv from 'dotenv'; // Environment Variables
 import dbConnection from './db.js';
 import authRouter from './routes/auth.js'
+// import pxData from './routes/pxData.js'
 import path from 'path';
 import cors from 'cors'; // Cross origin resource sharing
 import session from 'express-session'; //Cookie Session
@@ -36,7 +37,10 @@ app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
-    cookie: { secure: false }
+    cookie: { 
+        secure: false,
+        sameSite: 'lax'
+     }
 }))
 
 app.use('/auth', authRouter);
@@ -46,7 +50,7 @@ app.get('/users', (req, res) => {
     res.json(users);
 })
 
-
+// app.get('/pxData', pxData);
 // app.post('/users', async (req, res) => {
 //     try{
 //         const salt = await bcrypt.genSalt();

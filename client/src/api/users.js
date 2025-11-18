@@ -3,9 +3,9 @@ import axios from "axios";
 export const users = async () => {
 
     const response = await axios
-    .get('http://localhost:8080/auth/again', { withCredentials: true })
-
-    return response.data
+    .get('http://localhost:8080/auth/session', { withCredentials: true })
+    console.log(response.data);
+    return response.data;
 
 }
 
