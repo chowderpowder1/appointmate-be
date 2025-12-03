@@ -1,16 +1,23 @@
 import express from 'express'; // Node framework
-import Posts from './routes/posts.js';
 import logger from './middleware/logger.js';
 import errorHandler from './middleware/error.js'
 import notFound from './middleware/notFound.js';
 import dotenv from 'dotenv'; // Environment Variables
 import dbConnection from './db.js';
 import authRouter from './routes/auth.js'
+import userRoutes from './routes/userRoutes.js'
+import clinicRoutes from './routes/clinicRoutes.js'
 // import pxData from './routes/pxData.js'
 import path from 'path';
 import cors from 'cors'; // Cross origin resource sharing
 import session from 'express-session'; //Cookie Session
 import connectPgSimple from 'connect-pg-simple' // Used by session to configure session store
+
+import apptRoutes from './routes/apptRoutes.js'
+
+// google auth dependencies
+import passport from 'passport'
+import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 
 dotenv.config();
 
@@ -21,12 +28,12 @@ const pgSession = connectPgSimple(session);
 app.use(cors({
   origin: 'http://localhost:5173', 
   credentials: true, 
-  optionsSuccessStatus: 200
+//   optionsSuccessStatus: 200
 }));
 
 // Body parser middleware - used in dev for post requests
 app.use(express.json())            
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 
 // Session config
 app.use(session({
@@ -43,47 +50,98 @@ app.use(session({
      }
 }))
 
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.use(new GoogleStrategy({
+    clientID: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    callbackURL: 'http://localhost:8080/auth/google/callback'
+    }, async (accessToken, refreshToken, profile, done) => {
+        console.log('Block One')
+        try{
+            const googleId = profile.id
+            const email = profile.emails[0].value;
+            const name = profile.displayName;
+            const photo = profile.photos[0].value;
+            
+            let user = await dbConnection.query(`SELECT * from awp_users_tbl WHERE google_id = $1`, [googleId]);
+
+            // console.log(user)
+            // console.log(user.rows)
+            // console.log(profile)
+            if (user.rows.length === 0){
+                user = await dbConnection.query(`INSERT INTO awp_users_tbl ( user_role, user_fname, user_lname, user_logemail, password_hash, google_id)values( $1, $2, $3, $4, $5, $6) RETURNING user_id`,[5, name, 'z', email, null, googleId ])
+            }
+
+            done(null, user)
+    }catch (err){
+        console.log(err)
+    }}
+))
+
+passport.serializeUser((user, done) => {
+    // console.log('Serialize user block one' + user)
+    console.log('Block Three');
+    console.log(user.rows[0].user_id)
+    done(null, user.rows[0].user_id)
+})
+passport.deserializeUser( async (id, done) => {
+    console.log('deserializing')
+    const result = await dbConnection.query("SELECT * FROM awp_users_tbl WHERE user_id = $1", [id]);
+    console.log(result.rows[0]);
+    const row = result.rows[0]
+    const user = {
+        loggedIn:true,
+        email: row.user_logemail,
+        id: row.user_id,
+        firstName: row.user_fname,
+    }
+    done(null, user);
+});
+
+
+app.get("/auth/google", passport.authenticate('google', {scope: ["profile", "email"]}))
+
+app.get("/auth/google/callback", (req, res, next) => {
+    console.log('Callback Endpoint Reached')
+    req.session.user
+    passport.authenticate('google', (err, user, info)=> {
+        // console.log(user)
+        if (err) {
+        console.error("Authentication error:", err);
+        return res.status(500).json({ error: "Internal server error" });
+      }
+      if (!user) {
+        return res.status(401).json({ error: "Login failed" });
+      }
+      // Log in via session
+      req.login(user, (err) => {
+        if (err) return res.status(500).json({ error: "Login failed" });
+        // { id: rows.user_id, fname: rows.user_fname, email: rows.user_logemail }
+        
+        return res.redirect('http://localhost:5173/patient/dashboard');
+      });
+    })(req, res, next);
+   
+        }
+    )
+
+// Routes
 app.use('/auth', authRouter);
+app.use('/userData', userRoutes);
+app.use('/appt', apptRoutes);
+app.use('/clinic', clinicRoutes);
 
 // app.use('/login', )
 app.get('/users', (req, res) => {
     res.json(users);
 })
 
-// app.get('/pxData', pxData);
-// app.post('/users', async (req, res) => {
-//     try{
-//         const salt = await bcrypt.genSalt();
-//         const hashedPassword = await bcrypt.hash(req.body.password, salt);
-//         const user = { name: req.body.name, password: hashedPassword };
-//         users.push(user)
-//         res.status(201).send();
-//     }catch(error){
-//         console.log(error);
-//         res.status(500).send();
-//     }
-// })
-
-app.post('/users/login', async (req, res)=> {
-    const user = users.find(user => user.name = req.body.name)
-    if ( user == null){
-        return res.status(400).send('Cannot find user')
-    }
-    try { 
-        if (await bcrypt.compare(req.body.password, user.password)){
-            res.send('Success');
-        } else{
-            res.send('Incorrect Password');
-        }
-    } catch {
-        res.status(500).send()
-    }
-})
 // logger middlware
 app.use(logger);
 
 // Routes
-app.use('/api/posts', Posts);
 
 app.use(notFound)
 
