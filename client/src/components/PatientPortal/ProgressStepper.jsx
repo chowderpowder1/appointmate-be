@@ -12,8 +12,19 @@ import RedHeader from '../../components/Ui/RedHeader'
 import SessionBg from '../../assets/runningPersonBg.png'
 import RescheduleStatus from '../../components/PatientPortal/RescheduleStatus'
 import { FaCheck } from "react-icons/fa";
+import { FaCircleDot } from "react-icons/fa6";
+import { FaClock } from "react-icons/fa";
+import { TiCancel } from "react-icons/ti";
+
+//  Axios imports YEAAAHHHH
+import {useGetBookedDates, useGetMyAppointments} from '../../queries/apptData'
+
+import dayjs from "dayjs";
 
 const ProgressStepper = ({isHome}) => {
+  const { data: bookedApptData, isLoading: bookedApptDataisLoading, error: bookedApptDataError} = useGetBookedDates();
+
+  const { data: myAppointmentsData, isLoading: myAppointmentsDataIsLoading, error: myAppointmentsDataError } = useGetMyAppointments();
 
       const treatmentData = [
      {
@@ -52,6 +63,46 @@ const ProgressStepper = ({isHome}) => {
     }
   ]
 
+  // Errur Chiking ba
+  if ( bookedApptDataisLoading || myAppointmentsDataIsLoading ) return <div>Loading...</div>;
+  if ( bookedApptDataError || myAppointmentsDataError ) return <div>Error: {bookedApptDataError.message}</div>;
+
+  const mappedApptData = myAppointmentsData.userAppointments;
+  // console.log(mappedApptData.appt_date)
+  // console.log(dayjs(mappedApptData[0].appt_date).format('YYYY MM DD'))
+  console.log(mappedApptData[0].appt_status)
+
+  const getStatusStyle = (status) => {
+    switch (status) {
+      case 'pending':
+        return <> <div className={ProgressStyles.progressCircle} style={{border: '1px solid orange', backgroundColor:'orange'}}><FaCircleDot style={{color:'white', fontSize:'1.2rem'}}/></div></>;
+      case 'scheduled':
+        return <> <div className={ProgressStyles.progressCircle} style={{border: '1px solid #388E3C', backgroundColor:'#388E3C'}}><FaClock style={{color:'white', fontSize:'1.5rem'}}/></div></>;
+      case 'completed':
+        return <> <div className={ProgressStyles.progressCircle} style={{border: '1px solid #1976D5', backgroundColor:'#1976D5'}}><FaCheck style={{color:'white', fontSize:'1rem'}}/></div></>;
+      case 'approved':
+        return <> <div className={ProgressStyles.progressCircle} style={{border: '1px solid #388E3C', backgroundColor:'#388E3C'}}><FaClock style={{color:'white', fontSize:'1.5rem'}}/></div></>;
+      case 'cancelled':   
+      return <> <div className={ProgressStyles.progressCircle} style={{border: '1px solid #D32F2F', backgroundColor:'#D32F2F',}}><TiCancel style={{color:'white', fontSize:'2rem'}}/></div></>; 
+    }
+  }
+
+  const getStatusIndicatorStyles = (status) => {
+    console.log(status)
+    switch (status) {
+      case 'pending':
+        return {"--apptStatusColor":'orange'};
+      case 'scheduled':
+        return {"--apptStatusColor":'#388E3C'};
+      case 'completed':
+        return {"--apptStatusColor":'#1976D5'};
+      case 'approved':
+        return {"--apptStatusColor":'#388E3C'};
+      case 'cancelled':   
+      return {"--apptStatusColor":'#D32F2F'};
+    }
+  }
+
   return (
 
           <div
@@ -70,9 +121,45 @@ const ProgressStepper = ({isHome}) => {
           }}
           className={ProgressStyles.stepperSection}>
                 <div className={ProgressStyles.stepperSubSection}>
-                {treatmentData.map((treatment, index)=>
+                {mappedApptData.map((apptData, index)=>
                   (<>
-                   { treatment.sessionData.map((data, child)=>(
+                   
+                     <div className={ProgressStyles.row}>
+                      {getStatusStyle(apptData.appt_status)}
+                  {/* { apptData.appt_status == 'scheduled' && <><div className={ProgressStyles.progressCircle} style={{backgroundColor:'#1976D5', color:'white'}}><FaCheck/></div></>}
+
+                  { apptData.appt_status == 'pending' && <>  <div className={ProgressStyles.progressCircle} style={{border: '1px solid orange', backgroundColor:'white', color:'orange'}}><FaCircleDot/></div></>}
+                   */}
+                  <div className={ProgressStyles.detailsContainer} style={getStatusIndicatorStyles(apptData.appt_status)}>
+                  {/* <div className={ProgressStyles.detailsContainer} style={{     "--apptStatusColor": apptData.appt_status === "scheduled" ? "#1976D5" : "orange",}}> */}
+                      <span>
+                        <p className={ProgressStyles.rowTitle}>{apptData.appt_date}</p>
+                        <p className={ProgressStyles.rowSubText}>Appointment Date</p>
+                      </span>
+                      <div className={ProgressStyles.verticalDivider}/>
+                      <span>
+                      <p className={ProgressStyles.rowTitle}>{apptData.appt_start} - {apptData.appt_end}</p>
+                      <p className={ProgressStyles.rowSubText}>Appointment Time</p>
+                    </span>
+                    <div className={ProgressStyles.verticalDivider}/>
+                    <span>
+                      <p className={ProgressStyles.rowTitle}>{apptData.therapist_name}</p>
+                      <p className={ProgressStyles.rowSubText}>Assigned Therapist</p>
+                    </span>
+                    <div className={ProgressStyles.verticalDivider}/>
+                    <span>
+                      <p className={ProgressStyles.rowTitle}>{apptData.mode_of_payment}</p>
+                      <p className={ProgressStyles.rowSubText}>Payment Method</p>
+                    </span>
+                    <div className={ProgressStyles.verticalDivider}/>
+                    <div className={ProgressStyles.appointmentNotesContainer}>
+                      <FaNoteSticky />
+                      <Link to={`appointment-details/${apptData.appt_id}`}>Notes</Link>
+                    </div>
+                    </div>
+                  </div>
+
+                   {/* { treatment.sessionData.map((data, child)=>(
                      <div className={ProgressStyles.row}>
                   <div className={ProgressStyles.progressCircle} style={{backgroundColor:'#1976D5', color:'white'}}><FaCheck />
                   </div>
@@ -103,8 +190,8 @@ const ProgressStepper = ({isHome}) => {
                     </div>
                     </div>
                   </div>
-                  ))}
-                  {(treatment.sessionData.length < treatment.sessionLength) ? [...Array(treatment.sessionLength - treatment.sessionData.length)].map((_,y)=>(
+                  ))} */}
+                  {/* {(treatment.sessionData.length < treatment.sessionLength) ? [...Array(treatment.sessionLength - treatment.sessionData.length)].map((_,y)=>(
                   <div className={ProgressStyles.row}>
                   <div className={ProgressStyles.progressCircle}></div>
                   <div className={ProgressStyles.detailsContainer}>
@@ -134,7 +221,7 @@ const ProgressStepper = ({isHome}) => {
                     </div>
                     </div>
                   </div>
-                  )) : 'hell no'}
+                  )) : 'hell no'} */}
           
               </>))}
             </div>

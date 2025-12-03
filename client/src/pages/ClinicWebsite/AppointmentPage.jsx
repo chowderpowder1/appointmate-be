@@ -18,6 +18,15 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormLabel from '@mui/material/FormLabel';
+import CheckIcon from '@mui/icons-material/Check';
+import ToggleButton from '@mui/material/ToggleButton';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+
+import dayjs from "dayjs";
 
 // Icons
 import { FaLocationDot } from "react-icons/fa6";
@@ -27,21 +36,14 @@ import { IoIosMail } from "react-icons/io";
 import AwZabarte from '../../assets/AwZabarte.jpg'
 import AwValenzuela from '../../assets/AwValenzuela.jpg'
 
+import axios from 'axios';
 import { useUsers } from '../../queries/users'
+import { useGetBookedDates, useBookAppt } from '../../queries/apptData'
+
+// Imports fixed time slots of AWP
+import {timeSlots} from '../../features/timeSlots'
 
 const AppointmentPage = () => {
-  const {data, error, loading} = useUsers(); 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error.message}</div>;
-
-  const [ activeTab, setActiveTab ] = useState(0);
-
-  const toggleTab = (index) => {
-    setActiveTab(index);
-  }
-  
-  // console.log(data);
-
   const branchData = [
     {
       branchId: 0,
@@ -77,23 +79,153 @@ const AppointmentPage = () => {
   },
   ]
 
+  const hmoProvider = [
+            { Hmo: 'amaphil' },
+            { Hmo: 'caritas Health Shield' },
+            { Hmo: 'cocoLife' },
+            { Hmo: 'eastWest' },
+            { Hmo: 'firstLife' },
+            { Hmo: 'hartmann' },
+            { Hmo: 'hmi' },
+            { Hmo: 'hppi' },
+            { Hmo: 'iCare' },
+            { Hmo: 'medAsia' },
+            { Hmo: 'pacific Cross' },
+            { Hmo: 'bpiPhilam' },
+            { Hmo: 'coop Health' },
+            { Hmo: 'generali' },
+            { Hmo: 'inLife' },
+            { Hmo: 'lacson Lacson' },
+            { Hmo: 'mediCard' },
+            { Hmo: 'mediLink' },
+            { Hmo: 'medoCare' },
+            { Hmo: 'philam Life' },
+            { Hmo: 'sunLife Grepa' },
+            { Hmo: 'valuCare' },
+            { Hmo: 'wellCare' }
+  ]
+  const bookApptMutation = useBookAppt()
+  const {data : userData, isLoading: userDataIsLoading, error: userDataError} = useUsers();
+  const { data: bookedApptData, isLoading: bookedApptDataisLoading, error: bookedApptDataError, refetch: refetchBookedApptData } = useGetBookedDates();
+  const [ activeTab, setActiveTab ] = useState(0);
+  const [ disabledSlots, setDisabledSlots] = useState([]);
+  const [ disabledDates, setDisabledDates] = useState([]);
+  const [ mop, setMop ] = useState('');
+  const [ appointmentForm, setAppointmentForm] = useState({
+    // firstName:'',
+    // lastName: '',
+    // email: '',
+    // contactNumber: '',
+    apptDate: '',
+    apptTime:'',
+    apptTherapist: '',
+    mop:'',
+    hmoProvider: '',
+  });
+  const inputHandler = (e) => {
+    const {name, value} = e.target;
+    console.log("Payload Structure before send: ", appointmentForm)
+
+    setAppointmentForm( prev => ({
+      ...prev, 
+      [name] : value
+    }))
+    // calculateDisabledSlots()
+  }
+
+useEffect(()=>{
+
+    const newTimeSlots = []
+    const disabledDates = []
+    setDisabledSlots('')
+    if(bookedApptData?.appointments){
+      for ( const [key, val] of Object.entries(bookedApptData.appointments)){
+        console.log( 'key value pair for disabled slots:', key, val);
+        if ( (appointmentForm.apptDate).toString() == key){
+          // console.log(key)
+          // console.log(val)
+          val.forEach((timeSlot)=> {
+            // console.log(timeSlot)
+            // console.log(newTimeSlots);
+            newTimeSlots.push(timeSlot)
+            setDisabledSlots(newTimeSlots);
+            // console.log(disabledSlots);
+          })
+          // 
+        }
+      }
+
+      for (var key in bookedApptData.appointments){
+        if(bookedApptData.appointments.hasOwnProperty(key)){
+          if(bookedApptData.appointments[key].length > 10){
+            console.log(key)
+            disabledDates.push(dayjs(key).format('YYYY-MM-DD'))
+          }
+          // console.log(key + '=>' + bookedApptData.appointments[key].length)
+        }
+      }
+      setDisabledDates(disabledDates)
+    }
+  bookApptMutation.mutate(appointmentForm)
+},[appointmentForm.apptDate, bookedApptData])
+
+  const toggleTab = (index) => {
+    setActiveTab(index);
+  }
+
+  // Returns boolean values for disabled timeslots 
+  const  timeSlotGenerator = (timeSlot) => {
+    // console.log(timeSlot)
+    const now = dayjs().format('HH:mm')
+    // console.log(now)
+    const day = dayjs().format('YYYY-MM-DD')
+    // console.log(day)
+
+    if(appointmentForm.apptDate <= day && timeSlot <= now){
+      return true;
+    }
+    return disabledSlots.includes(timeSlot)
+  }
+  
+  if (userDataIsLoading || bookedApptDataisLoading) return <div>Loading...</div>;
+  if (userDataError || bookedApptDataError) return <div>Error: {bookedApptDataError.message || userDataError.message}</div>;
+  // const disabledDates = new Set(Object.keys(bookedApptData.appointments));
+  // const disabledTimes = new Set(Object.values(bookedApptData.appointments));
+  // console.log(bookedApptData);
+  // console.log(disabledDates);
+  // console.log(disabledTimes);
+
+  const submitFormData = async (e) => {
+    e.preventDefault();
+    // console.log("Payload Structure before send: "+ JSON.stringify(appointmentForm))
+    // console.log(appointmentForm)
+    bookApptMutation.mutate(appointmentForm)
+    setAppointmentForm({
+      apptDate: '',
+      apptTime:'',
+      apptTherapist: '',
+      mop:'',
+      hmoProvider: '',
+    })
+  }
   return (
     <div className={AppointmentStyles.appointmentContainer}>
       <HeroGen bgSrc={AppointmentBg} header='Book an appointment!'> 
       </HeroGen>
       <div className={AppointmentStyles.appointmentSubContainer}>
         <div className={AppointmentStyles.formsContainer}>
+          <form onSubmit={submitFormData}>
           <Box 
           sx={{
                 display:'flex',
                 flexDirection:'column',
                 gap:2
-              }}
-          >
-            <TextField slotProps={{input: {readOnly: true,}}} value={data?.first_name || ''} fullWidth id="outlined-basic" label="First Name" variant="outlined" />
-            <TextField slotProps={{input: {readOnly: true,}}} value={data?.last_name || ''} fullWidth id="outlined-basic" label="Last Name" variant="outlined" />
-            <TextField slotProps={{input: {readOnly: true,}}} value={data?.email || ''} fullWidth id="outlined-basic" label="Email" variant="outlined" />
-            <TextField slotProps={{input: {readOnly: true,}}} value={data?.contact_number || ''} fullWidth id="outlined-basic" label="Contact Number" variant="outlined" />
+            }}>
+
+            <TextField required slotProps={{input: {readOnly: true,}}} value={userData.firstName} fullWidth id="outlined-basic" label="First Name" variant="outlined" />
+            <TextField required slotProps={{input: {readOnly: true,}}} value={userData.lastName} fullWidth id="outlined-basic" label="Last Name" variant="outlined" />
+            <TextField required slotProps={{input: {readOnly: true,}}} value={userData.email}fullWidth id="outlined-basic" label="Email" variant="outlined" />
+            <TextField required slotProps={{input: {readOnly: true,}}} value={userData.contact_number} fullWidth id="outlined-basic" label="Contact Number" variant="outlined" />
               <Box sx={{
                 width:'100%',
                 display:'flex',
@@ -101,64 +233,187 @@ const AppointmentPage = () => {
                 justifyContent:'space-between'
                 }}>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DemoContainer  components={['DatePicker']}>
-                      <DatePicker sx={{width:'300px'}} label="Basic date picker" />
-                    </DemoContainer>
-                    <DemoContainer components={['TimePicker']}>
-                      <TimePicker sx={{width:'300px'}} label="Basic time picker" />
-                    </DemoContainer>
+                  <DatePicker
+                  
+                    label="Pick an Appointment Date"
+                    onChange={(e)=> {
+                      const formattedDate = dayjs(e).format("YYYY-MM-DD")                        
+                      inputHandler({target: { name: 'apptDate', value: formattedDate}})                    
+                    }}    
+                    shouldDisableDate={(day)=> {
+                        const formattedDate = day.format("YYYY-MM-DD")                        
+                        return disabledDates.includes(formattedDate)    
+                      }}
+                    value={dayjs(appointmentForm.apptDate)}
+                    name="apptDate"
+                    slotProps={{
+                      textField: {
+                        fullWidth: true,
+                      },
+                    }}
+                    minDate={dayjs()} // prevents selecting future dates
+                    // shouldDisableDate={(day)=> {
+                    //   const formatted= day.format("YYYY-MM-DD")
+                    //   return disabledDates.has(formatted)
+                    // }}
+                  />
+                    
+                    {/* Time Slot Picker */}
+                <FormControl sx={{flexDirection:'row', gap:'1rem'}} required fullWidth>
+                <InputLabel sx={{width:'300px'}} id="demo-simple-select-label">Pick a time slot</InputLabel>
+                <Select sx={{width:'300px'}}
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={appointmentForm.apptTime}
+                  name='apptTime'
+                  label="Pick a time slot"
+                  onChange={inputHandler}
+                  disabled={!appointmentForm.apptDate}
+                >
+                  {timeSlots.map((e)=>(
+                    <MenuItem disabled={timeSlotGenerator(e.value)} 
+                    value={e.value}>{(e.label).toUpperCase()}</MenuItem>
+                  ))}
+                </Select>
+
+              </FormControl>
                 </LocalizationProvider>
               </Box>    
-            <FormControl fullWidth>
+
+
+            {/* <FormControl fullWidth>
              <InputLabel id="demo-simple-select-label">Select Branch</InputLabel>
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-
+                name="apptBranch"
+                onChange={inputHandler}
                 label="Select Branch">
-                {/* onChange={handleChange} */}
-              
-                <MenuItem value={10}>Quezon City</MenuItem>
-                <MenuItem value={20}>Antipolo</MenuItem>
-                <MenuItem value={30}>Baguio</MenuItem>
+                
+                <MenuItem value={'Quezon City'}>Quezon City</MenuItem>
+                <MenuItem value={'Caloocan'}>Caloocan</MenuItem>
+                <MenuItem value={'Manila'}>Manila</MenuItem>
+                <MenuItem value={'Oritgas'}>Ortigas</MenuItem>
               </Select>
-              </FormControl>
-            <FormControl fullWidth>
+              </FormControl> */}
+
+            <FormControl fullWidth required>
              <InputLabel id="demo-simple-select-label">Choose Physical Therapist</InputLabel>
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
+                label="Choose Physical Therapist"
+                onChange={inputHandler}
+                name='apptTherapist'
+                value={appointmentForm.apptTherapist}
 
-                label="Choose Physical Therapist">
-                {/* onChange={handleChange} */}
-              
-                <MenuItem value={10}>Ronaldo</MenuItem>
-                <MenuItem value={20}>Jualito</MenuItem>
-                <MenuItem value={30}>Maria</MenuItem>
+                >
+                <MenuItem value={'Rafael Ong'}>Rafael Ong</MenuItem>
+                <MenuItem value={'Lucia Reyes'}>Lucia Reyes</MenuItem>
               </Select>
               </FormControl>
-              <p>Mode of Payment:</p>
-              <FormControl sx={{flexDirection:'row', gap:'1rem'}} fullWidth>
-                <InputLabel sx={{width:'300px'}} id="demo-simple-select-label">HMO</InputLabel>
-              <Select sx={{width:'300px'}}
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                label="HMO">
-                {/* onChange={handleChange} */}
-                <MenuItem value={10}>CocoLife</MenuItem>
-                <MenuItem value={20}>SunLife</MenuItem>
-                
-              </Select>
-                <Button sx={{width:'300px', color: 'gray', borderColor:'gray'}} variant="outlined">Cash</Button>
+              {/* <p>Mode of Payment:</p> */}
+
+                <Box sx={{flexDirection:'row', gap:'1rem'}}fullWidth>
+
+
+{/* <FormControl>
+  <FormLabel id="demo-radio-buttons-group-label">Mode of Payment:</FormLabel>
+  <RadioGroup
+    aria-labelledby="demo-radio-buttons-group-label"
+    defaultValue="female"
+    name="radio-buttons-group"
+  >
+    <FormControlLabel value="HMO" control={<Radio />} label="HMO" />
+    <FormControlLabel value="CASH" control={<Radio />} label="CASH" />
+  </RadioGroup>
+</FormControl> */}
+<ToggleButtonGroup
+required
+      fullWidth
+        sx={{
+    gap: 1,
+    "& .MuiToggleButtonGroup-grouped:not(:first-of-type)": {
+      borderLeft: "1px solid rgba(0,0,0,0.23)",
+    },
+    "& .MuiToggleButtonGroup-grouped": {
+      borderRadius: "8px", // prevents weird clipped corners
+    }
+  }}
+      value={appointmentForm.mop}
+      exclusive
+      name='mop'
+      onChange={(event, nextView)=>{
+        console.log(appointmentForm.mop);
+        if(nextView == appointmentForm.mop || appointmentForm.mop == null){
+          console.log('its the same')
+          inputHandler({target:{name:'mop', value: ''}})
+        }
+        inputHandler({target:{name: 'mop', value: nextView }})
+        setMop(nextView)
+        // setAppointmentForm.mop(nextView)
+      }}
+>
+    <ToggleButton
+      value='HMO'
+              sx={{
+          "&.Mui-selected": {
+            backgroundColor: "#4791DD",
+            color: "white",
+            "&:hover": {
+              backgroundColor: "#4791DD", // keeps hover same as selected
+            },
+          },
+        }}
+>
+      <p>HMO</p>
+    </ToggleButton>
+    <ToggleButton
+    
+      value='CASH'
+              sx={{
+          "&.Mui-selected": {
+            backgroundColor: "#4791DD",
+            color: "white",
+            "&:hover": {
+              backgroundColor: "#4791DD", // keeps hover same as selected
+            },
+          },
+        }}
+    >
+      <p>CASH</p>
+    </ToggleButton>
+</ToggleButtonGroup>
+                </Box>
+
+                 <FormControl sx={{flexDirection:'row', gap:'1rem'}} fullWidth>
+                <InputLabel fullWidth id="demo-simple-select-label">HMO Provider</InputLabel>
+                <Select fullWidth
+                required={ appointmentForm.mop == 'HMO' ? true : false}
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={appointmentForm.hmo}
+                  disabled={ appointmentForm.mop =='CASH' || appointmentForm.mop=='' || appointmentForm.mop == null}
+                  name='hmoProvider'
+                  label="HMO Provider"
+                  onChange={inputHandler}
+                >
+                  {hmoProvider.map((e)=>(
+                    <MenuItem 
+                  
+                    value={e.Hmo}>{(e.Hmo).toUpperCase()}</MenuItem>
+                  ))}
+                </Select>
               </FormControl>
-            <Button sx={{padding:'1rem'}} variant="contained">Book An Appointment</Button>
-            
+            <Button type="submit" sx={{padding:'1rem'}} variant="contained">Book My Appointment</Button>
           </Box>
+
+        </form>
         </div>
         
         <div className={AppointmentStyles.infoContainer}>
           <div>
-            <h1 className={AppointmentStyles.titleText}>Make Appointment</h1>
+            <h1 className={AppointmentStyles.titleText}>Set an Appointment</h1>
             <p className={AppointmentStyles.subText}>Getting an accurate diagnosis can be one of the most impactful experiences that you can have - especially if you've been in search of that answer for a while. We can help you get there.</p>
           </div>
 

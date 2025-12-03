@@ -4,50 +4,36 @@ import ManageStyles from './ManageApptTab.module.css'
 import MockPxPhoto from '../../assets/mockPx.jpg'
 import { FaEye } from "react-icons/fa";
 import { MdEditDocument } from "react-icons/md";
+import { Button } from '@mui/material';
+import { useGetAllAppt, useUpdateApptStatus } from '../../queries/useEmployees'
 
 const ManageAppt = () => {
-    const mockAppointments = [
-  {
-    patientName: "Sarah Johnson",
-    date: "15 September 2025",
-    time: "2:30 PM",
-    therapist: "Dr. Maria Rodriguez",
-    payment: "Cash Basis",
-    apptId: 1
-  },
-  {
-    patientName: "Michael Chen",
-    date: "15 September 2025",
-    time: "3:45 PM",
-    therapist: "Dr. James Wilson",
-    payment: "HMO",
-    apptId: 2
-  },
-  {
-    patientName: "Emma Davis",
-    date: "16 September 2025",
-    time: "10:00 AM",
-    therapist: "Dr. Lisa Thompson",
-    payment: "HMO",
-    apptId: 3
-  },
-  {
-    patientName: "Robert Martinez",
-    date: "16 September 2025",
-    time: "1:15 PM",
-    therapist: "Dr. Maria Rodriguez",
-    payment: "Cash Basis",
-    apptId: 4
-  },
-  {
-    patientName: "Jennifer Wong",
-    date: "17 September 2025",
-    time: "9:30 AM",
-    therapist: "Dr. James Wilson",
-    payment: "HMO",
-    apptId: 5
+  const {mutate: updateApptStatus } = useUpdateApptStatus();
+  const { data: allApptData, isLoading: allAptDataIsLoading, error: allAptDataError} = useGetAllAppt();
+
+  if (allAptDataIsLoading ) return <div>Loading...</div>;
+  if (allAptDataError) return <div>Error: {allAptDataError.message}</div>
+  const apptStatusHandler = (status) =>{
+    updateApptStatus({
+      appt_id: status,
+      appt_status: 'scheduled'
+    })
   }
-];
+
+    const getApptStatusIndicator = (status) => {
+    switch (status) {
+      case 'pending':
+        return {"background-color":'orange'};
+      case 'scheduled':
+        return {"background-color":'#388E3C'};
+      case 'completed':
+        return {"background-color":'#1976D5'};
+      case 'approved':
+        return {"background-color":'#388E3C'};
+      case 'cancelled':   
+      return {"background-color":'#D32F2F'};
+    }
+  }
 
   return (
     <div className={ManageStyles.container}>
@@ -65,31 +51,41 @@ const ManageAppt = () => {
                     <span>Action</span>
                 </div>
 
-                {mockAppointments.map((data, index)=>(
+                {allApptData.allActiveAppt.map((data, index)=>(
                     <div className={ManageStyles.apptDataRow}>
                         <span className={ManageStyles.pxDataItem}>
                         <div className={ManageStyles.pxPhotoContainer}>
                             <img src={MockPxPhoto} className={ManageStyles.pxPhoto} alt="" />
                         </div>
                             <div className={ManageStyles.pxDataText}>
-                                <p>{data.patientName}</p>
-                                <p>#A2023141814</p>
+                                <p>{data.patient_name}</p>
+                                <p>{data.patient_id}</p>
                             </div>
                         </span>
-                        <span>January 5</span>
-                        <span>9:30AM</span>
-                        <span>Meowtoo</span>
-                        <span>Cash</span>
-                        <span>Ongoing</span>
+                        <span>{data.appt_date}</span>
+                        <span>{data.appt_start} - {data.appt_end}</span>
+                        <span>{data.therapist_name}</span>
+                        <span>{data?.mode_of_payment || 'N/A' }</span>
+                        <span className={ManageStyles.apptStatusIndicator}>
+                          <div className={ManageStyles.circleStatusIndicator} style={getApptStatusIndicator(data.appt_status)}></div>
+                          {data.appt_status.toUpperCase()}
+                        </span>
                         <span className={ManageStyles.actionBtnsContainer}>
                             <span className={ManageStyles.viewBtn}>
                               <FaEye className={ManageStyles.icon}/>
                             </span>
-                            <span className={ManageStyles.editBtn}>
-                              <Link to={`edit-appointment/${data.apptId}`}>
-                                  <MdEditDocument className={ManageStyles.icon}/>
-                              </Link>
-                            </span>
+                            <Button onClick={()=> apptStatusHandler(data.appt_id)}
+                            variant='contained' > Approve
+                            </Button>
+
+                            {/* // onClick={handleSaveProfile} 
+                            // disabled={loading}>{loading ? 'Saving...' : 'Save Profile'} */}
+                            <Link to={`edit-appointment/${data.appt_id}`}>                            
+                              <Button variant='contained' > 
+                                Edit
+                              </Button>
+                            </Link>
+
                         </span>
                     </div>
                 ))}

@@ -247,6 +247,7 @@
 .alternativeLoginContainer{
     display:flex;
     gap:1rem;
+    margin:auto;
 }
 .alternativeLoginBtnContainer{
     object-fit: contain;

@@ -5,6 +5,8 @@ import MockPatient from '../../assets/yutao.jpg'
 import { FiExternalLink } from "react-icons/fi";
 import { FaClock } from "react-icons/fa";
 
+import dayjs from 'dayjs';
+
 const ScheduledPxNotification = () => {
   return (
     <div className={ScheduledStyles.container}>

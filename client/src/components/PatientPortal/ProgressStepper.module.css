@@ -97,7 +97,7 @@
     content:'';
     height:100%;
     width:15px;
-    background-color: #1976D5;
+    background-color: var(--apptStatusColor);
     position:absolute;
     left:0;
 }
@@ -181,6 +181,8 @@
     font-size:1.2rem;
     font-weight:600;
     color: var(--aw-gray);
+    width:7rem;
+    margin:auto;
 }
 .rowSubText{
    font-size:.8rem;

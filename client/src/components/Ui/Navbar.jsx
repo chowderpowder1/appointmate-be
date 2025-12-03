@@ -27,10 +27,10 @@ const Navbar = () => {
     }
 
     const { data, isLoading, error } = useUsers();
-
-    if (isLoading) return <div>Loading...</div>;
-    if (error) return <div>Error: {error.message}</div>;
     console.log(data);
+    if (isLoading) return <div>Loading...</div>;
+    if (error) return <div>⚠ Error: {error.message}</div>;
+
     const ActiveNav = ({isActive})  => isActive ? 'activeNav nav-item' : 'nav-item'
   return (
         <nav className="nav-container">
@@ -61,12 +61,9 @@ const Navbar = () => {
             <div className="right-nav">
                 <IoSearchSharp className='search-btn'/>
                 <Link to='/Appointment' className="nav-book-btn">Book Now</Link>
-                {/* <h4>{data.username} </h4>
-                <h4>{data.userID} </h4> */}
-                
-
+                    
                 {data.loggedIn && <><Link className="user-icon" to='/patient/dashboard'><img src={MockUser} alt="" /></Link>
-                <button onClick={handleLogout} className="logout-btn"><IoMdLogOut/></button></>} 
+                <button onClick={handleLogout} className="logout-btn"><IoMdLogOut/></button> <p>{data.firstName}</p></>} 
 
                 {!data.loggedIn && <Link to='/login' className='nav-book-btn'>Login</Link>} 
                 

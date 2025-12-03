@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router'
 
 import LoginStyles from './WelcomePage.module.css'
+
 import '../ClinicWebsite/SwiperStyles.css'
 import AwLogo from '../../assets/aw-logo.png'
 import LoginImageOne from '../../assets/loginImageOne.png';
@@ -28,6 +29,8 @@ import Checkbox from '@mui/material/Checkbox';
 
 import axios from "axios";
 import Alert from '@mui/material/Alert';
+
+import { GoogleLogin } from '@react-oauth/google';
 
 const LoginPage = () => {
     const redirect = useNavigate();
@@ -61,6 +64,8 @@ const LoginPage = () => {
                     'http://localhost:8080/auth/signup', 
                     signUpForm
                 )
+                redirect("/");
+                
             console.log('Response:', response.data);
             } catch (error) 
             {
@@ -78,19 +83,38 @@ const LoginPage = () => {
     const handleLoginSubmit = async (e) =>{
         e.preventDefault();
             try{
-                const response = await axios.post(
+                const res = await axios.post(
                     'http://localhost:8080/auth/login', 
                     loginForm,
                     { withCredentials: true }
-                )
-                
+                ).then(res => {
+                    if (res.status===200 && res.data.redirectTo){
+                        window.location.href = res.data.redirectTo;
+                    }
+                })
                     redirect("/");
-
-            console.log('This is Welcome Page - Response:', response);
             } catch (error) 
             {
                 console.error('Error:', error);
             }
+    }
+
+    const handleGoogleLogin = async(credentialResponse) => {
+
+        try{
+            const res = await axios.get("http://localhost:8080/auth/google/callback", credentialResponse.credential, {withCredentials: true})
+
+            if (!res.ok) {
+              const errData = await res.json();
+              console.error("Login failed:", errData.error);
+              return;
+            }
+        
+            const data = await res.json();
+            console.log("Logged in user:", data);
+        } catch (err){
+            console.error("Login error: ", err);
+        }
     }
     const loginSwiperData = [
         {
@@ -198,19 +222,32 @@ const LoginPage = () => {
                          <p>or continue using</p>
                          <div className={LoginStyles.line}></div>
                      </div>
-
-                     <div className={LoginStyles.alternativeLoginContainer}>
-                         <div className={LoginStyles.alternativeLoginBtnContainer}>
-                             <div className={LoginStyles.googleContainer}>
-                                <img className={LoginStyles.googleSignIn} src={googleSignIn} alt="" />
-                                <p>Sign in with Google</p>
-                             </div>
+             <div className={LoginStyles.alternativeLoginContainer}>
+                        <div className={LoginStyles.alternativeLoginBtnContainer}>
+                            {/* <GoogleLogin 
+                            onSuccess={handleGoogleLogin}
+                            onError={()=> console.log("Login Failed")}
+                            
+                                //    onSuccess={credentialResponse => {
+                                //     console.log('Successful')
+                                //      console.log(credentialResponse);
+                                //    }}
+                                //    onError={() => {
+                                //      console.log('Login Failed');
+                                //    }}
+                                 /> */}
                          </div>
                          <div className={LoginStyles.alternativeLoginBtnContainer}>
+                            <div className={LoginStyles.googleContainer}>
+                                <a href="http://localhost:8080/auth/google">
+                                  <button>Continue with Google</button>
+                                </a>                            
+                         </div>
+                         {/* <div className={LoginStyles.alternativeLoginBtnContainer}>
                              <div className={LoginStyles.googleContainer}>
                                 <img className={LoginStyles.googleSignIn} src={fbSignIn} alt="" />
                                 <p>Sign in with Facebook</p>
-                             </div>
+                             </div> */}
                          </div>
                      </div>
                      <p>Don't have an Account? <p onClick={() => toggleTab(3)} className={LoginStyles.noAccRegLinkText}>Register Here</p></p>

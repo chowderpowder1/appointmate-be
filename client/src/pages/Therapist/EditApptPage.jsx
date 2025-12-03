@@ -21,7 +21,7 @@ const EditAppt = () => {
             <h2>Edit appointment</h2>
           </div>
           <div className={EditStyles.sessionIdContainer}>
-            <p><b>Session ID:</b> #21ABB</p>
+            <p><b>Session ID:</b> Approval Needed for a Session ID to be assigned</p>
           </div>
         </div>
         <AssignedPt/>

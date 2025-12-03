@@ -113,3 +113,15 @@
     cursor: pointer;
     font-size:1.2rem;
 }
+.circleStatusIndicator{
+    width:15px;
+    height:15px;
+    border-radius:50%;
+    background-color: black;
+}
+.apptStatusIndicator{
+    display:flex;
+    flex-flow:row;
+    gap:.5rem;
+    align-items: center;
+}

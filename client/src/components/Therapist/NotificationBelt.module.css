@@ -16,6 +16,8 @@
     display:flex;
     align-items: center;
     overflow:hidden;
+    position:relative;
+
 }
 .totalApptContainer{
     background: #3B61D0;
@@ -56,6 +58,14 @@
     color: var(--text-gray);
     font-weight:300;
     font-size:.8rem;
+}
+.apptHelperText{
+    color: white;
+    font-weight:300;
+    font-size:.6rem;
+    position:absolute;
+    top:10px;
+    right:20px;
 }
 .apptSubtext{
     font-size:1.5rem;

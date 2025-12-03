@@ -9,12 +9,21 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
 
+import dayjs from 'dayjs';
+
+// Tanstack
+import { useUsers } from '../../queries/users'
+
 const FdDashboard = () => {
+  const { data: userData, isLoading: userDataIsLoading, error: userDataError} = useUsers();
+  
+  if (userDataIsLoading) return <div>Loading...</div>;
+  if (userDataError) return <div>⚠ Error: {userDataError.message}</div>;
   return (
 <div className={DashboardStyles.container}>
       <h1 className={DashboardStyles.header}>Dashboard</h1>
       <div className={DashboardStyles.row}>
-        <TherapistGreet name={'Mayu'}/>
+        <TherapistGreet name={userData.firstName}/>
         <SchedulePxNotification/>
       </div>
       <div className={DashboardStyles.row}>

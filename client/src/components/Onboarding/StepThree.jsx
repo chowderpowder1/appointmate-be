@@ -9,7 +9,10 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { Grid } from '@mui/material';
 
+import {useAppContext} from './AppContext.jsx'
+
 const StepThree = () => {
+    const {formData, setFormData} = useAppContext();
     const [idType, setIdType] = useState('');
     const [hmoCard, setHmoCard] = useState('');
 
@@ -18,6 +21,64 @@ const StepThree = () => {
     }
     const handleId = (e) => {
     setIdType(e.target.value)
+    }
+
+        const hmoProvider = [
+            { Hmo: 'amaphil' },
+            { Hmo: 'caritas Health Shield' },
+            { Hmo: 'cocoLife' },
+            { Hmo: 'eastWest' },
+            { Hmo: 'firstLife' },
+            { Hmo: 'hartmann' },
+            { Hmo: 'hmi' },
+            { Hmo: 'hppi' },
+            { Hmo: 'iCare' },
+            { Hmo: 'medAsia' },
+            { Hmo: 'pacific Cross' },
+            { Hmo: 'bpiPhilam' },
+            { Hmo: 'coop Health' },
+            { Hmo: 'generali' },
+            { Hmo: 'inLife' },
+            { Hmo: 'lacson Lacson' },
+            { Hmo: 'mediCard' },
+            { Hmo: 'mediLink' },
+            { Hmo: 'medoCare' },
+            { Hmo: 'philam Life' },
+            { Hmo: 'sunLife Grepa' },
+            { Hmo: 'valuCare' },
+            { Hmo: 'wellCare' }
+        ]
+        const phIdTypes =  [
+            { idType: 'nationalId' },
+            { idType: 'passport' },
+            { idType: 'driversLicense' },
+            { idType: 'umid' },
+            { idType: 'sss' },
+            { idType: 'philHealth' },
+            { idType: 'gsis' },
+            { idType: 'tin' },
+            { idType: 'pagibig' },
+            { idType: 'postal' },
+            { idType: 'prc' },
+            { idType: 'votersId' },
+            { idType: 'studentId' },
+            { idType: 'companyId' },
+            { idType: 'seniorCitizenId' },
+            { idType: 'pwdId' }
+        ];
+
+    const handleInputChange = (section, key) => (e) => {
+      const { name, value} = e.target 
+      setFormData( prev => ({
+          ...prev,
+          [section]: {
+            ...prev[section],
+            [key]:{
+              ...prev[section][key],
+              [name]: value
+          }
+      }}))  
+      console.log(formData);
     }
 
   return (
@@ -30,18 +91,19 @@ const StepThree = () => {
                 <Select
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
-                  value={hmoCard}
+                  value={formData.identification.Hmo.name}
+                  name='name'
                   label="HMO Card Presented"
-                  onChange={handleHmo}
+                  onChange={handleInputChange('identification','Hmo' )}
                 >
-                  <MenuItem value={'Iglesia ni Chris Brown'}>Iglesia ni Chris Brown</MenuItem>
-                  <MenuItem value={20}>Ipinanganak Muli</MenuItem>
-                  <MenuItem value={30}>Bisayawa</MenuItem>
+                  {hmoProvider.map((e)=>(
+                    <MenuItem value={e.Hmo}>{(e.Hmo).toUpperCase()}</MenuItem>
+                  ))}
                 </Select>
               </FormControl>
         </Grid>
         <Grid item size={5}>
-          <TextField fullWidth id="outlined-basic" label="HMO Card Number" variant="outlined" />
+          <TextField fullWidth value={formData.identification.Hmo.cardNumber} name='cardNumber' onChange={handleInputChange('identification', 'Hmo')} id="outlined-basic" label="HMO Card Number" variant="outlined" />
         </Grid>
 
         <Grid item size={7}>
@@ -50,17 +112,18 @@ const StepThree = () => {
             <Select
               labelId="demo-simple-select-label"
               id="demo-simple-select"
-              value={idType}
+              value={formData.identification.Id.type}
+              name='type'
               label="Valid ID Type"
-              onChange={setIdType}>
-              <MenuItem value={'Iglesia ni Chris Brown'}>Iglesia ni Chris Brown</MenuItem>
-              <MenuItem value={20}>Ipinanganak Muli</MenuItem>
-              <MenuItem value={30}>Bisayawa</MenuItem>
+              onChange={handleInputChange('identification', 'Id')}>
+              {phIdTypes.map((e)=>(
+                <MenuItem value={e.idType}>{(e.idType).toUpperCase()}</MenuItem>
+              ))}
             </Select>
           </FormControl>
         </Grid>
         <Grid item size={5}>
-          <TextField fullWidth id="outlined-basic" label="Valid ID Number" variant="outlined" />
+          <TextField onChange={handleInputChange('identification', 'Id')} name='number' value={formData.identification.Id.number} fullWidth id="outlined-basic" label="Valid ID Number" variant="outlined" />
         </Grid>
     </Grid>
     </div>

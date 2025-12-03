@@ -3,7 +3,14 @@ import NavStyles from './TherapistNavBar.module.css'
 import { IoIosNotifications } from "react-icons/io";
 import { CgProfile } from "react-icons/cg";
 
+// Tanstack
+import { useUsers } from '../../queries/users'
+
 const TherapistNavBar = () => {
+  const { data: userData, isLoading: userDataIsLoading, error: userDataError} = useUsers();
+  
+  if (userDataIsLoading) return <div>Loading...</div>;
+  if (userDataError) return <div>⚠ Error: {userDataError.message}</div>;
   return (
     <div className={NavStyles.main}>
       <h1>Appointment and Patient Record Management System</h1>
@@ -11,7 +18,7 @@ const TherapistNavBar = () => {
         <ul className={NavStyles.navItems}>
             <li><IoIosNotifications/></li>
             <li><CgProfile/></li>
-            <p>PT - Juan Dela Cruz</p>
+            <p>{userData.userRole}: {userData.firstName}</p>
         </ul>
       </div>
 

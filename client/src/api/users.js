@@ -1,12 +1,9 @@
 import axios from "axios";
+import { api } from "./apiClient.js";
 
 export const users = async () => {
-
-    const response = await axios
-    .get('http://localhost:8080/auth/session', { withCredentials: true })
-    console.log(response.data);
+    const response = await api.get('/auth/session', { withCredentials: true })
     return response.data;
-
 }
 
     // .then((res)=>{

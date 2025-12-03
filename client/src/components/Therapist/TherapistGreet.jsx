@@ -5,18 +5,29 @@ import MockTherapist from '../../assets/mock-therapist.jpg'
 import { IoTime } from "react-icons/io5";
 import { FaCalendar } from "react-icons/fa";
 
+import dayjs from 'dayjs';
+
+// Tanstack
+import { useUsers } from '../../queries/users'
+
 const TherapistGreet = ({name}) => {
+
+    const { data: userData, isLoading: userDataIsLoading, error: userDataError} = useUsers();
+    
+    if (userDataIsLoading) return <div>Loading...</div>;
+    if (userDataError) return <div>⚠ Error: {userDataError.message}</div>;
+
   return (
     <div className={GreetStyles.container}>
     <div className={GreetStyles.therapistProfile}>
         <img src={MockTherapist} alt="" />
     </div>
     <div className={GreetStyles.greetText}>
-        <h3 className={GreetStyles.therapistName}>Hello, {name}</h3>
+        <h3 className={GreetStyles.therapistName}>Hello, {userData.firstName}</h3>
         <p>Welcome Back</p>
         <div className={GreetStyles.greetTime}>
-            <span><FaCalendar className={GreetStyles.timeIcon}/>Monday, May 22, 2025</span>
-            <span><IoTime className={GreetStyles.timeIcon}/>8:01 AM</span>
+            <span><FaCalendar className={GreetStyles.timeIcon}/>{dayjs().format('ddd MMM DD ')}</span>
+            <span><IoTime className={GreetStyles.timeIcon}/>{dayjs().format('hh:mm A')}</span>
         </div>
     </div>
     <div className={GreetStyles.greetIcon}>

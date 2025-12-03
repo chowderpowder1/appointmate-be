@@ -50,9 +50,9 @@
     
 }
 .tblHeader, .tblData{
-    border-left: 1px solid black;
-    border-right: 1px solid black;
-    border-bottom:1px solid black;
+    border-left: 1px solid var(--aw-gray);
+    border-right: 1px solid var(--aw-gray);
+    border-bottom:1px solid var(--aw-gray);
     padding:12px 8px;
     text-align:center;
 }

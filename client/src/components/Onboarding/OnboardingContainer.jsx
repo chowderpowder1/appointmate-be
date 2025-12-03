@@ -11,22 +11,12 @@ import StepFour from './StepFour'
 import StepComplete from './StepComplete'
 
 // useContext
-import { useContext } from 'react';
-import StepperContext from './StepperContext';
-import StepperProvider from './StepperContext'
-// const StepperContext = createContext();
+import {useAppContext} from './AppContext.jsx'
+import {useCountries} from '../../queries/countries.js'
 
 const OnboardingContainer = () => {
 
-    // const [formData, setFormData] = useState({
-    //   firstName: '',
-    //   lastName: '',
-    //   email: ''
-    // });
-
-    //  const updateFormData = (field, value) => {
-    //   setFormData(prev => ({ ...prev, [field]: value }));
-    // };
+    const {formData, setFormData} = useAppContext();
 
     const pages = [StepOne, StepTwo, StepThree, StepFour, StepComplete]
     const [currentStep, setCurrentStep] = useState(0);
@@ -38,19 +28,20 @@ const OnboardingContainer = () => {
     // <StepperContext value={{formData, setFormData}}>
     <div className={OnboardingStyles.container}>
         <div className={OnboardingStyles.headerContainer}>
-          {currentStep !== numberOfSteps && <> <p className={OnboardingStyles.header}>Let's Get You Started</p>
+          {currentStep !== numberOfSteps && <> <p className={OnboardingStyles.header}>Let's Get You Started {formData.personalInfo.lastName}</p>
             <p className={OnboardingStyles.subHeader}>Complete your profile to finish setting up your account</p></>}
            
         </div>
+
+        {/* Logic Body for rendering fields */}
         {currentStep !== numberOfSteps && <Stepper currentStep={currentStep} numberOfSteps={numberOfSteps} stepDescription={stepDescription} pages={pages}></Stepper>}
 
         {currentStep === numberOfSteps && <StepComplete/>}
         
          {currentStep !== numberOfSteps && <div className={OnboardingStyles.btnContainer}>
             <Button variant="contained" onClick={prevBtn}>Previous</Button>
-            <Button variant="contained" onClick={nextBtn}>Next</Button>
+            <Button variant="contained" onClick={nextBtn}>{currentStep<numberOfSteps ? 'Next' : 'Submit'}</Button>
         </div>}
-        <p></p>
     </div>
     // </StepperContext>
   )

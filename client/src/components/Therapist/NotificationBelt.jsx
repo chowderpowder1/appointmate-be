@@ -12,7 +12,16 @@ import { FaStop } from "react-icons/fa";
 import { ImCross } from "react-icons/im";
 import { FaPhoneAlt } from "react-icons/fa";
 
+//Tanstack Import
+import { useGetApptOverview } from '../../queries/useEmployees'
+
 const NotificationBelt = () => {
+
+  const { data: apptOverviewData, isLoading: apptOverviewDataIsLoading, error: apptOverviewDataError} = useGetApptOverview();
+
+  if (apptOverviewDataIsLoading) return <div>Loading...</div>;
+  if (apptOverviewDataError) return <div>Error: {apptOverviewDataError.message}</div>
+  console.log(apptOverviewData)
   return (
     <div className={BeltStyles.beltContainer}>
       <div className={`${BeltStyles.totalApptContainer} ${BeltStyles.apptContainer}`}>
@@ -21,48 +30,52 @@ const NotificationBelt = () => {
             <FaListAlt className={BeltStyles.icon}/>
           </div>
           <div className={BeltStyles.textContainer}>
-            <p className={BeltStyles.apptSubtext}>26</p>
+            <p className={BeltStyles.apptSubtext}>{apptOverviewData.totalAppt}</p>
             <p className={BeltStyles.apptTitle}>Total Appointments</p>
           </div>
       </div>
       <div className={`${BeltStyles.dailyApptContainer} ${BeltStyles.apptContainer}`}>
-          
           <div className={BeltStyles.iconContainer}>
             <FaCheck className={BeltStyles.icon}/>
           </div>
           <div className={BeltStyles.textContainer}>
-            <p className={BeltStyles.apptSubtext}>5</p>
+            <p className={BeltStyles.apptSubtext}>{apptOverviewData.servedAppt}</p>
             <p className={BeltStyles.apptTitle}>Appointments Served Today</p>
+            
+
           </div>
       </div>
       <div className={`${BeltStyles.pendingAptContainer} ${BeltStyles.apptContainer}`}>
-          
           <div className={BeltStyles.iconContainer}>
             <FaEllipsisH className={BeltStyles.icon}/>
           </div>
           <div className={BeltStyles.textContainer}>
-            <p className={BeltStyles.apptSubtext}>7</p>
+            <p className={BeltStyles.apptSubtext}>{apptOverviewData.pendingAppt}</p>
             <p className={BeltStyles.apptTitle}>Appointments Pending</p>
+            
           </div>
       </div>
       <div className={`${BeltStyles.cancelledAptContainer} ${BeltStyles.apptContainer}`}>
-          
+          <p className={BeltStyles.apptHelperText}>For the last 7 days </p>
           <div className={BeltStyles.iconContainer}>
             <ImCross className={BeltStyles.icon}/>
           </div>
           <div className={BeltStyles.textContainer}>
-            <p className={BeltStyles.apptSubtext}>8</p>
+            <p className={BeltStyles.apptSubtext}>{apptOverviewData.cancelledAppt}</p>
             <p className={BeltStyles.apptTitle}>Appointments Cancelled </p>
+            
           </div>
       </div>
       <div className={`${BeltStyles.rescheduledAptContainer} ${BeltStyles.apptContainer}`}>
-          
+          <p className={BeltStyles.apptHelperText}>For the last 7 days </p>
           <div className={BeltStyles.iconContainer}>
             <FaPhoneAlt className={BeltStyles.icon}/>
           </div>
           <div className={BeltStyles.textContainer}>
-            <p className={BeltStyles.apptSubtext}>6</p>
+            <p className={BeltStyles.apptSubtext}>{apptOverviewData.rescheduledAppt}</p>
             <p className={BeltStyles.apptTitle}>Appointments Rescheduled </p>
+            
+
           </div>
       </div>
 
