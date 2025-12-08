@@ -6,9 +6,11 @@ import LoginStyles from './WelcomePage.module.css'
 
 import '../ClinicWebsite/SwiperStyles.css'
 import AwLogo from '../../assets/aw-logo.png'
+import OtpLogo from '../../assets/OTP_LOGO.png'
 import LoginImageOne from '../../assets/loginImageOne.png';
 import LoginImageTwo from '../../assets/loginImageTwo.png';
 import LoginImageThree from '../../assets/loginImageThree.png';
+import GoogleIcon from '../../assets/GoogleIcon.png'
 import googleSignIn from '../../assets/googleSignIn.png'
 import fbSignIn from '../../assets/fbSignIn.png'
 
@@ -31,24 +33,143 @@ import axios from "axios";
 import Alert from '@mui/material/Alert';
 
 import { GoogleLogin } from '@react-oauth/google';
+import { ToastContainer, toast } from 'react-toastify';
+
+import Modal from '../../components/Ui/Modal'
+import { styled } from '@mui/material'
+
+import { useGenerateOtp } from '../../queries/users.js'
+import { useSubmitLogin, useSubmitOtp } from '../../queries/auth.js'
 
 const LoginPage = () => {
+    const [isOpen, setIsOpen] = useState(false);
+    const { mutate: submitLoginMutation} = useSubmitLogin();
+    const {mutate:generateOtpMutation} = useGenerateOtp();
+    const {mutate:submitOtp} = useSubmitOtp();
+    const [isOtpOpen, setIsOtpOpen] = useState(false);
     const redirect = useNavigate();
     const toggleTab = ( index ) => setToggleState(index);
+    const [isVerified, setIsVerified] = useState();
     const [toggleState, setToggleState] = useState(1);
-
+    const [emailError, setEmailError] = useState();
+    const [emailHelperText, setEmailHelperText] = useState();
+    const [contactNumberError, setContactNumberError] = useState();
+    const [contactNumberHelperText, setContactNumberHelperText] = useState();
+    const [passwordError, setPasswordError] = useState();
+    const [passwordHelperText, setPasswordHelperText] = useState();
+    const [cpasswordError, setcPasswordError] = useState();
+    const [cpasswordHelperText, setcPasswordHelperText] = useState();
+    const [otpPayLoad, setOtpPayLoad] = useState({
+        otp: '',
+        email:'',
+    });
+    
     const [signUpForm, setsignUpForm] = useState({
         first_name:"",
         last_name:"",
         contact_number:"",
         email:"",
         password:"",
+        cpassword:"",
     })
 
     const [loginForm, setLoginForm] = useState({
         email:"",
         password:"",
     })
+
+    const otpHandler = (e) => {
+        setOtpPayLoad((prev) => ({
+            ...prev,
+            [e.target.name]: e.target.value
+        }))
+        console.log(otpPayLoad)
+    }
+
+    const cpasswordMatch = (e) => {
+        const passwordVal = e.target.value;
+
+        if(signUpForm.cpassword != passwordVal ){
+
+            console.log('Passord does not match')
+            setcPasswordError(true)
+            setcPasswordHelperText('Password Does not Match')
+        } else{
+            console.log('Password Match')
+            setcPasswordError(false)
+            setcPasswordHelperText('Password Match')
+        }
+    }
+
+    const passwordMatch = (e) => {
+        const passwordVal = e.target.value;
+
+        if(signUpForm.password != passwordVal ){
+
+            console.log('Passord does not match')
+            setPasswordError(true)
+            setPasswordHelperText('Password Does not Match')
+        } else{
+            console.log('Password Match')
+            setPasswordError(false)
+            setPasswordHelperText('Password Match')
+        }
+    }
+    const handleOtpSubmit = (e) => {
+        console.log(otpPayLoad)
+        e.preventDefault()
+        submitOtp(otpPayLoad, {
+            onSuccess: (data) => {
+                console.log('success', data.requireOtp)
+                setIsVerified(data.requireOtp)
+                if(!data.requireOtp){
+                    toast('Email has been successfully verified')
+                }   
+z
+            }
+        })
+    }
+
+    const isValidEmail = (email) => {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    
+    };
+
+    const isValidContactNumber = (number) => {
+        return /^(09|\+639)\d{9}$/.test(number);
+    }
+
+    const handleContactNumberChange = (e) =>{
+        
+        const contactNumber = e.target.value;
+        console.log(contactNumber)
+
+        if(!isValidContactNumber(contactNumber)){
+            console.log('not valid contact Number')
+            setContactNumberError(true)
+            setContactNumberHelperText('Please Enter a valid contact number')
+        } else{
+            console.log('is valid contact number')
+            setContactNumberError(false)
+            setContactNumberHelperText('Valid contact number')
+        }
+    }
+
+    const handleEmailChange = (e) =>{
+        
+        const email = e.target.value;
+        console.log(email)
+
+        if(!isValidEmail(email)){
+            console.log('not valid email')
+            setEmailError(true)
+            setEmailHelperText('Please Enter a valid email address')
+        } else{
+            console.log('is valid email')
+            setEmailError(false)
+            setEmailHelperText('Valid Email')
+        }
+    }
 
     const handleSignUpChange = (e) => {
       setsignUpForm({
@@ -58,13 +179,20 @@ const LoginPage = () => {
     };
 
     const handleSignUpSubmit = async (e) =>{
+
         e.preventDefault();
             try{
                 const response = await axios.post(
                     'http://localhost:8080/auth/signup', 
-                    signUpForm
-                )
-                redirect("/");
+                    signUpForm  
+                ).then(res => {
+                    console.log(res)
+                    toast('Account Successfully registered. Redirecting to login page')
+                    delay(3000)
+                    if (res.status===200 && res.data.redirectTo){
+                        window.location.href = res.data.redirectTo;
+                    }
+                })
                 
             console.log('Response:', response.data);
             } catch (error) 
@@ -78,44 +206,57 @@ const LoginPage = () => {
         ...loginForm,
         [e.target.name]: e.target.value,
       });
+      setOtpPayLoad((prev) => ({
+    ...prev,
+    email: loginForm.email   // carry the email forward
+  }));
+        console.log(otpPayLoad)
     };
 
     const handleLoginSubmit = async (e) =>{
         e.preventDefault();
+        submitLoginMutation(loginForm, {
+            onSuccess: (data) => {
+                console.log('success', data.requireOtp)
+                setIsVerified(data.requireOtp)
+                if(data.gmailAccount){
+                    toast('Gmail Account: Please Sign in with Google')
+                }   
+            }
+        })
+        // generateOtpMutation(email);
             try{
                 const res = await axios.post(
                     'http://localhost:8080/auth/login', 
                     loginForm,
                     { withCredentials: true }
-                ).then(res => {
+                )
+                .then(res => {
                     if (res.status===200 && res.data.redirectTo){
-                        window.location.href = res.data.redirectTo;
+                        toast('Account Successfully registered. Redirecting to login page')
+                        setTimeout(()=>{
+                            window.location.href = res.data.redirectTo;
+                        }, '1000')
                     }
                 })
-                    redirect("/");
+                    
+                //     redirect("/");
             } catch (error) 
             {
+                
                 console.error('Error:', error);
+    
+                notify((error.response.data).toString())
+
             }
+            setLoginForm({
+                        email:'',
+                        password:'',
+                    })
     }
 
-    const handleGoogleLogin = async(credentialResponse) => {
+    const notify = (message) => toast(message);
 
-        try{
-            const res = await axios.get("http://localhost:8080/auth/google/callback", credentialResponse.credential, {withCredentials: true})
-
-            if (!res.ok) {
-              const errData = await res.json();
-              console.error("Login failed:", errData.error);
-              return;
-            }
-        
-            const data = await res.json();
-            console.log("Logged in user:", data);
-        } catch (err){
-            console.error("Login error: ", err);
-        }
-    }
     const loginSwiperData = [
         {
             title: 'Book Appointments Anytime!',
@@ -137,6 +278,40 @@ const LoginPage = () => {
     return (
         
         <div className={LoginStyles.loginContainer}>
+        <Modal open={isVerified} onClose={() => setIsVerified(false)}>
+            <div className={LoginStyles.otpContainer}>
+            <div className={LoginStyles.otpLogoContainer}><img className={LoginStyles.otpLogo} src={OtpLogo} alt="" /></div>
+            <h2>Enter verification code</h2>
+            <p className={LoginStyles.otpDesc}>Please enter the code sent to your email or phone.</p>
+             <form 
+             onSubmit={handleOtpSubmit}
+             >
+                 <TextField
+                 onChange={otpHandler} 
+                              name='otp' 
+                              required
+                              
+                            id="outlined-basic" 
+                             //  label="Email"
+                            variant="outlined" 
+                             //  type="email"
+                             //  value={loginForm.email}
+                             //  onError={emailError}
+                             //  helperText={emailHelperText}
+                             slotProps={{ htmlInput: { maxLength: 6, style:{ textAlign: 'center'} } }}
+                             sx={{
+                    width:'70%',                          
+                             }}
+                 />
+                             <Button type='submit' variant="contained"
+                             sx={{
+                    width:'70%',
+                    backgroundColor:'var(-primary-contrast)',
+                    height:'50px'
+                             }}>Verify</Button>
+             </form>
+            </div>         
+        </Modal>
           <div className={LoginStyles.containerOne}>
             <Swiper className={LoginStyles.loginSwiper}
                 modules={[Pagination, Autoplay]}
@@ -196,16 +371,38 @@ const LoginPage = () => {
                         marginTop:2,
                      }}
                      component="form">
-                         <TextField onChange={handleLoginChange} name='email' id="outlined-basic" label="Email" variant="outlined" type="email"/>
+                         <TextField 
+                         onChange={
+                            (e)=>{
+                            const email = e.target.value
+                            handleLoginChange(e)
+                            handleEmailChange(e)
+                        }} 
+                         name='email' 
+                         required
+                         id="outlined-basic" 
+                         label="Email" 
+                         variant="outlined" 
+                         type="email"
+                         value={loginForm.email}
+                         error={emailError}
+                         helperText={emailHelperText}
+                         
+                         />
     
-                         <TextField onChange={handleLoginChange} name='password' id="outlined-basic" label="Password" variant="outlined" type="password"/>
+                         <TextField 
+                         onChange={handleLoginChange} 
+                         value={loginForm.password}
+                         required
+                         name='password' 
+                         id="outlined-basic" 
+                         label="Password" 
+                         variant="outlined" 
+                         type="password"/>
     
                         <div className={LoginStyles.loginQol}>
-                        <form action="POST">
-                            <input type="checkbox" id='rememberMe' name='rememberMe' />
-                            <label id={LoginStyles.rememberMeLabel} htmlFor="rememberMe">Remember Me</label>
-                        </form>
-                        <Link>Forgot Password?</Link>
+
+                        {/* <Link>Forgot Password?</Link> */}
                      </div>
 
                         <Button type='submit' sx={{
@@ -240,7 +437,12 @@ const LoginPage = () => {
                          <div className={LoginStyles.alternativeLoginBtnContainer}>
                             <div className={LoginStyles.googleContainer}>
                                 <a href="http://localhost:8080/auth/google">
-                                  <button>Continue with Google</button>
+                                <div className={LoginStyles.googleIconContainer}>
+                                    <img className={LoginStyles.googleIcon} src={GoogleIcon} alt="" />
+                                    </div>
+                                  <button className={LoginStyles.googleContainerBtn}>
+                                    Sign in with Google
+                                </button>
                                 </a>                            
                          </div>
                          {/* <div className={LoginStyles.alternativeLoginBtnContainer}>
@@ -328,18 +530,84 @@ const LoginPage = () => {
                         width:'100%',
                         padding:0
                      }}>
-                             <TextField onChange={handleSignUpChange} fullWidth
-                             id="outlined-basic" name="first_name" label="First Name" variant="outlined" />
-                             <TextField onChange={handleSignUpChange} fullWidth name="last_name" id="outlined-basic" label="Last Name" variant="outlined" />
+                             <TextField onChange={handleSignUpChange} 
+                             fullWidth
+                             id="outlined-basic" 
+                             name="first_name" 
+                             label="First Name" 
+                             variant="outlined" 
+                             required/>
+                             <TextField 
+                             onChange={handleSignUpChange}
+
+                             fullWidth 
+                             name="last_name" 
+                             id="outlined-basic" 
+                             label="Last Name" 
+                             variant="outlined" 
+                             required/>
                          </Box>
     
-                         <TextField onChange={handleSignUpChange} id="outlined-basic" name="email" label="Email" variant="outlined" />
+                         <TextField 
+                            onChange={(e)=>{
+                                const emailVal = e.target.value
+                                handleSignUpChange(e)
+                                handleEmailChange(e)
+                            }} 
+                         id="outlined-basic" 
+                         name="email" 
+                         label="Email" 
+                         variant="outlined" 
+                         error={emailError}
+                         helperText={emailHelperText}
+                         required/>
     
-                         <TextField onChange={handleSignUpChange} id="outlined-basic" name="contact_number" label="Contact Number" variant="outlined" />
+                         <TextField 
+                         onChange={(e)=>{
+                            handleSignUpChange(e)
+                            handleContactNumberChange(e)
+                        }} 
+
+                         id="outlined-basic" 
+                         name="contact_number" 
+                         label="Contact Number" 
+                         variant="outlined"                         
+                         required
+                         error={contactNumberError}
+                         helperText={contactNumberHelperText}
+                         />
     
-                         <TextField onChange={handleSignUpChange} id="outlined-basic" name="password" label="Password" variant="outlined" type={'password'} />
+                         <TextField 
+                            onChange={(e)=>{
+                                handleSignUpChange(e)
+                                cpasswordMatch(e)
+                            }} 
+                            id="outlined-basic" 
+                            name="password" 
+                            value={signUpForm.password}
+                            label="Password" 
+                            variant="outlined" 
+                            type={'password'} 
+                            required
+                            error={passwordError}
+                            helperText={passwordHelperText}
+                         />
     
-                         <TextField onChange={handleSignUpChange} id="outlined-basic" label="Confirm Password" variant="outlined" type={'password'} />
+                         <TextField 
+                            onChange={(e)=>{
+                                handleSignUpChange(e)
+                                passwordMatch(e)
+                            }} 
+                            id="outlined-basic" 
+                            label="Confirm Password" 
+                            name="cpassword" 
+                            value={signUpForm.cpassword}
+                            variant="outlined" 
+                            type={'password'} 
+                            required
+                            error={cpasswordError}
+                            helperText={cpasswordHelperText}
+                        />
     
                         <div className={LoginStyles.loginQol}>
     
@@ -366,6 +634,7 @@ const LoginPage = () => {
     
               </div>
 </div>
+ <ToastContainer />
         </div>
   )
 }

@@ -27,9 +27,7 @@ const AboutCarousel = () => {
 
     <div className={AboutCarouselStyles['about-carousel-slides']}>
           <Swiper className={AboutCarouselStyles['swiper']}
-
-            spaceBetween={40}
-            
+            spaceBetween={40}            
             // loop={true}
             slidesPerView={4}
             grabCursor={true}

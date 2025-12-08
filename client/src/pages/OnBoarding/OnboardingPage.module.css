@@ -6,6 +6,26 @@
     display:flex;
     justify-content: center;
     align-items: center;
-
+    flex-flow:column;
     margin:auto;
+    position: relative;
+}
+.navbar{
+    width:100%;
+    height:60px;
+    background-color: white;
+    position:absolute;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2.5rem;
+    gap:1rem;
+    top:0;
+}
+.logoContainer{
+
+}
+.logoContainer img{
+     width:70px;
+     height:70px;
 }

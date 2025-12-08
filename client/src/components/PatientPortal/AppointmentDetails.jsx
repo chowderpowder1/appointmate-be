@@ -4,8 +4,15 @@ import MockupPt from '../../assets/mockup-pt.jpg'
 import { FaPhoneAlt } from "react-icons/fa";
 import { IoIosMail } from "react-icons/io";
 import { BsCalendarMinusFill } from "react-icons/bs";
+import { getAnAppointmentsDetails } from '../../queries/apptData.js'
 
-const AppointmentDetails = () => {
+const AppointmentDetails = (apptID) => {
+    const { data: apptDetails, isLoading: apptDetailsLoading, error: apptDetailsError} = getAnAppointmentsDetails(apptID);
+    
+    if (apptDetailsLoading) return <div>Loading...</div>;
+    if (apptDetailsError) return <div>Error: {bookedApptDataError.message || userDataError.message}</div>;
+
+    console.log(apptDetails);
   return (
     <div className={AppointmentStyles.appointmentContainer}>
         <div className={AppointmentStyles.appointmentTitleContainer}>

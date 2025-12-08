@@ -27,7 +27,7 @@ export const useBookAppt = () => {
             queryClient.invalidateQueries(['apptBookedDates']);
         },
         onError: () => {
-            console.log('Failed to book appointemnt', err)
+            console.log('Failed to book appointment', err)
         }
     })
 
@@ -35,9 +35,23 @@ export const useBookAppt = () => {
 
 export const useGetMyAppointments = () => {
     return useQuery({
-        queryKEy:['getMyAppointments'],
+        queryKey:['getMyAppointments'],
         queryFn: async () => {
             const res = await axios.get('http://localhost:8080/userData/getMyAppointments', { withCredentials: true})
+
+            return res.data;
+        }
+    })
+}
+
+export const getAnAppointmentsDetails = ({apptID}) => {
+    return useQuery({
+        queryKey:['getAnAppointmentsDetails'],
+        queryFn: async () => {
+            const res = await axios.get('http://localhost:8080/appt/getApptDetails', {
+                params: {apptID},
+                withCredentials: true
+            })
 
             return res.data;
         }

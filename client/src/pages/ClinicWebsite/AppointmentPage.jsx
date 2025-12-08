@@ -156,8 +156,9 @@ useEffect(()=>{
       }
 
       for (var key in bookedApptData.appointments){
+        console.log(bookedApptData.appointments)
         if(bookedApptData.appointments.hasOwnProperty(key)){
-          if(bookedApptData.appointments[key].length > 10){
+          if(bookedApptData.appointments[key].length >= 10){
             console.log(key)
             disabledDates.push(dayjs(key).format('YYYY-MM-DD'))
           }

@@ -252,19 +252,7 @@
 .alternativeLoginBtnContainer{
     object-fit: contain;
 }
-.googleContainer{
-    display:flex;
-    gap: 1rem;
-    border:1px solid var(--border-color);
-    width:fit-content;
-    padding: .5rem 1rem;
-    border-radius:35px;
-    flex-shrink:0;
-    white-space:nowrap;
-    align-items: center;
-    color:var(--text-gray);
-    cursor:pointer;
-}
+
 .googleSignIn{
     
     width:40px;
@@ -281,3 +269,53 @@
 background-color: white;
 
 } */
+
+.otpContainer{
+    background-color:white;
+    border-radius:25px;
+    padding:2rem;
+    display:flex;
+    flex-flow:column;
+    justify-content: center;
+    align-items: center;
+    gap:1rem;
+}
+.otpLogoContainer{
+    margin-bottom:1rem;
+}
+.otpLogo{
+    width:auto;
+    height:100px;
+}
+.otpDesc{
+    width:80%;
+    text-align: center;
+}
+.googleContainer a{
+    display:flex;
+    
+    border:1px solid #343231;
+    width:fit-content;
+    padding: .5rem .5rem;
+    border-radius:35px;
+    flex-shrink:0;
+    white-space:nowrap;
+    align-items: center;
+    justify-content: center;
+    color:var(--text-gray);
+    cursor:pointer;
+    flex-flow:row;
+}
+.googleIcon{
+    height:40px;
+    width:auto;
+}
+.googleIconContainer{
+    display:flex;
+}
+.googleContainerBtn{
+
+    background-color: transparent;
+    font-size:1rem;
+
+}

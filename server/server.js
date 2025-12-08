@@ -14,6 +14,7 @@ import session from 'express-session'; //Cookie Session
 import connectPgSimple from 'connect-pg-simple' // Used by session to configure session store
 
 import apptRoutes from './routes/apptRoutes.js'
+import nodemailer from 'nodemailer';
 
 // google auth dependencies
 import passport from 'passport'
@@ -71,7 +72,7 @@ passport.use(new GoogleStrategy({
             // console.log(user.rows)
             // console.log(profile)
             if (user.rows.length === 0){
-                user = await dbConnection.query(`INSERT INTO awp_users_tbl ( user_role, user_fname, user_lname, user_logemail, password_hash, google_id)values( $1, $2, $3, $4, $5, $6) RETURNING user_id`,[5, name, 'z', email, null, googleId ])
+                user = await dbConnection.query(`INSERT INTO awp_users_tbl ( user_role, user_fname, user_lname, user_logemail, password_hash, google_id, is_verified)values( $1, $2, $3, $4, $5, $6, $7) RETURNING user_id`,[5, name, 'z', email, null, googleId, true ])
             }
 
             done(null, user)
@@ -129,6 +130,30 @@ app.get("/auth/google/callback", (req, res, next) => {
 
 // Routes
 app.use('/auth', authRouter);
+
+        // let transporter = nodemailer.createTransport({
+        //     service: "Gmail", 
+        //     // smtp.gmail.com
+        //     auth:{
+        //         user:'jessee.dan.catli@gmail.com',
+        //         pass: 'oulz vxxd cejw rpwj'
+        //     },
+        //     tls: {
+        //         rejectedUnauthorized: false,
+        //     }
+        // })
+// app.get('/test', async (req, res) => {
+//     const noparamres = await fetch('https://noparam.com/api/v1/verify', {
+//         method: 'POST',
+//         headers: {
+//           'Authorization': 'Bearer 528503cd-c741-4603-9ad9-b7e636485d80'
+//         },
+//         body: JSON.stringify({
+//           "email": "test@test.com"
+//         })
+//     })    
+//     console.log(noparamres);
+// })
 app.use('/userData', userRoutes);
 app.use('/appt', apptRoutes);
 app.use('/clinic', clinicRoutes);

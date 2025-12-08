@@ -13,7 +13,10 @@ import Modal from '../../components/Ui/Modal'
 import { FaLongArrowAltLeft } from "react-icons/fa";
 import { IoIosArrowForward } from "react-icons/io";
 
+import { useParams } from "react-router";
+
 const PxAppointmentDetailsPage = () => {
+   const { id } = useParams();
   return (
     <div className={AppointmentStyles.appointmentContainer}>
       
@@ -26,9 +29,9 @@ const PxAppointmentDetailsPage = () => {
 
       <div className={AppointmentStyles.columnOne}>
         <AppointmentNotification/>
-        <AppointmentDetails/>
+        <AppointmentDetails apptID={id}/>
         <ClinicLocation/>
-        <Attachments/>
+        {/* <Attachments/> */}
       </div>
 
       <div className={AppointmentStyles.columnTwo}>

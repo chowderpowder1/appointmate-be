@@ -15,7 +15,7 @@ async function getBookedDates (req, res) {
     // Fetches all booked dates from the current day onwards
 
     try{
-        const slots = await dbConnection.query(`select appt_date, appt_start from awp_appt_tbl WHERE appt_status != 'cancelled' AND appt_start >= NOW() ORDER BY appt_start;`)
+        const slots = await dbConnection.query(`select appt_date, appt_start from awp_appt_tbl WHERE appt_status != 'cancelled' AND appt_start >= (CURRENT_DATE - INTERVAL '1 days') ORDER BY appt_start;`)
         const bookedSlots = {}
 
         slots.rows.forEach(row => {
@@ -216,4 +216,30 @@ async function getPatientsList(req, res){
     }
 }
 
-export {getBookedDates, bookAppointment, getApptOverview, getAllApptData, updateApptStatus, getPatientsList};
+async function getApptDetails(req,res){
+    console.log('Appt Details Endpoint')
+    try{
+        if (req.session.user || req.user) {
+            const appointmentID = req.query.apptID;
+            const apptDetails = await dbConnection.query(`SELECT * from awp_appt_tbl WHERE appt_id=$1`,[appointmentID])
+            const apptRows = apptDetails.rows[0]
+            const therapistID = apptRows.therapist_id
+            const assignedTherapistResult = await dbConnection.query(
+              `SELECT u.*
+               FROM awp_users_tbl AS u
+               INNER JOIN awp_pthera_tbl AS p
+               ON u.user_id = p.user_id
+               WHERE p.pthera_id = $1`,
+              [therapistID])            
+                console.log(assignedTherapistResult.rows[0])
+            console.log(apptRows)
+            return res.status(200).json({
+                assignedTherapist: assignedTherapist ? `${assignedTherapist.user_fname} ${assignedTherapist.user_lname}`: null,
+                
+            })
+        }
+    }catch(err){
+
+    }
+}
+export {getBookedDates, bookAppointment, getApptOverview, getAllApptData, updateApptStatus, getPatientsList, getApptDetails};

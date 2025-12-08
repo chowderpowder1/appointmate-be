@@ -1,5 +1,5 @@
 import express from 'express';
-import { getBookedDates, bookAppointment, getApptOverview, getAllApptData, updateApptStatus, getPatientsList } from '../controllers/apptController.js'
+import { getBookedDates, bookAppointment, getApptOverview, getAllApptData, updateApptStatus, getPatientsList, getApptDetails } from '../controllers/apptController.js'
 
 const router = express.Router();
 
@@ -10,6 +10,8 @@ router.post('/bookAppointment', bookAppointment)
 router.get('/getApptOverview', getApptOverview)
 
 router.get('/getAllApptData', getAllApptData)
+
+router.get('/getApptDetails', getApptDetails)
 
 router.put('/updateApptStatus', updateApptStatus)
 

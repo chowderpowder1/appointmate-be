@@ -97,7 +97,7 @@ return (
         </div>
       </div>
 
-      <div className={`${DashboardStyles.columnThree} ${DashboardStyles.column}`}>
+      {/* <div className={`${DashboardStyles.columnThree} ${DashboardStyles.column}`}>
 
         <div className={DashboardStyles.progressContainer}>
           <h2 className={DashboardStyles.smallHeader}>Notifications</h2>
@@ -150,7 +150,7 @@ return (
           </div>
           
         </div>
-      </div>
+      </div> */}
 
     </div>
   )
