@@ -69,9 +69,10 @@ const StepComplete = () => {
       <div style={{display:'flex', gap:'8px', alignItems:'center'}}>
         <Button variant='contained' onClick={handleSaveProfile} disabled={loading}>{loading ? 'Saving...' : 'Save Profile'}</Button>
         <Button variant='contained'> <NavLink style={{color:'white'}} to='/Appointment'>Book an Appointment</NavLink></Button>
+        
+      <Button variant='contained' ><NavLink style={{color:'white'}}to='/'>Go to homepage</NavLink></Button>
       </div>
       {message && <p style={{marginTop:'10px'}}>{message}</p>}
-      <p ><NavLink to='/'>Go to homepage</NavLink></p>
     </div>
   )
 }

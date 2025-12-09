@@ -9,7 +9,11 @@ import { IoIosArrowBack } from "react-icons/io";
 import { IoCalendarClear } from "react-icons/io5";
 import { IoIosArrowForward } from "react-icons/io";
 
+import { useParams } from "react-router";
+
 const EditAppt = () => {
+  const { id } = useParams();
+  
   return (
     <div className={EditStyles.mainContainer}>
       <div className={EditStyles.directoryContainer}> <IoCalendarClear/> <p>Appointments</p> <IoIosArrowForward/> <p>Edit Appointments</p></div>
@@ -20,23 +24,23 @@ const EditAppt = () => {
             <IoIosArrowBack/>
             <h2>Edit appointment</h2>
           </div>
-          <div className={EditStyles.sessionIdContainer}>
+          {/* <div className={EditStyles.sessionIdContainer}>
             <p><b>Session ID:</b> Approval Needed for a Session ID to be assigned</p>
-          </div>
+          </div> */}
         </div>
-        <AssignedPt/>
+        <AssignedPt apptID={id}/>
 
         <div className={EditStyles.apptDetailsContainer}>
-          <ApptDetails/>
+          <ApptDetails apptID={id}/>
           <PaymentMethod/>
-          <PxAttachment/>
+          {/* <PxAttachment/> */}
         </div>
 
         <button className={EditStyles.applyBtn}> Apply Changes</button>
       </div>
-      <div className={EditStyles.rowTwo}>
+      {/* <div className={EditStyles.rowTwo}>
         <UpdateApptStatus/>
-      </div>
+      </div> */}
 
     </div>
   )

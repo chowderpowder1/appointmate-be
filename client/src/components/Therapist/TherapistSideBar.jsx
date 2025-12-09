@@ -36,9 +36,9 @@ const TherapistSideBar = () => {
         <NavLink to='manage-appointments' className={ActiveSideBar}>
           <FaCalendar /> <span className={expandedText()}>APPOINTMENTS</span>
         </NavLink>
-        <NavLink to='patient-records' className={ActiveSideBar}>
+        {/* <NavLink to='patient-records' className={ActiveSideBar}>
           <HiDocumentMagnifyingGlass /> <span className={expandedText()}>PATIENT RECORDS</span>
-        </NavLink>
+        </NavLink> */}
         {/* <NavLink to='my-documents' className={ActiveSideBar}>
           <TbGraphFilled /> <span className={expandedText()}>MY DOCUMENTS</span>
         </NavLink> */}

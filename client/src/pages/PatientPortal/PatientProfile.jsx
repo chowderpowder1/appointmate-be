@@ -1,8 +1,22 @@
 import React from 'react'
 import ProfileStyles from './PatientProfile.module.css'
 import patientDefaultBg from '../../assets/patientProfileBg.png'
-import MockUser from '../../assets/zoey.png'
+import MockUser from '../../assets/aw_mock-px.png'
 import { FaPencilAlt } from "react-icons/fa";
+import { Link } from 'react-router'
+
+import TextField from '@mui/material/TextField';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { Grid } from '@mui/material';
+import FormGroup from '@mui/material/FormGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
+import Slider from '@mui/material/Slider';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
 
 // axios fetch user data 
 import { useUsers, usePatientData } from '../../queries/users.js'
@@ -28,7 +42,7 @@ const PatientProfile = () => {
         </div>
         <div className={ProfileStyles.editBtn}> 
             <FaPencilAlt/>
-            <p>Edit Profile</p>
+            <Link to='update-my-info' style={{color:'white'}}>Edit Profile</Link>
         </div>
       </div>
 

@@ -9,6 +9,7 @@ import WelcomePage from './pages/PatientPortal/WelcomePage'
 import PatientDashboardLayout from './layouts/PatientDashboardLayout'
 import PatientDashboard from './pages/PatientPortal/PatientDashboard'
 import PatientProfile from './pages/PatientPortal/PatientProfile'
+import UpdatePatientInfo from './pages/PatientPortal/UpdatePatientInfo'
 import PatientTreatmentProgress from './pages/PatientPortal/PatientTreatmentProgress'
 import PatientAppointmentDetails from './pages/PatientPortal/PxAppointmentDetailsPage'
 import './App.css'
@@ -61,6 +62,7 @@ function App() {
     <Route path='/patient' element={<PatientDashboardLayout/>}>
       <Route path='dashboard' element={<PatientDashboard/>}/>
       <Route path='profile' element={<PatientProfile/>}/>
+      <Route path='profile/update-my-info' element={<UpdatePatientInfo/>}/>
       <Route path='treatment-progress' element={<PatientTreatmentProgress/>}/>
       <Route path='treatment-progress/appointment-details/:id' element={<PatientAppointmentDetails/>}/>
       <Route path='patient-record' element={<PatientRecord/>}/>

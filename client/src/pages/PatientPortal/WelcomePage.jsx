@@ -28,6 +28,7 @@ import { IoIosArrowBack } from "react-icons/io";
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
+import FormControl from '@mui/material/FormControl';
 
 import axios from "axios";
 import Alert from '@mui/material/Alert';
@@ -37,6 +38,7 @@ import { ToastContainer, toast } from 'react-toastify';
 
 import Modal from '../../components/Ui/Modal'
 import { styled } from '@mui/material'
+import dayjs from "dayjs";
 
 import { useGenerateOtp } from '../../queries/users.js'
 import { useSubmitLogin, useSubmitOtp } from '../../queries/auth.js'
@@ -59,11 +61,12 @@ const LoginPage = () => {
     const [passwordHelperText, setPasswordHelperText] = useState();
     const [cpasswordError, setcPasswordError] = useState();
     const [cpasswordHelperText, setcPasswordHelperText] = useState();
+    const [isChecked, setIsChecked] = useState(false);
     const [otpPayLoad, setOtpPayLoad] = useState({
         otp: '',
         email:'',
     });
-    
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     const [signUpForm, setsignUpForm] = useState({
         first_name:"",
         last_name:"",
@@ -86,15 +89,19 @@ const LoginPage = () => {
         console.log(otpPayLoad)
     }
 
+    const isValidPassword= (password) => /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(password)
     const cpasswordMatch = (e) => {
         const passwordVal = e.target.value;
 
         if(signUpForm.cpassword != passwordVal ){
-
             console.log('Passord does not match')
             setcPasswordError(true)
             setcPasswordHelperText('Password Does not Match')
-        } else{
+        } else if (!isValidPassword(passwordVal)){
+            setcPasswordError(true)
+            setcPasswordHelperText(`Make sure your password is at least 8 characters, one lowercase letter, one uppercase letter, one number, one special character (@$!%*?&)`)
+        } 
+        else{
             console.log('Password Match')
             setcPasswordError(false)
             setcPasswordHelperText('Password Match')
@@ -107,12 +114,15 @@ const LoginPage = () => {
         if(signUpForm.password != passwordVal ){
 
             console.log('Passord does not match')
-            setPasswordError(true)
-            setPasswordHelperText('Password Does not Match')
-        } else{
+            setcPasswordError(true)
+            setcPasswordHelperText('Password Does not Match')
+        }  else if (!isValidPassword(passwordVal)){
+            setcPasswordError(true)
+            setcPasswordHelperText(`Make sure your password is at least 8 characters, one lowercase letter, one uppercase letter, one number, one special character (@$!%*?&)`)
+        } else if (signUpForm.password == passwordVal){
             console.log('Password Match')
-            setPasswordError(false)
-            setPasswordHelperText('Password Match')
+            setcPasswordError(false)
+            setcPasswordHelperText('Password Match')
         }
     }
     const handleOtpSubmit = (e) => {
@@ -186,9 +196,8 @@ z
                     'http://localhost:8080/auth/signup', 
                     signUpForm  
                 ).then(res => {
-                    console.log(res)
-                    toast('Account Successfully registered. Redirecting to login page')
-                    delay(3000)
+                    console.log(res.data.message)
+                    toast(res.data.message)
                     if (res.status===200 && res.data.redirectTo){
                         window.location.href = res.data.redirectTo;
                     }
@@ -224,7 +233,6 @@ z
                 }   
             }
         })
-        // generateOtpMutation(email);
             try{
                 const res = await axios.post(
                     'http://localhost:8080/auth/login', 
@@ -300,18 +308,22 @@ z
                              //  helperText={emailHelperText}
                              slotProps={{ htmlInput: { maxLength: 6, style:{ textAlign: 'center'} } }}
                              sx={{
-                    width:'70%',                          
+                    width:'100%',
+                    margin:'auto',
+                    
                              }}
                  />
                              <Button type='submit' variant="contained"
                              sx={{
-                    width:'70%',
+                                marginTop:'1rem',
+                    width:'100%',
                     backgroundColor:'var(-primary-contrast)',
                     height:'50px'
                              }}>Verify</Button>
              </form>
             </div>         
         </Modal>
+
           <div className={LoginStyles.containerOne}>
             <Swiper className={LoginStyles.loginSwiper}
                 modules={[Pagination, Autoplay]}
@@ -497,7 +509,9 @@ z
                                     boxShadow:'none'
 
                     }}
-                                    variant='contained' className={LoginStyles.loginBtn} onClick={() => toggleTab(3)}>
+                                    variant='contained' className={LoginStyles.loginBtn} 
+                                    
+                                    onClick={() => toggleTab(3)}>
                         SignUp
                     </Button>
     
@@ -612,13 +626,37 @@ z
                         <div className={LoginStyles.loginQol}>
     
                      </div>
-                        <FormGroup>
-                        <FormControlLabel sx={{
-                            alignItems:'flex-start',
-                            textAlign:'none',
-                        }}
-                        control={<Checkbox defaultChecked />} label="By proceeding, I confirm that I have read, understood, and accepted the Terms and Conditions." />
-                        </FormGroup>
+                        <FormControl required>
+                          <FormGroup>
+                            <FormControlLabel
+                              sx={{
+                                alignItems: 'flex-start',
+                                textAlign: 'none',
+                              }}
+                              control={
+                                <Checkbox 
+                                  checked={isChecked}
+                                  onChange={(e) => setIsChecked(e.target.checked)}
+                                  onClick={() => setIsOpen(true)}
+                                />
+                              } 
+                              label={
+                                <span>
+                                  By proceeding, I confirm that I have read, understood, and accepted the{' '}
+                                  <span 
+                                    onClick={() => setIsOpen(true)}
+                                    style={{ color: '#1976d2', cursor: 'pointer', textDecoration: 'underline' }}
+                                  >
+                                    Terms and Conditions
+                                  </span>.
+                                </span>
+                              }
+                            />
+                          </FormGroup>
+                          {/* {hasError && (
+                            <FormHelperText>You must accept the Terms and Conditions</FormHelperText>
+                          )} */}
+                        </FormControl>
                         
                             <Button sx={{
                                 width:'70%',
@@ -627,14 +665,80 @@ z
                                 fontWeight:500,
                                 fontSize:'1.1rem',
                                 textTransform:'none'
-                            }} variant="contained" type="submit" >Sign Up</Button>
+                            }} variant="contained" type="submit" 
+                            disabled={!isChecked || cpasswordError}
+                            >Sign Up</Button>
                                                  </Box>
                         
                     <p style={{marginTop:'1rem', color:'var(--off-black)'}}>Already have an account? <p className={LoginStyles.noAccRegLinkText} onClick={()=>toggleTab(2)}>Sign in here.</p></p>
     
               </div>
 </div>
- <ToastContainer />
+            <Modal open={isOpen}  onClose={() => setIsOpen(false)}>
+             
+            <div className={LoginStyles.tosContainer}>
+  <h1>Terms and Conditions</h1>
+    <p>Effective Date: {dayjs().format('dddd MMM YYYY')}</p>
+  <p><strong>Welcome to AppointMate!</strong> By registering, accessing, or using our platform, you agree to comply with these Terms and Conditions. Please read them carefully.</p>
+
+  <h2>1. Acceptance of Terms</h2>
+  <p>By creating an account and using AppointMate, you acknowledge that you have read, understood, and agreed to these Terms and Conditions.</p>
+  <p>If you do not agree, you may not use the platform.</p>
+
+  <h2>2. User Registration</h2>
+  <p>You must provide accurate and complete information when creating an account.</p>
+  <p>You are responsible for maintaining the confidentiality of your login credentials.</p>
+  <p>Duplicate accounts are not allowed. Attempts to create multiple accounts may result in termination.</p>
+
+  <h2>3. Use of AppointMate</h2>
+  <p>AppointMate is intended to help users manage appointments efficiently.</p>
+  <p>You agree to use the platform for lawful purposes only.</p>
+  <p>You may not misuse, disrupt, or interfere with the platform's services or data.</p>
+
+  <h2>4. User Responsibilities</h2>
+  <p>You are responsible for all activity under your account.</p>
+  <p>You agree not to share your account credentials with others.</p>
+  <p>You must comply with all applicable laws and regulations while using AppointMate.</p>
+
+  <h2>5. Privacy and Data</h2>
+  <p>AppointMate collects and processes data according to our Privacy Policy.</p>
+  <p>By using the platform, you consent to the collection, storage, and use of your data as described.</p>
+  <p>We take reasonable measures to protect your data but cannot guarantee complete security.</p>
+
+  <h2>6. Verification and Communication</h2>
+  <p>Users may receive verification codes (OTP) for authentication purposes.</p>
+  <p>You agree to provide a valid email or phone number to receive notifications.</p>
+
+  <h2>7. Limitation of Liability</h2>
+  <p>AppointMate is provided "as is." We do not guarantee uninterrupted or error-free service.</p>
+  <p>We are not liable for any direct, indirect, or consequential damages arising from the use or inability to use the platform.</p>
+
+  <h2>8. Termination</h2>
+  <p>We may suspend or terminate accounts for violations of these Terms, suspicious activity, or at our discretion.</p>
+  <p>Users may terminate their account at any time by following the in-app instructions.</p>
+
+  <h2>9. Changes to Terms</h2>
+  <p>AppointMate reserves the right to update or modify these Terms at any time.</p>
+  <p>Users will be notified of significant changes through the platform or email. Continued use of AppointMate constitutes acceptance of the updated Terms.</p>
+
+  <h2>10. Governing Law</h2>
+  <p>These Terms are governed by the laws of the Philippines.</p>
+  <p>Any disputes arising from these Terms shall be resolved in accordance with the governing law.</p>
+
+  <div className={LoginStyles.tosBtnContainer}>
+      <Button variant="contained" onClick={()=>{
+        setIsOpen(false)
+      }} > I understand </Button>
+      {/* <Button variant="contained" onClick={()=>{
+        setIsOpen(false)}}
+        sx={{
+        backgroundColor:'red'
+      }}> Decline </Button> */}
+  </div>
+</div>
+            
+            </Modal>
+ <ToastContainer/>
         </div>
   )
 }

@@ -1,7 +1,7 @@
 import DashboardStyles from './Dashboard.module.css'
 
 import { React, useState, useEffect} from 'react'
-import MockUser from '../../assets/zoey.png'
+import MockUser from '../../assets/aw_mock-px.png'
 import DatePicker from '../../components/PatientPortal/DatePicker'
 import AppointmentNotification from '../../components/PatientPortal/AppointmentNotification'
 import { BiSolidAlarm } from "react-icons/bi";
@@ -89,12 +89,12 @@ return (
       </div>
 
       <div className={`${DashboardStyles.columnTwo} ${DashboardStyles.column}`}>
-        <DatePicker/>
+        {/* <DatePicker/>
         <div className={`${DashboardStyles.progressContainer} ${DashboardStyles.miniVerticalStepperContainer}`}>
           <h1 className={DashboardStyles.subHeader}>Therapy Progress</h1>
           <p>Session Breakdown</p>
           <MiniVerticalStepper/>
-        </div>
+        </div> */}
       </div>
 
       {/* <div className={`${DashboardStyles.columnThree} ${DashboardStyles.column}`}>

@@ -29,7 +29,7 @@ const FdDashboard = () => {
       <div className={DashboardStyles.row}>
         <NotificationBelt/>
       </div>
-      <div className={DashboardStyles.apptDataContainer}>
+      {/* <div className={DashboardStyles.apptDataContainer}>
         <div className={DashboardStyles.calendarContainer}>
 
              <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -100,7 +100,7 @@ const FdDashboard = () => {
         <div className={DashboardStyles.upcomingApptContainer}>
           <UpcomingAppt/>
         </div>
-      </div>
+      </div> */}
     </div>
   )
 }

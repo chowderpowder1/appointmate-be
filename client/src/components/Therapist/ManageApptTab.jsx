@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router'
 import ManageStyles from './ManageApptTab.module.css'
-import MockPxPhoto from '../../assets/mockPx.jpg'
+import MockPxPhoto from '../../assets/aw_mock-px.png'
 import { FaEye } from "react-icons/fa";
 import { MdEditDocument } from "react-icons/md";
 import { Button } from '@mui/material';
@@ -59,7 +59,7 @@ const ManageAppt = () => {
                         </div>
                             <div className={ManageStyles.pxDataText}>
                                 <p>{data.patient_name}</p>
-                                <p>{data.patient_id}</p>
+                                <p>Patient ID: {data.patient_id}</p>
                             </div>
                         </span>
                         <span>{data.appt_date}</span>
@@ -71,10 +71,10 @@ const ManageAppt = () => {
                           {data.appt_status.toUpperCase()}
                         </span>
                         <span className={ManageStyles.actionBtnsContainer}>
-                            <span className={ManageStyles.viewBtn}>
+                            {/* <span className={ManageStyles.viewBtn}>
                               <FaEye className={ManageStyles.icon}/>
-                            </span>
-                            <Button onClick={()=> apptStatusHandler(data.appt_id)}
+                            </span> */}
+                            <Button disabled={ data.appt_status === 'completed' || data.appt_status === 'scheduled' } onClick={()=> apptStatusHandler(data.appt_id)}
                             variant='contained' > Approve
                             </Button>
 
@@ -82,7 +82,7 @@ const ManageAppt = () => {
                             // disabled={loading}>{loading ? 'Saving...' : 'Save Profile'} */}
                             <Link to={`edit-appointment/${data.appt_id}`}>                            
                               <Button variant='contained' > 
-                                Edit
+                                View
                               </Button>
                             </Link>
 

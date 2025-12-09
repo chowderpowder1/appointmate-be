@@ -72,7 +72,15 @@ const StepOne = () => {
             </Box>
 
             <Box display='flex' sx={{gap:'1rem'}}>
-                <TextField onChange={handleInputChange('personalInfo')} value={formData.personalInfo.middleName} id="outlined-basic" name="middleName" label="Middle Initial" variant="outlined" />
+                <TextField onChange={handleInputChange('personalInfo')} value={formData.personalInfo.middleName} id="outlined-basic" name="middleName" label="Middle Initial" variant="outlined" 
+                  slotProps={{
+                  input: {
+                    inputProps: {
+                      maxLength: 1
+                    }
+                  }
+                }}
+                />
                 {/* <TextField id="outlined-basic" label="Age" variant="outlined" /> */}
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DatePicker
@@ -97,15 +105,19 @@ const StepOne = () => {
         </div>
 
         <div className={OneStyles.rightContainer}>
-            <div className={OneStyles.uploadPhotoContainer}>
+            {/* <div className={OneStyles.uploadPhotoContainer}>
                     <FaCamera onClick={handleClick} className={OneStyles.icon}/>
                     <label className={OneStyles.upload} htmlFor="">
                         <input  ref={fileInputRef} type="file" id="avatar" name="avatar" accept="image/png, image/jpeg" />
                     </label>
                     
             </div>
-            <p>Add Photo</p>
-                <FormControl>
+            <p>Add Photo</p> */}
+                <FormControl
+                  sx={{ 
+                      alignSelf: 'flex-end',
+                      marginTop: 'auto'
+                    }}>
                     <FormLabel>Gender</FormLabel>
                     <RadioGroup row
                         name='gender'

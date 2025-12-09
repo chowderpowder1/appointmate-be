@@ -39,10 +39,10 @@ const FdSideBar = () => {
         <NavLink to='manage-appointments' className={ActiveSideBar}>
           <HiDocumentMagnifyingGlass /> <span className={expandedText()}>APPOINTMENTS</span>
         </NavLink>
-
+{/* 
         <NavLink to='manage-documents' className={ActiveSideBar}>
           <FaBookMedical /> <span className={expandedText()}>MANAGE DOCUMENTS</span>
-        </NavLink>
+        </NavLink> */}
 
         <div onClick={expandSideBar} className={SideBarStyles.expandContainer}>
           <RiExpandRightFill className={ expand ? `${SideBarStyles.expandBtn} ${SideBarStyles.expandBtnActive}` : `${SideBarStyles.expandBtn}`} />

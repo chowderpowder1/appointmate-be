@@ -2,6 +2,7 @@ import React from 'react'
 import NavStyles from './TherapistNavBar.module.css'
 import { IoIosNotifications } from "react-icons/io";
 import { CgProfile } from "react-icons/cg";
+import { IoMdLogOut } from "react-icons/io";
 
 // Tanstack
 import { useUsers } from '../../queries/users'
@@ -19,6 +20,7 @@ const FDTopNav = () => {
             <li><IoIosNotifications/></li>
             <li><CgProfile/></li>
             <p>{userData.userRole}: {userData.firstName}</p>
+            <button onClick={handleLogout} className="logout-btn"><IoMdLogOut/></button>
         </ul>
       </div>
 

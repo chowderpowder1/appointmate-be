@@ -56,13 +56,17 @@ async function login(req, res){
         //   is_profile_complete: user.rows[0].is_profile_complete
         };
         console.log('This is the role', dbUser.user_role)
+        if (dbUser.user_role === 3){
+            console.log('redirecting to front desk')
+            return res.status(200).json({redirectTo: 'http://localhost:5173/therapist/dashboard'})
+        }
         if (dbUser.user_role === 4){
             console.log('redirecting to front desk')
             return res.status(200).json({redirectTo: 'http://localhost:5173/front-desk/dashboard'})
         }
         if (dbUser.user_role === 5){
             console.log('redirecting to Patient Landing Page')
-            return res.status(200).json({redirectTo: 'http://localhost:5173/'})
+            return res.status(200).json({redirectTo: 'http://localhost:5173/patient/dashboard'})
         }
         return res.send("User Logged in");
 
@@ -73,23 +77,22 @@ async function login(req, res){
 
 async function signup(req, res){
     try{
-        console.log(req.body)
-        const { email, password, contact_number, first_name, last_name} = req.body;
-        console.log(req.body);
+        const { email, password, cpassword, contact_number, first_name, last_name} = req.body;
         const user_role=5;
         const user = await dbConnection.query('SELECT * FROM awp_users_tbl WHERE user_logemail = $1', [email])
-
+        if(password != cpassword){
+            console.log(`password not match`)
+            return res.json({message:'Submitted Password does not match'})
+        }
         if(user.rows.length === 0){
             const salt = await bcrypt.genSalt();
             const hashedPassword = await bcrypt.hash(password, salt);
             const userIdResult = await dbConnection.query('INSERT INTO awp_users_tbl ( user_role, user_fname, user_lname, user_logemail, password_hash)values( $1, $2, $3, $4, $5) RETURNING user_id', [user_role, first_name, last_name, email, hashedPassword])
-            console.log(userIdResult.rows[0])
             const userId= userIdResult.rows[0].user_id;
             const defaultContactType= 1;
-            console.log(userId, contact_number, defaultContactType)
             await dbConnection.query('INSERT INTO awp_ucontacts_tbl (user_id, contact_value, contact_type_id) values ($1, $2, $3)',[userId, contact_number, defaultContactType])
 
-            return res.status(200).json({redirectTo: 'http://localhost:5173/login'})
+            return res.status(200).json({redirectTo: 'http://localhost:5173/login', message: 'Account Successfully registered. Redirecting to login page'})
 
         }else{
             return res.send('User Already Registered')
@@ -115,11 +118,17 @@ async function session (req, res) {
         
         // Front Desk
         if(currentUserRole.rows[0].user_role === 4){
-            console.log('Employee Endpoint', employeeUserData.rows[0])
             return res.json({
                 loggedIn:true,
                 firstName: employeeUserData.rows[0].user_fname,
                 userRole: 'Front-Desk'
+            })
+        }
+        if(currentUserRole.rows[0].user_role === 3){
+            return res.json({
+                loggedIn:true,
+                firstName: employeeUserData.rows[0].user_fname,
+                userRole: 'Therapist'
             })
         }
 
@@ -175,7 +184,7 @@ async function session (req, res) {
 
 
 
-        console.log('Here it is niel', (rows))
+        // console.log('Here it is niel', (rows))
 
 // is_profile_complete
     return res.json({
@@ -213,7 +222,6 @@ async function logout (req, res) {
 
 //  This is a quick workaround - currently the same column is used for login and signup otp. Revise and create a separate table
 async function otp (req, res) {
-    console.log(req.body);
     try{
 
         // const currentUserID = req?.session?.user?.id || req?.user?.id || null;

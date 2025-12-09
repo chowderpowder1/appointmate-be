@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Link, NavLink, useNavigate } from 'react-router'
 import './Navbar.css'
 import AwLogo from '../../assets/aw-logo-lowRes.png'
-import MockUser from '../../assets/zoey.png'
+import MockUser from '../../assets/aw_mock-px.png'
 
 import { IoSearchSharp } from "react-icons/io5";
 import { IoMdLogOut } from "react-icons/io";

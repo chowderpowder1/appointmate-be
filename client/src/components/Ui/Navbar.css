@@ -8,9 +8,14 @@
     justify-content: space-between;
     padding:1rem 5rem;
 }
+.navCenter {
+
+    margin-left:15rem;
+}
 .navCenter li{
     list-style: none;
     white-space:nowrap;
+
 }
 .logoContainer{
     cursor:pointer;
@@ -71,7 +76,7 @@
     overflow: hidden;
     height:50px;
     width: 50px;
-    background-color: #97ABC0;
+    /* background-color: #97ABC0; */
     flex-shrink:0;
 }
 .user-icon:hover{

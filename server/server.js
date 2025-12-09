@@ -72,7 +72,7 @@ passport.use(new GoogleStrategy({
             // console.log(user.rows)
             // console.log(profile)
             if (user.rows.length === 0){
-                user = await dbConnection.query(`INSERT INTO awp_users_tbl ( user_role, user_fname, user_lname, user_logemail, password_hash, google_id, is_verified)values( $1, $2, $3, $4, $5, $6, $7) RETURNING user_id`,[5, name, 'z', email, null, googleId, true ])
+                user = await dbConnection.query(`INSERT INTO awp_users_tbl ( user_role, user_fname, user_lname, user_logemail, password_hash, google_id, is_verified)values( $1, $2, $3, $4, $5, $6, $7) RETURNING user_id`,[5, name, 'N/A', email, null, googleId, true ])
             }
 
             done(null, user)

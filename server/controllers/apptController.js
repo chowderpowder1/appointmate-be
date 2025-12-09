@@ -41,9 +41,58 @@ async function getAllApptData(req, res) {
         if(req.session.user.id){
             const isAuthorized = await dbConnection.query(`SELECT user_role from awp_users_tbl WHERE user_id=$1`, [req.session.user.id])
 
+ if (isAuthorized.rows[0].user_role === 3) {
+    console.log(`Shiqi is a therapist`); // Fixed: parentheses, not backticks
+    
+    const therapistID = await dbConnection.query(
+        `SELECT pthera_id FROM awp_pthera_tbl WHERE user_id=$1`, 
+        [req.session.user.id]
+    ); // Fixed: parentheses syntax
+    
+    const therapistData = await dbConnection.query(
+        `SELECT * FROM awp_users_tbl WHERE user_id=$1`,
+        [req.session.user.id]
+    ); // Fixed: parentheses syntax
+    
+    const dbActiveAppt = await dbConnection.query(
+        `SELECT * FROM awp_appt_tbl 
+         WHERE appt_date >= (CURRENT_DATE - INTERVAL '7 days') 
+           AND therapist_id = $1`,
+        [therapistID.rows[0].pthera_id] // Fixed: extract the actual ID from result
+    );
+    
+    const allActiveAppt = await Promise.all(dbActiveAppt.rows.map(async (r) => {
+        const assignedPatientResults = await dbConnection.query(
+            `SELECT a.user_fname, a.user_lname 
+             FROM awp_users_tbl AS a 
+             LEFT JOIN awp_patient_tbl AS b ON a.user_id = b.user_id 
+             WHERE b.patient_id=$1`,
+            [r.patient_id]
+        ); // Fixed: parentheses syntax
+        
+        return {
+            appt_id: r.appt_id,
+            patient_id: r.patient_id,
+            patient_name: assignedPatientResults.rows[0] 
+                ? `${assignedPatientResults.rows[0].user_fname} ${assignedPatientResults.rows[0].user_lname}` 
+                : null,
+            therapist_id: r.therapist_id,
+            therapist_name: therapistData.rows[0] // Fixed: access rows[0]
+                ? `${therapistData.rows[0].user_fname} ${therapistData.rows[0].user_lname}` 
+                : null,
+            appt_status: r.appt_status,
+            appt_date: (dayjs(r.appt_date).format('DD MMM YYYY')).toUpperCase(),
+            appt_start: dayjs(r.appt_start).format('h:mm A'),
+            appt_end: dayjs(r.appt_end).format('h:mm A'),
+            mode_of_payment: r.mode_of_payment
+        };
+    }));
+    
+    res.json({ allActiveAppt });
+}
             if( isAuthorized.rows[0].user_role === 4){
 
-                const dbActiveAppt = await dbConnection.query(`SELECT * FROM awp_appt_tbl WHERE appt_date >= (CURRENT_DATE - INTERVAL '7 days');`)
+                const dbActiveAppt = await dbConnection.query(`SELECT * FROM awp_appt_tbl WHERE appt_date >= (CURRENT_DATE - INTERVAL '7 days') ORDER BY appt_date ASC, appt_status ;`)
 
                 const allActiveAppt = await Promise.all( dbActiveAppt.rows.map( async (r)=>{
                 {
@@ -80,7 +129,7 @@ async function getAllApptData(req, res) {
         }
 
     }catch(err){
-
+        console.log(err)
     }
 }
 
@@ -94,8 +143,7 @@ async function bookAppointment (req, res){
         // console.log(theraFname)
         // The query below is susceptible to a case where therapists both have the same name and last name, in which case the query would return two users
         const theraIdLookup = await dbConnection.query(`SELECT pthera_id from awp_pthera_tbl WHERE user_id=(WITH x AS (select * from awp_users_tbl where user_role=3) Select user_id from x WHERE user_fname=$1 AND user_lname=$2);`,[theraFname, theraLname])
-        console.log('Therapist ID LOOKUP:', theraIdLookup.rows[0])
-        const theraId = theraIdLookup.rows[0].pthera_id;
+        const theraId = theraIdLookup?.rows[0]?.pthera_id;
 
         const patientIdLookup = await dbConnection.query(`SELECT patient_id from awp_patient_tbl WHERE user_id=$1;`,[userId])
         const patientId= patientIdLookup?.rows[0]?.patient_id
@@ -130,10 +178,43 @@ async function bookAppointment (req, res){
 }
 
 async function getApptOverview(req, res) {
+
     try{
-        if(req.session.user.id){
+        if(req?.session?.user?.id){
             const isAuthorized = await dbConnection.query(`SELECT user_role from awp_users_tbl WHERE user_id=$1`, [req.session.user.id])
 
+            if( isAuthorized.rows[0].user_role === 3){
+                const therapistID = await dbConnection.query(`SELECT pthera_id from awp_pthera_tbl WHERE user_id=$1`, [req.session.user.id])
+                const totalAppt = await dbConnection.query('SELECT COUNT(appt_id) from awp_appt_tbl WHERE therapist_id=$1;',[therapistID.rows[0].pthera_id])
+                const scheduledAppt = await dbConnection.query(`SELECT COUNT(appt_id) from awp_appt_tbl WHERE therapist_id=$1 AND appt_status='scheduled' AND appt_date >= (CURRENT_DATE - INTERVAL \'7 days\');`,[therapistID.rows[0].pthera_id])
+                const servedAppt = await dbConnection.query(
+                    'SELECT COUNT(*) FROM awp_appt_tbl WHERE therapist_id=$1 AND appt_date = CURRENT_DATE AND appt_status=$2;',
+                    [therapistID.rows[0].pthera_id, 'completed']
+                );
+
+                const pendingAppt = await dbConnection.query(
+                    'SELECT COUNT(*) FROM awp_appt_tbl WHERE therapist_id=$1 AND appt_status=$2 AND appt_date >= (CURRENT_DATE - INTERVAL \'7 days\');',
+                    [therapistID.rows[0].pthera_id, 'pending']
+                );
+
+                const cancelledAppt = await dbConnection.query(
+                    'SELECT COUNT(*) FROM awp_appt_tbl WHERE therapist_id=$1 AND appt_date >= (CURRENT_DATE - INTERVAL \'7 days\') AND appt_status=$2;',
+                    [therapistID.rows[0].pthera_id, 'cancelled']
+                );
+
+                const rescheduledAppt = await dbConnection.query(
+                    'SELECT COUNT(*) FROM awp_appt_tbl WHERE therapist_id=$1 AND appt_date >= (CURRENT_DATE - INTERVAL \'7 days\') AND appt_status=$2;',
+                    [therapistID.rows[0].pthera_id, 'rescheduled']
+                );                
+                res.json({
+                    scheduledAppt:scheduledAppt.rows[0].count,
+                    totalAppt:totalAppt.rows[0].count,
+                    servedAppt:servedAppt.rows[0].count,
+                    pendingAppt:pendingAppt.rows[0].count,
+                    cancelledAppt:cancelledAppt.rows[0].count,
+                    rescheduledAppt:rescheduledAppt.rows[0].count
+                })
+            }
             if( isAuthorized.rows[0].user_role === 4){
                 const totalAppt = await dbConnection.query('SELECT COUNT(appt_id) from awp_appt_tbl;')
 
@@ -168,7 +249,7 @@ async function updateApptStatus(req, res){
             console.log('Update Endpoint reached')
             const isAuthorized = await dbConnection.query(`SELECT user_role from awp_users_tbl WHERE user_id=$1`, [req.session.user.id])
             if( isAuthorized.rows[0].user_role === 4){
-                console.log('Update Payload: ',req.body)
+                // console.log('Update Payload: ',req.body)
                 const {
                     appt_id,
                     appt_status
@@ -220,10 +301,16 @@ async function getApptDetails(req,res){
     console.log('Appt Details Endpoint')
     try{
         if (req.session.user || req.user) {
+            // const currentUserID = req?.session?.user?.id || req?.user?.id || null;
             const appointmentID = req.query.apptID;
             const apptDetails = await dbConnection.query(`SELECT * from awp_appt_tbl WHERE appt_id=$1`,[appointmentID])
+
             const apptRows = apptDetails.rows[0]
             const therapistID = apptRows.therapist_id
+            const therapistSpecialization = await dbConnection.query(`SELECT * from awp_pthera_tbl WHERE pthera_id=$1`,[therapistID])
+            const therapistUserID = therapistSpecialization.rows[0].user_id;
+            const therapistDetails = await dbConnection.query(`SELECT * from awp_users_tbl WHERE user_id=$1`,[therapistUserID])
+            const therapistContact = await dbConnection.query(`SELECT contact_value from awp_ucontacts_tbl WHERE user_id=$1`,[therapistUserID])
             const assignedTherapistResult = await dbConnection.query(
               `SELECT u.*
                FROM awp_users_tbl AS u
@@ -231,15 +318,96 @@ async function getApptDetails(req,res){
                ON u.user_id = p.user_id
                WHERE p.pthera_id = $1`,
               [therapistID])            
-                console.log(assignedTherapistResult.rows[0])
-            console.log(apptRows)
-            return res.status(200).json({
+            const assignedTherapist = assignedTherapistResult.rows[0];
+            const userID = await dbConnection.query(`SELECT user_id from awp_patient_tbl where patient_id=$1`,[apptRows.patient_id])
+            const patientData = await dbConnection.query(`SELECT * from awp_users_tbl where user_id=$1`,[userID.rows[0].user_id])
+            const patientDataRows = patientData.rows[0]
+                console.log(`APPT DETAILS ENDPOINT: `,patientData.rows[0])
+            return res.json({
+                patientID: apptRows.patient_id,
+                patientFName: patientDataRows.user_fname,
+                patientLName: patientDataRows.user_lname,
+                patientEmail: patientDataRows.user_logemail,
+                therapistID: therapistID,
+                therapistEmail: therapistDetails.rows[0].user_logemail,
+                therapistContactNumber: therapistContact.rows[0].contact_value,
                 assignedTherapist: assignedTherapist ? `${assignedTherapist.user_fname} ${assignedTherapist.user_lname}`: null,
-                
+                therapistSpecialization: therapistSpecialization.rows[0].pthera_special,
+                apptStatus : apptRows.appt_status,
+                appt_date: (dayjs(apptRows.appt_date).format('DD MMM YYYY')).toUpperCase(),
+                appt_start: dayjs(apptRows.appt_start).format('h:mm A'),
+                appt_end: dayjs(apptRows.appt_end).format('h:mm A'),        
+            })
+        } else{
+            return res.status.json({
+                success:false,
+                message:'User not authorized'
             })
         }
     }catch(err){
-
+        console.log(err)
     }
 }
-export {getBookedDates, bookAppointment, getApptOverview, getAllApptData, updateApptStatus, getPatientsList, getApptDetails};
+
+async function patientUpdateApptStatus (req, res){
+    try{
+        // YES the apptID works, im too lazy to change the payload
+        const apptID = req.body.apptID.apptID 
+        const newApptStatus = req.body.apptNewStatus
+
+        const updateRes = await dbConnection.query(`UPDATE awp_appt_tbl SET appt_status=$1 WHERE appt_id=$2`,[newApptStatus, apptID])
+        if (updateRes.rowCount > 0 ){
+            return res.status(200).json({
+                success:true,
+                message:'Appointment Successfully Cancelled'
+            })
+        }
+            return res.status(400).json({
+                success:false,
+                message:'There was a problem with your request'
+            })
+        console.log(updateRes.rowCount);
+    }catch(err){
+        console.log(err)
+    }
+}
+
+// Therapists
+
+async function getTherapistAppointments(req,res){
+    try{
+        if(req.session.user.id){
+            const isAuthorized = await dbConnection.query(`SELECT user_role from awp_users_tbl WHERE user_id=$1`, [req.session.user.id])
+            const therapistID = await dbConnection.query(`SELECT pthera_id from awp_pthera_tbl WHERE user_id=$1`, [req.session.user.id])
+
+            if( isAuthorized.rows[0].user_role === 3){
+                const totalAppt = await dbConnection.query('SELECT COUNT(appt_id) from awp_appt_tbl where therapist_id=$1;',[therapistID])
+
+                const servedAppt = await dbConnection.query(`SELECT COUNT(*) FROM awp_appt_tbl WHERE appt_date = CURRENT_DATE AND appt_status='completed';`)
+
+                const pendingAppt = await dbConnection.query(`SELECT COUNT(*) FROM awp_appt_tbl WHERE appt_status='pending';`)
+
+                const cancelledAppt = await dbConnection.query(`SELECT COUNT(*) FROM awp_appt_tbl WHERE appt_date >= (CURRENT_DATE - INTERVAL '7 days') AND appt_status='cancelled';`)
+
+                const rescheduledAppt = await dbConnection.query(`SELECT COUNT(*) FROM awp_appt_tbl WHERE appt_date >= (CURRENT_DATE - INTERVAL '7 days') AND appt_status='rescheduled';`)
+
+                res.json({
+                    totalAppt:totalAppt.rows[0].count,
+                    servedAppt:servedAppt.rows[0].count,
+                    pendingAppt:pendingAppt.rows[0].count,
+                    cancelledAppt:cancelledAppt.rows[0].count,
+                    rescheduledAppt:rescheduledAppt.rows[0].count
+                })
+            }else{
+                res.json({message:'User is not a Therapist'})
+            }
+        }else{
+            res.json({message:'User not authorized.'})
+        }
+
+    }catch(err){
+        console.log(err);
+        res.status(404).send('idk')
+    }
+}
+export {getBookedDates, bookAppointment, getApptOverview, getAllApptData, updateApptStatus, getPatientsList, getApptDetails, patientUpdateApptStatus, getTherapistAppointments};

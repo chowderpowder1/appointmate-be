@@ -24,6 +24,24 @@ const OnboardingContainer = () => {
     const stepDescription = ['Personal Information', 'Contact Information', 'Coverage & Identification', ' Emergency Information']
     const nextBtn = () => setCurrentStep(current => current === numberOfSteps ?  currentStep: currentStep + 1);
     const prevBtn = () => setCurrentStep(current => current === 0 ?  currentStep : currentStep - 1);
+
+const checkNestedEmpty = (obj) => {
+  for (const key in obj) {
+    if (typeof obj[key] === 'object' && obj[key] !== null && key != 'dob') {
+
+      if (checkNestedEmpty(obj[key])) {
+        console.log(obj[key]) 
+        return true
+      };
+    } else if (obj[key] === '' || obj[key] === null || obj[key] === undefined) {
+      return true;
+    }
+  }
+  console.log(formData)
+  return false;
+
+};
+
   return (
     // <StepperContext value={{formData, setFormData}}>
     <div className={OnboardingStyles.container}>
@@ -40,7 +58,10 @@ const OnboardingContainer = () => {
         
          {currentStep !== numberOfSteps && <div className={OnboardingStyles.btnContainer}>
             <Button variant="contained" onClick={prevBtn}>Previous</Button>
-            <Button variant="contained" onClick={nextBtn}>{currentStep<numberOfSteps ? 'Next' : 'Submit'}</Button>
+            <Button  disabled={currentStep === 3 && checkNestedEmpty(formData)}
+            variant="contained" onClick={()=>{
+              nextBtn()
+              }}>{currentStep != (numberOfSteps-1) ? 'Next' : 'Submit'}</Button>
         </div>}
     </div>
     // </StepperContext>

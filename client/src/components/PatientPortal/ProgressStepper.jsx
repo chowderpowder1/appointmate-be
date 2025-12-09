@@ -70,11 +70,13 @@ const ProgressStepper = ({isHome}) => {
   const mappedApptData = myAppointmentsData.userAppointments;
   // console.log(mappedApptData.appt_date)
   // console.log(dayjs(mappedApptData[0].appt_date).format('YYYY MM DD'))
-  console.log(mappedApptData[0].appt_status)
-
+  // console.log(mappedApptData[0].appt_status)
+  console.log(useGetBookedDates)
   const getStatusStyle = (status) => {
     switch (status) {
       case 'pending':
+        return <> <div className={ProgressStyles.progressCircle} style={{border: '1px solid orange', backgroundColor:'orange'}}><FaCircleDot style={{color:'white', fontSize:'1.2rem'}}/></div></>;
+      case 'reschedule':
         return <> <div className={ProgressStyles.progressCircle} style={{border: '1px solid orange', backgroundColor:'orange'}}><FaCircleDot style={{color:'white', fontSize:'1.2rem'}}/></div></>;
       case 'scheduled':
         return <> <div className={ProgressStyles.progressCircle} style={{border: '1px solid #388E3C', backgroundColor:'#388E3C'}}><FaClock style={{color:'white', fontSize:'1.5rem'}}/></div></>;
@@ -91,6 +93,8 @@ const ProgressStepper = ({isHome}) => {
     console.log(status)
     switch (status) {
       case 'pending':
+        return {"--apptStatusColor":'orange'};
+      case 'reschedule':
         return {"--apptStatusColor":'orange'};
       case 'scheduled':
         return {"--apptStatusColor":'#388E3C'};
@@ -125,12 +129,12 @@ const ProgressStepper = ({isHome}) => {
                   (<>
                    
                      <div className={ProgressStyles.row}>
-                      {getStatusStyle(apptData.appt_status)}
+                      {getStatusStyle(apptData?.appt_status)}
                   {/* { apptData.appt_status == 'scheduled' && <><div className={ProgressStyles.progressCircle} style={{backgroundColor:'#1976D5', color:'white'}}><FaCheck/></div></>}
 
                   { apptData.appt_status == 'pending' && <>  <div className={ProgressStyles.progressCircle} style={{border: '1px solid orange', backgroundColor:'white', color:'orange'}}><FaCircleDot/></div></>}
                    */}
-                  <div className={ProgressStyles.detailsContainer} style={getStatusIndicatorStyles(apptData.appt_status)}>
+                  <div className={ProgressStyles.detailsContainer} style={getStatusIndicatorStyles(apptData?.appt_status)}>
                   {/* <div className={ProgressStyles.detailsContainer} style={{     "--apptStatusColor": apptData.appt_status === "scheduled" ? "#1976D5" : "orange",}}> */}
                       <span>
                         <p className={ProgressStyles.rowTitle}>{apptData.appt_date}</p>

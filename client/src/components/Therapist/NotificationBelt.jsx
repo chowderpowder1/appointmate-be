@@ -14,26 +14,33 @@ import { FaPhoneAlt } from "react-icons/fa";
 
 //Tanstack Import
 import { useGetApptOverview } from '../../queries/useEmployees'
+import { useUsers } from '../../queries/users'
 
 const NotificationBelt = () => {
+  const {data : userData, isLoading: userDataIsLoading, error: userDataError} = useUsers();
 
   const { data: apptOverviewData, isLoading: apptOverviewDataIsLoading, error: apptOverviewDataError} = useGetApptOverview();
 
   if (apptOverviewDataIsLoading) return <div>Loading...</div>;
   if (apptOverviewDataError) return <div>Error: {apptOverviewDataError.message}</div>
   console.log(apptOverviewData)
+  if (userDataIsLoading) return <div>Loading...</div>;
+  if (userDataError) return <div>Error: {userDataError.message}</div>;
+  console.log(userData)
   return (
     <div className={BeltStyles.beltContainer}>
+      {userData.userRole=='Therapist' && <>
       <div className={`${BeltStyles.totalApptContainer} ${BeltStyles.apptContainer}`}>
-          
           <div className={BeltStyles.iconContainer}>
             <FaListAlt className={BeltStyles.icon}/>
           </div>
           <div className={BeltStyles.textContainer}>
-            <p className={BeltStyles.apptSubtext}>{apptOverviewData.totalAppt}</p>
-            <p className={BeltStyles.apptTitle}>Total Appointments</p>
+            <p className={BeltStyles.apptSubtext}>{apptOverviewData.scheduledAppt}</p>
+            <p className={BeltStyles.apptTitle}>Scheduled Appointments </p>
           </div>
       </div>
+      </>}
+
       <div className={`${BeltStyles.dailyApptContainer} ${BeltStyles.apptContainer}`}>
           <div className={BeltStyles.iconContainer}>
             <FaCheck className={BeltStyles.icon}/>

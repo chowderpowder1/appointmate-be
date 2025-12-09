@@ -6,10 +6,7 @@ const AppContext = createContext();
 export const AppProvider = ({ children }) => {
   const [formData, setFormData] = useState({
     personalInfo:{
-      // firstName:'',
-      // lastName:'',
       middleName:'',
-      // age:null,
       gender:'',
       dob:'',
     },
@@ -22,8 +19,7 @@ export const AppProvider = ({ children }) => {
       zipcode:'',
       religion:'',
       country:'',
-      employer:'',
-      contactNumber:'',
+      // contactNumber:'',
       // email:''
     },
     identification:{

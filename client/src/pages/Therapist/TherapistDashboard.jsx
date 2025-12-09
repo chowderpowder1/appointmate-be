@@ -21,7 +21,7 @@ const TherapistDashboard = () => {
         <NotificationBelt/>
       </div>
       <div className={DashboardStyles.apptDataContainer}>
-        <div className={DashboardStyles.calendarContainer}>
+        {/* <div className={DashboardStyles.calendarContainer}>
 
              <LocalizationProvider dateAdapter={AdapterDayjs}>
   <DateCalendar
@@ -90,7 +90,7 @@ const TherapistDashboard = () => {
         </div>
         <div className={DashboardStyles.upcomingApptContainer}>
           <UpcomingAppt/>
-        </div>
+        </div> */}
       </div>
     </div>
   )

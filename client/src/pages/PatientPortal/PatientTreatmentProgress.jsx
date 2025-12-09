@@ -153,7 +153,7 @@ const PatientAppointment = () => {
         <ProgressStepper isHome={false}/>
       </div>
       <div className={TreatmentStyles.columnTwo}>
-        <CircularStepper/>
+        {/* <CircularStepper/> */}
         <div className={TreatmentStyles.scheduledSessionContainer}>
               <div className={TreatmentStyles.sessionData}>
                 <div className={TreatmentStyles.sessionBackground}>
@@ -177,7 +177,7 @@ const PatientAppointment = () => {
                 <button className={TreatmentStyles.viewBtn}> <FaExternalLinkAlt/> View Appointment Details</button>
               </div>
         </div>
-              <RescheduleStatus/>
+              {/* <RescheduleStatus/> */}
       </div>
     </div>
   )

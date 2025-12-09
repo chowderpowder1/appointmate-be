@@ -4,10 +4,17 @@ import { IoPersonCircle } from "react-icons/io5";
 import { FaCalendarPlus } from "react-icons/fa6";
 import { MdOutlineModeEdit } from "react-icons/md";
 
-import MockPxPhoto from '../../../assets/mockPx.jpg'
+import MockPxPhoto from '../../../assets/aw_mock-px.png'
 import DatePicker from '../../../components/PatientPortal/DatePicker'
+import {UseGetAnAppointmentsDetails} from '../../../queries/apptData.js'
 
-const ApptDetails = () => {
+
+const ApptDetails = (apptID) => {
+      const { data: apptDetails, isLoading: apptDetailsLoading, error: apptDetailsError} = UseGetAnAppointmentsDetails(apptID);
+        if (apptDetailsLoading) return <div>Loading...</div>;
+        if (apptDetailsError) return <div>Error: {apptDetailsError.error}</div>;
+      console.log(apptDetails)
+
      const timeSlots = [
       { id: 1, time: '08:00', display: '9:00 AM', available: true },
       { id: 2, time: '08:30', display: '9:30 AM', available: true },
@@ -45,34 +52,29 @@ const ApptDetails = () => {
                             <img src={MockPxPhoto} className={DetailStyles.pxPhoto} alt="" />
                         </div>
                         <div className={DetailStyles.pxDataContainer}>
-                            <p>Belle Mariano</p>
-                            <span>432432</span>
-                            <span>niel@gmail.com</span>
+                            <p>Patient Name: {apptDetails.patientFName} {apptDetails.patientLName}</p>
+                            <span>Patient Email: {apptDetails.patientEmail}</span>
                         </div>
                     </div>
                     <div className={DetailStyles.pxIdContainer}>
                         <div>
-                            <p>Patient ID</p>
-                            <p>#A2023141816</p>
+                            <p>Patient ID #{apptDetails.patientID}</p>
                         </div>
-                        <div>
-                            <p>Session ID</p>
-                            <p>#21AB8</p>
-                        </div>
+                       
                     </div>
-                    <div>
+                    {/* <div>
                         <p>Chief Complaint:</p>
                         <div className={DetailStyles.complaintData}>
                             <p>Hi po! I’ve been feeling some mild lower back discomfort lately, baka dahil sa matagal na upo during tapings and shoots. Also po, I had a previous ankle injury na minsan umaalalay pa rin. Hoping to get this checked po, thank you!</p>
                         </div>
-                    </div>
+                    </div> */}
 
                 </div>
             </div>
-        <button className={DetailStyles.viewPxBtn}>View Patient Record</button>
+        {/* <button className={DetailStyles.viewPxBtn}>View Patient Record</button> */}
         </div>
         <div className={DetailStyles.apptDetailsContainer}>
-            <div className={DetailStyles.apptStatusContainer}>
+            {/* <div className={DetailStyles.apptStatusContainer}>
                 <FaCalendarPlus className={DetailStyles.apptStatusIcon}/>
                 <div className={DetailStyles.apptStatusSubcontainer}>
                     <p>Reschedule Requested by Patient</p>
@@ -83,9 +85,9 @@ const ApptDetails = () => {
                         <button className={DetailStyles.actionBtn}>Dismiss</button>
                     </div>
                 </div>
-            </div>
+            </div> */}
 
-            <div>
+            {/* <div>
                 <p>Appointment Date & Time</p>
                 <div className={DetailStyles.apptDataContainer}>
                     <span>
@@ -101,8 +103,8 @@ const ApptDetails = () => {
                         <p>Accelerated Wellness Zabarte Road QC</p>
                     </span>
                 </div>
-            </div>
-            <div className={DetailStyles.columnTwo}>
+            </div> */}
+            {/* <div className={DetailStyles.columnTwo}>
                 <DatePicker/>
                 <div className={DetailStyles.colTwoSubContainer}>
                         <div>
@@ -137,7 +139,7 @@ const ApptDetails = () => {
                         </div>
                     
                 </div>
-            </div>
+            </div> */}
         </div>
     </div>
   )

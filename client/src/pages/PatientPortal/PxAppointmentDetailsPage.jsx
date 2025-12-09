@@ -35,8 +35,8 @@ const PxAppointmentDetailsPage = () => {
       </div>
 
       <div className={AppointmentStyles.columnTwo}>
-        <RescheduleStatus/>
-        <DatePicker/>
+        {/* <RescheduleStatus/> */}
+        {/* <DatePicker/> */}
         <CheckList/>
         <PxSupport/>
         

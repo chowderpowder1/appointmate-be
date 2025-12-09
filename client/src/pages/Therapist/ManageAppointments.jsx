@@ -28,14 +28,14 @@ const ManageAppointments = () => {
             <div onClick={ ()=> toggleTab(1)} className={`${ManageStyles.tabItem} ${activeTab === 1 ? ManageStyles.tabActive:''}`}>
               Schedule Appointments
             </div>
-            
+{/*             
             <div onClick={ ()=> toggleTab(2)} className={`${ManageStyles.tabItem} ${activeTab === 2 ? ManageStyles.tabActive:''}`}>
               Reschedule Appointments
             </div>
             
             <div onClick={ ()=> toggleTab(3)} className={`${ManageStyles.tabItem} ${activeTab === 3 ? ManageStyles.tabActive:''}`}>
               Cancel Appointments
-            </div>
+            </div> */}
         </div>
 
         <div className={ManageStyles.slidesContainer}>

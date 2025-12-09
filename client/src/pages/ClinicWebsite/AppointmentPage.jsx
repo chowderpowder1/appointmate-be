@@ -5,6 +5,7 @@ import RedHeader from '../../components/Ui/RedHeader'
 import Box from '@mui/material/Box';
 import { FaFacebook, FaInstagram } from "react-icons/fa";
 import AppointmentBg from '../../assets/appointmentBg.png'
+import { Link } from 'react-router';
 
 // Date Picker Dependencies
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
@@ -26,6 +27,8 @@ import CheckIcon from '@mui/icons-material/Check';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 
+import Modal from '../../components/Ui/Modal'
+
 import dayjs from "dayjs";
 
 // Icons
@@ -42,6 +45,7 @@ import { useGetBookedDates, useBookAppt } from '../../queries/apptData'
 
 // Imports fixed time slots of AWP
 import {timeSlots} from '../../features/timeSlots'
+import { ToastContainer, toast } from 'react-toastify';
 
 const AppointmentPage = () => {
   const branchData = [
@@ -110,6 +114,7 @@ const AppointmentPage = () => {
   const [ activeTab, setActiveTab ] = useState(0);
   const [ disabledSlots, setDisabledSlots] = useState([]);
   const [ disabledDates, setDisabledDates] = useState([]);
+  const [ isOpen, setIsOpen] = useState(true);
   const [ mop, setMop ] = useState('');
   const [ appointmentForm, setAppointmentForm] = useState({
     // firstName:'',
@@ -162,7 +167,13 @@ useEffect(()=>{
             console.log(key)
             disabledDates.push(dayjs(key).format('YYYY-MM-DD'))
           }
-          // console.log(key + '=>' + bookedApptData.appointments[key].length)
+          console.log(dayjs().format('hh:mm A'))
+          // key == dayjs().format('YYYY-MM-DD')
+          if(dayjs().isAfter(dayjs('03:30 PM', 'hh:mm A')) && dayjs().isBefore(dayjs().add(1, 'day'))){
+            console.log('its today')
+            disabledDates.push(dayjs(key).format('YYYY-MM-DD'))
+          }
+          console.log(key + '=>' + bookedApptData.appointments[key].length)
         }
       }
       setDisabledDates(disabledDates)
@@ -201,6 +212,7 @@ useEffect(()=>{
     // console.log("Payload Structure before send: "+ JSON.stringify(appointmentForm))
     // console.log(appointmentForm)
     bookApptMutation.mutate(appointmentForm)
+    toast('Appointment Successfully Booked')
     setAppointmentForm({
       apptDate: '',
       apptTime:'',
@@ -209,11 +221,13 @@ useEffect(()=>{
       hmoProvider: '',
     })
   }
+  console.log(userData)
   return (
     <div className={AppointmentStyles.appointmentContainer}>
+
       <HeroGen bgSrc={AppointmentBg} header='Book an appointment!'> 
       </HeroGen>
-      <div className={AppointmentStyles.appointmentSubContainer}>
+      {userData.loggedIn && <><div className={AppointmentStyles.appointmentSubContainer}>
         <div className={AppointmentStyles.formsContainer}>
           <form onSubmit={submitFormData}>
           <Box 
@@ -311,6 +325,7 @@ useEffect(()=>{
                 >
                 <MenuItem value={'Rafael Ong'}>Rafael Ong</MenuItem>
                 <MenuItem value={'Lucia Reyes'}>Lucia Reyes</MenuItem>
+                <MenuItem value={'shiquina reyes'}>Shiquina Reyes</MenuItem>
               </Select>
               </FormControl>
               {/* <p>Mode of Payment:</p> */}
@@ -419,14 +434,14 @@ required
           </div>
 
           <div className={AppointmentStyles.branchContainer}>
-
+{/* 
               <div className={AppointmentStyles.branchTabs}>
                 <span onClick={ ()=> toggleTab(0)} className={`${AppointmentStyles.branchItem} ${activeTab === 0 ? AppointmentStyles.activeTab:''}`}>Zabarte</span>
                 <span onClick={ ()=> toggleTab(1)} className={`${AppointmentStyles.branchItem} ${activeTab === 1 ? AppointmentStyles.activeTab:''}`}>Caloocan</span>
                 <span onClick={ ()=> toggleTab(2)}  className={`${AppointmentStyles.branchItem} ${activeTab === 2 ? AppointmentStyles.activeTab:''}`}>Manila</span>
                 <span onClick={ ()=> toggleTab(3)}  className={`${AppointmentStyles.branchItem} ${activeTab === 3 ? AppointmentStyles.activeTab:''}`}>Ortigas</span>
                 <div className={AppointmentStyles.divider}/>
-              </div>
+              </div> */}
 
                 {branchData.map((slide, index)=>(
                   <div key={slide.id} className={`${AppointmentStyles.branchSlide} ${ activeTab === index ? `${AppointmentStyles.branchSlideActive}` : ''}`}>
@@ -494,7 +509,24 @@ required
             <p>@accelerated_wellness</p>
           </div>
         </div>
-      </div>
+      </div></>}
+
+    {!userData.loggedIn && <>
+    <div style={{
+      margin: 'auto',
+      textAlign: 'center',
+      padding: '40px 20px'
+    }}>
+      <h1>Please Log in to your account to book an appointment</h1>
+      <p style={{
+        marginBottom:'1rem'
+      }}>-appointmate team c:</p>
+
+      <Button variant="contained" > <Link style={{color:'white'}} to='/login'>Login / Signup</Link></Button>
+    </div>
+    </>}
+     <ToastContainer/>
+
     </div>
   )
 }

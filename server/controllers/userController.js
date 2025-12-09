@@ -34,7 +34,7 @@ async function submitUserData(req, res){
 
         await dbConnection.query('UPDATE awp_users_tbl SET user_mname=$1, is_profile_complete=$2 WHERE user_id=$3', [middleName, profileCompleted, id])
 
-        await dbConnection.query(`INSERT INTO awp_ucontacts_tbl (user_id, contact_type_id, contact_value) values ( $1, $2, $3)`,[id,1 , contactNumber])
+        // await dbConnection.query(`INSERT INTO awp_ucontacts_tbl (user_id, contact_type_id, contact_value) values ( $1, $2, $3)`,[id,1 , contactNumber])
 
         // await dbConnection.query(`ALTER TABLE awp_users_tbl set is_`)
     } catch (err){
@@ -96,17 +96,13 @@ async function getUserData(req, res){
 async function getMyAppointments(req, res){
 
     try{    
-        // console.log(req.body);
-        console.log('NOT TRIGGERED')
 
         if(req.session.user.patientId){
-            console.log('triggered')
             const userAppointmentsResponse = await dbConnection.query(`SELECT * FROM awp_appt_tbl WHERE patient_id=$1`,[req.session.user.patientId])
             const apptRows = userAppointmentsResponse.rows
             // console.log('appt rows', apptRows)
             // const apptDate = ((apptRows[0].appt_date).toString()).split('T')[0]
             // console.log(apptDate)
-            console.log('bingle', dayjs(apptRows[0].appt_start).format('h:mm A'))
 
             const userAppointments = await Promise.all( apptRows.map( async (r)=>{
 
@@ -143,4 +139,113 @@ async function getMyAppointments(req, res){
         console.log(err)
     }
 }
-export {submitUserData, getUserData, getMyAppointments};
+
+async function updateUserData(req,res){
+    console.log('update endpoint reached')
+    try{
+        if (req?.session?.user || req?.user) {
+            const currentUserID = req?.session?.user?.id || req?.user?.id || null;
+            console.log(`User ID Exists:`,currentUserID)
+            const {
+              middleInitial,
+              firstName,
+              lastName,
+              contact_number,
+              ...patientData
+            } = req.body;
+        
+            const userData = {
+              middleInitial,
+              firstName,
+              lastName,
+              contact_number
+            };   
+            
+            const userDataUpdate = await dbConnection.query(
+              `UPDATE awp_users_tbl 
+               SET user_fname = $1,
+                   user_mname = $2,
+                   user_lname = $3
+               WHERE user_id = $4`,
+              [
+                userData.firstName,
+                userData.middleInitial,
+                userData.lastName,
+                currentUserID
+              ]
+            );            
+            if(userDataUpdate.rowCount > 0){
+                console.log(`userData Update successful`)
+            }else{
+                console.log('Problem with data update of patient')
+                res.status(400).json({message:'There was a problem in updating your information'})
+            }
+            const userContactUpdate = await dbConnection.query(
+                `UPDATE awp_ucontacts_tbl
+                SET contact_value= $1
+                WHERE user_id= $2`,
+                [
+                    userData.contact_number,
+                    currentUserID
+                ])
+
+            if(userContactUpdate.rowCount > 0){
+                console.log(`User Contact Update successful`)
+                
+            }else{
+                console.log('Problem with data update of patient')
+                res.status(400).json({message:'There was a problem in updating your information'})
+            }                
+                const patientDataUpdate = await dbConnection.query(
+                  `UPDATE awp_patient_tbl 
+                   SET ptn_dob = $1,
+                       ptn_sex = $2,
+                       ptn_addrunit = $3,
+                       ptn_addrst = $4,
+                       ptn_addrbrgy = $5,
+                       ptn_addrcity = $6,
+                       zipcode = $7,
+                       ptn_hmoprov = $8,
+                       ptn_hmoidnum = $9,
+                       ptn_validtype = $10,
+                       ptn_validnum = $11,
+                       ptn_employer = $12,
+                       ptn_econtactname = $13,
+                       ptn_econtactnum = $14,
+                       updated_at = NOW()
+                   WHERE patient_id = $15`,
+                  [
+                    patientData.dob,
+                    patientData.gender,
+                    patientData.unit,
+                    patientData.street,
+                    patientData.barangay,
+                    patientData.city,
+                    patientData.zipcode,
+                    patientData.hmoCardPresented,
+                    patientData.hmoNumber,
+                    patientData.id,
+                    patientData.idNumber,
+                    patientData.employer,
+                    patientData.econtact,
+                    patientData.enumber,
+                    req.session.user.patientId
+                  ]
+                );
+                
+            if(patientDataUpdate.rowCount > 0){
+                console.log(`Patient Data Update successful`)
+            } else{
+                console.log('Problem with data update of patient')
+                res.status(400).json({message:'There was a problem in updating your information'})
+            }
+
+            res.status(200).json({message:'All Data updated successfully'})
+        }else{
+            return res.json({message: 'User is not authorized'})
+        }
+    }catch(err){
+        console.log(err)
+    }
+}
+export {submitUserData, getUserData, getMyAppointments, updateUserData};

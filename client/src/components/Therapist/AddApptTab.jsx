@@ -129,7 +129,7 @@ const AddApptTab = () => {
     bookApptMutation.mutate(appointmentForm)
     setAppointmentForm({
         patientID:'',
-        patientName: 'hello',
+        patientName: '',
         apptDate: '',
         apptTime:'',
         apptTherapist: '',
@@ -240,9 +240,12 @@ const AddApptTab = () => {
                                   margin: "5px",
                                   borderRadius: "6px",
                                   border: "1px solid #1976d2",
-                                  backgroundColor: selectedSlot === slot ? "#1976d2" : "white",
-                                  color: selectedSlot === slot ? "white" : "#1976d2",
-                                  cursor: "pointer",
+                                  backgroundColor: timeSlotGenerator(slot.value) 
+                                    ? 'gray' 
+                                    : (selectedSlot === slot ? 'white' : '#1976d2'),                              
+                                  color: selectedSlot === slot ? "#1976d2": "white",
+
+                                  cursor: "pointer", 
                                 }}
                             variant="outlined" onClick={() =>{
                                 handleSelectedSlot(slot)
@@ -280,7 +283,6 @@ const AddApptTab = () => {
     </form>
 
         <div>
-        <button onClick={notify}>Notify!</button>
         <ToastContainer />
       </div>
     </div>
