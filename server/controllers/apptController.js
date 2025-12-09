@@ -17,7 +17,7 @@ async function getBookedDates (req, res) {
     try{
         const slots = await dbConnection.query(`select appt_date, appt_start from awp_appt_tbl WHERE appt_status != 'cancelled' AND appt_start >= (CURRENT_DATE - INTERVAL '1 days') ORDER BY appt_start;`)
         const bookedSlots = {}
-
+        
         slots.rows.forEach(row => {
             const tzConvertedDate = dayjs(row.appt_start).tz("Asia/Manila").format("YYYY-MM-DD HH:mm")          
               const date = tzConvertedDate.split(' ')[0];
@@ -158,7 +158,7 @@ async function bookAppointment (req, res){
         } = req.body
         console.log(apptTime)
         console.log(apptDate)
-        const calculatedApptStartTime = new Date(`${apptDate}T${apptTime}`) 
+        const calculatedApptStartTime = dayjs(`${apptDate}T${apptTime}`); 
         const calculatedApptEndTime = (dayjs(calculatedApptStartTime).add(30, 'minute')).format();
         console.log(calculatedApptEndTime)
         // console.log(testVal)
