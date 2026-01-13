@@ -4,13 +4,15 @@ import MockupPt from '../../assets/aw_mock-px.png'
 import { FaPhoneAlt } from "react-icons/fa";
 import { IoIosMail } from "react-icons/io";
 import { BsCalendarMinusFill } from "react-icons/bs";
-import { UseGetAnAppointmentsDetails, useUpdateMyAppointment } from '../../queries/apptData.js'
 import Button from '@mui/material/Button';
 import Modal from '../../components/Ui/Modal'
 
 // React Icons
 import { MdOutlineCancel } from "react-icons/md";
 import { RiCalendarScheduleFill } from "react-icons/ri";
+
+// Query
+import { UseGetAnAppointmentsDetails, useUpdateMyAppointment } from '../../queries/apptData.js'
 
 const AppointmentDetails = (apptID) => {
     const { data: apptDetails, isLoading: apptDetailsLoading, error: apptDetailsError} = UseGetAnAppointmentsDetails(apptID);
@@ -202,10 +204,10 @@ const AppointmentDetails = (apptID) => {
                  </div>
             </div>
             <div className={AppointmentStyles.rowBottom}>
-            {/* <p>Chief Complaint</p>
+            <p>Chief Complaint</p>
             <div className={AppointmentStyles.pxComplaintContainer}>
                 <p className={AppointmentStyles.pxComplaint}>Hi po! I’ve been feeling some mild lower back discomfort lately, baka dahil sa matagal na upo during tapings and shoots. Also po, I had a previous ankle injury na minsan umaalalay pa rin. Hoping to get this checked po, thank you!</p>
-            </div> */}
+            </div>
             <div className={AppointmentStyles.btnContainer}>
 
                 <Button

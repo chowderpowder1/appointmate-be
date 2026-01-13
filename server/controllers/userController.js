@@ -56,7 +56,6 @@ async function getUserData(req, res){
         // }
         const calculateAge = await dbConnection.query(`SELECT *, DATE_PART('year', AGE(ptn_dob)) AS age FROM awp_patient_tbl where user_id=$1`, [userId])
         const extractDob = await dbConnection.query(`SELECT TO_CHAR(ptn_dob, 'YYYY-MM-DD') AS dob FROM awp_patient_tbl WHERE user_id = $1`, [userId])
-        console.log(patientData.rows);
         if (patientData.rows.length === 0){
             return res.status(404).json({
                 success: false,
@@ -98,7 +97,7 @@ async function getMyAppointments(req, res){
     try{    
 
         if(req.session.user.patientId){
-            const userAppointmentsResponse = await dbConnection.query(`SELECT * FROM awp_appt_tbl WHERE patient_id=$1`,[req.session.user.patientId])
+            const userAppointmentsResponse = await dbConnection.query(`SELECT * FROM awp_appt_tbl WHERE patient_id=$1 ORDER BY appt_start DESC`,[req.session.user.patientId])
             const apptRows = userAppointmentsResponse.rows
             // console.log('appt rows', apptRows)
             // const apptDate = ((apptRows[0].appt_date).toString()).split('T')[0]
@@ -125,6 +124,7 @@ async function getMyAppointments(req, res){
                         appt_status: r.appt_status,
                         appt_date: (dayjs(r.appt_date).format('DD MMM YYYY')).toUpperCase(),
                         appt_start: dayjs(r.appt_start).format('h:mm A'),
+                        appt_day_of_week: dayjs(r.appt_start).format('dddd'),
                         appt_end: dayjs(r.appt_end).format('h:mm A'),
                         when_range: r.when_range,
                         mode_of_payment: r.mode_of_payment

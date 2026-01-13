@@ -67,27 +67,27 @@ const PastMedicalHistory = () => {
               </div>
               
               <div className={HistoryStyles.onInspectionItem}>
-                <p className={HistoryStyles.historyDataTitle}>AMBULATORY:</p>
+                <p className={HistoryStyles.historyDataTitle}>DEFORMITY ON:</p>
                 <p className={HistoryStyles.historyData}>N/A</p>
               </div>
 
               <div className={HistoryStyles.onInspectionItem}>
-                <p className={HistoryStyles.historyDataTitle}>AMBULATORY:</p>
+                <p className={HistoryStyles.historyDataTitle}>SWELLING ON::</p>
                 <p className={HistoryStyles.historyData}>N/A</p>
               </div>
 
               <div className={HistoryStyles.onInspectionItem}>
-                <p className={HistoryStyles.historyDataTitle}>AMBULATORY:</p>
+                <p className={HistoryStyles.historyDataTitle}>ATROPHY:</p>
                 <p className={HistoryStyles.historyData}>N/A</p>
               </div>
 
               <div className={HistoryStyles.onInspectionItem}>
-                <p className={HistoryStyles.historyDataTitle}>AMBULATORY:</p>
+                <p className={HistoryStyles.historyDataTitle}>POSTURAL DEVIATION:</p>
                 <p className={HistoryStyles.historyData}>N/A</p>
               </div>
 
               <div className={HistoryStyles.onInspectionItem}>
-                <p className={HistoryStyles.historyDataTitle}>AMBULATORY:</p>
+                <p className={HistoryStyles.historyDataTitle}>OTHERS:</p>
                 <p className={HistoryStyles.historyData}>N/A</p>
               </div>
 
@@ -100,32 +100,37 @@ const PastMedicalHistory = () => {
             <div className={HistoryStyles.onInspectionDataContainer}>
               
               <div className={HistoryStyles.onInspectionItem}>
-                <p className={HistoryStyles.historyDataTitle}>AMBULATORY:</p>
+                <p className={HistoryStyles.historyDataTitle}>EDEMA ON:</p>
                 <p className={HistoryStyles.historyData}>N/A</p>
               </div>
               
               <div className={HistoryStyles.onInspectionItem}>
-                <p className={HistoryStyles.historyDataTitle}>AMBULATORY:</p>
+                <p className={HistoryStyles.historyDataTitle}>NODULE/S ON:</p>
                 <p className={HistoryStyles.historyData}>N/A</p>
               </div>
 
               <div className={HistoryStyles.onInspectionItem}>
-                <p className={HistoryStyles.historyDataTitle}>AMBULATORY:</p>
+                <p className={HistoryStyles.historyDataTitle}>MUSCLES ON:</p>
                 <p className={HistoryStyles.historyData}>N/A</p>
               </div>
 
               <div className={HistoryStyles.onInspectionItem}>
-                <p className={HistoryStyles.historyDataTitle}>AMBULATORY:</p>
+                <p className={HistoryStyles.historyDataTitle}>TAUT BAND/S ON:</p>
                 <p className={HistoryStyles.historyData}>N/A</p>
               </div>
 
               <div className={HistoryStyles.onInspectionItem}>
-                <p className={HistoryStyles.historyDataTitle}>AMBULATORY:</p>
+                <p className={HistoryStyles.historyDataTitle}>JT EFFUSION ON:</p>
                 <p className={HistoryStyles.historyData}>N/A</p>
               </div>
 
               <div className={HistoryStyles.onInspectionItem}>
-                <p className={HistoryStyles.historyDataTitle}>AMBULATORY:</p>
+                <p className={HistoryStyles.historyDataTitle}>LOM ON:</p>
+                <p className={HistoryStyles.historyData}>N/A</p>
+              </div>
+
+              <div className={HistoryStyles.onInspectionItem}>
+                <p className={HistoryStyles.historyDataTitle}>TENDERNESS ON:</p>
                 <p className={HistoryStyles.historyData}>N/A</p>
               </div>
 
@@ -148,22 +153,12 @@ const PastMedicalHistory = () => {
               </div>
 
               <div className={HistoryStyles.onInspectionItem}>
-                <p className={HistoryStyles.historyDataTitle}>AMBULATORY:</p>
+                <p className={HistoryStyles.historyDataTitle}>OTHER NOTES:</p>
                 <p className={HistoryStyles.historyData}>N/A</p>
               </div>
 
               <div className={HistoryStyles.onInspectionItem}>
-                <p className={HistoryStyles.historyDataTitle}>AMBULATORY:</p>
-                <p className={HistoryStyles.historyData}>N/A</p>
-              </div>
-
-              <div className={HistoryStyles.onInspectionItem}>
-                <p className={HistoryStyles.historyDataTitle}>AMBULATORY:</p>
-                <p className={HistoryStyles.historyData}>N/A</p>
-              </div>
-
-              <div className={HistoryStyles.onInspectionItem}>
-                <p className={HistoryStyles.historyDataTitle}>AMBULATORY:</p>
+                <p className={HistoryStyles.historyDataTitle}>SEPCIAL NOTES:</p>
                 <p className={HistoryStyles.historyData}>N/A</p>
               </div>
 

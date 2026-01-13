@@ -1,15 +1,21 @@
 import { useQuery } from '@tanstack/react-query';
 import { useMutation, useQueryClient  } from '@tanstack/react-query';
 import axios from 'axios';
+import { useParams } from "react-router";
 
-
-export const useGetBookedDates = () => {
+export const useGetBookedDates = (therapistId) => {
     return useQuery({
-        queryKey:['apptBookedDates'],
+        queryKey:['apptBookedDates', therapistId],
         queryFn: async () => {
-            const res = await axios.get('http://localhost:8080/appt/getBookedDates', {withCredentials: true})
+            const res = await axios.get('http://localhost:8080/appt/getBookedDates', 
+                {
+                    params: {therapistId},
+                    withCredentials: true
+                }
+            )
             return res.data;
-        }
+        },
+        // enabled: !!therapistId
     })
 }
 

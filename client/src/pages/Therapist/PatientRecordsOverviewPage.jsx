@@ -5,9 +5,18 @@ import { CgEye } from "react-icons/cg";
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import { NavLink } from 'react-router';
+import { NavLink,Link,useParams } from 'react-router';
+
+
+// tanstack
+import { useGetAllPatientsData } from '../../queries/users'
 
 const PatientRecordsOverview = () => {
+    const { data: allPatientData, isLoading: allPatientDataIsLoading, error: allPatientDataDataError} = useGetAllPatientsData();
+
+    if (allPatientDataIsLoading) return <div>Loading...</div>;
+    if (allPatientDataDataError) return <div>Error: {allPatientDataDataError.message}</div>;
+
   return (
     <div className={RecordStyles.container}>
         <div className={RecordStyles.headerContainer}>
@@ -59,48 +68,24 @@ const PatientRecordsOverview = () => {
                     </tr>
                 </thead>
                 <tbody className={RecordStyles.tblBody}>
-                    <tr>
-                        <td className={RecordStyles.tblData}>P-01</td>
-                        <td className={RecordStyles.tblData}>Marian Rivera</td>
-                        <td className={RecordStyles.tblData}>Zabarte</td>
-                        <td className={RecordStyles.tblData}>HMO</td>
-                        <td className={RecordStyles.tblData}>Date Created</td>
-                        <td className={RecordStyles.tblData}><NavLink to='view-patient-record/:1'>                           <Button variant="contained"
-                            sx={{
-                                borderRadius:'35px',
-                                boxShadow:'none'
-                                }}
-                            >View</Button></NavLink></td>
-                    </tr>
-                    <tr>
-                        <td className={RecordStyles.tblData}>P-01</td>
-                        <td className={RecordStyles.tblData}>Marian Rivera</td>
-                        <td className={RecordStyles.tblData}>Zabarte</td>
-                        <td className={RecordStyles.tblData}>HMO</td>
-                        <td className={RecordStyles.tblData}>Date Created</td>
-                        <td className={RecordStyles.tblData}>
-                            <Button variant="contained"
-                            sx={{
-                                borderRadius:'35px',
-                                boxShadow:'none'
-                                }}
-                            >View</Button></td>
-                    </tr>
-                    <tr>
-                        <td className={RecordStyles.tblData}>P-01</td>
-                        <td className={RecordStyles.tblData}>Marian Rivera</td>
-                        <td className={RecordStyles.tblData}>Zabarte</td>
-                        <td className={RecordStyles.tblData}>HMO</td>
-                        <td className={RecordStyles.tblData}>Date Created</td>
-                        <td className={RecordStyles.tblData}>                           
-                            <Button variant="contained"
-                            sx={{
-                                borderRadius:'35px',
-                                boxShadow:'none'
-                                }}
-                            >View</Button></td>
-                    </tr>
-                    <tr>
+
+                    {allPatientData.map((p)=>(
+                         <tr>
+                            <td className={RecordStyles.tblData}>P-{p.patientId}</td>
+                            <td className={RecordStyles.tblData}>{p.patientName}</td>
+                            <td className={RecordStyles.tblData}>{p.branch}</td>
+                            <td className={RecordStyles.tblData}>{p.paymentMethod.toUpperCase()}</td>
+                            <td className={RecordStyles.tblData}>{p.dateCreated}</td>
+                            <td className={RecordStyles.tblData}><NavLink to={`view-patient-record/${p.patientId}`}>                           <Button variant="contained"
+                                sx={{
+                                    borderRadius:'35px',
+                                    boxShadow:'none'
+                                    }}
+                                >View</Button></NavLink></td>
+                        </tr>
+                    ))}
+
+                    {/* <tr>
                         <td className={RecordStyles.tblData}>P-01</td>
                         <td className={RecordStyles.tblData}>Marian Rivera</td>
                         <td className={RecordStyles.tblData}>Zabarte</td>
@@ -112,62 +97,9 @@ const PatientRecordsOverview = () => {
                                 borderRadius:'35px',
                                 boxShadow:'none'
                                 }}
-                            >View</Button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td className={RecordStyles.tblData}>P-01</td>
-                        <td className={RecordStyles.tblData}>Marian Rivera</td>
-                        <td className={RecordStyles.tblData}>Zabarte</td>
-                        <td className={RecordStyles.tblData}>HMO</td>
-                        <td className={RecordStyles.tblData}>Date Created</td>
-                        <td className={RecordStyles.tblData}>                           
-                            <Button variant="contained"
-                            sx={{
-                                borderRadius:'35px',
-                                boxShadow:'none'
-                                }}
                             >View</Button></td>
-                    </tr>
-                    <tr>
-                        <td className={RecordStyles.tblData}>P-01</td>
-                        <td className={RecordStyles.tblData}>Marian Rivera</td>
-                        <td className={RecordStyles.tblData}>Zabarte</td>
-                        <td className={RecordStyles.tblData}>HMO</td>
-                        <td className={RecordStyles.tblData}>Date Created</td>
-                        <td className={RecordStyles.tblData}>                           <Button variant="contained"
-                            sx={{
-                                borderRadius:'35px',
-                                boxShadow:'none'
-                                }}
-                            >View</Button></td>
-                    </tr>
-                    <tr>
-                        <td className={RecordStyles.tblData}>P-01</td>
-                        <td className={RecordStyles.tblData}>Marian Rivera</td>
-                        <td className={RecordStyles.tblData}>Zabarte</td>
-                        <td className={RecordStyles.tblData}>HMO</td>
-                        <td className={RecordStyles.tblData}>Date Created</td>
-                        <td className={RecordStyles.tblData}>                           <Button variant="contained"
-                            sx={{
-                                borderRadius:'35px',
-                                boxShadow:'none'
-                                }}
-                            >View</Button></td>
-                    </tr>
-                    <tr>
-                        <td className={RecordStyles.tblData}>P-01</td>
-                        <td className={RecordStyles.tblData}>Marian Rivera</td>
-                        <td className={RecordStyles.tblData}>Zabarte</td>
-                        <td className={RecordStyles.tblData}>HMO</td>
-                        <td className={RecordStyles.tblData}>Date Created</td>
-                        <td className={RecordStyles.tblData}>                           <Button variant="contained"
-                            sx={{
-                                borderRadius:'35px',
-                                boxShadow:'none'
-                                }}
-                            >View</Button></td>
-                    </tr>
+                    </tr> */}
+
                 </tbody>
             </table>
         </div>

@@ -69,3 +69,45 @@ export const useGetServicesList = () => {
         }
     })
 }
+
+export const useGetTherapists = () => {
+    return useQuery({
+        queryKey:['getTherapists'],
+        queryFn: async () => {
+            const res = await axios.get('http://localhost:8080/clinic/getTherapists', {withCredentials: true})
+            return res.data;
+        }
+    })
+}
+
+export const useGetPatientData = (patientId) => {
+    return useQuery({
+        queryKey:['getPatientData'],
+        queryFn: async () => {
+            const res = await axios.get('http://localhost:8080/clinic/getPatientData', 
+                {
+                    params: {patientId},
+                    withCredentials: true
+                }
+            )
+            return res.data;
+        },
+        // enabled: !!therapistId
+    })
+}
+
+export const useGetUserPersonalData = (userId) => {
+    return useQuery({
+        queryKey:['getUserPersonalData'],
+        queryFn: async () => {
+            const res = await axios.get('http://localhost:8080/clinic/getUserPersonalData', 
+                {
+                    params: {userId},
+                    withCredentials: true
+                }
+            )
+            return res.data;
+        },
+        // enabled: !!therapistId
+    })
+}

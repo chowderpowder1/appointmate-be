@@ -17,12 +17,11 @@ import { FaClock } from "react-icons/fa";
 import { TiCancel } from "react-icons/ti";
 
 //  Axios imports YEAAAHHHH
-import {useGetBookedDates, useGetMyAppointments} from '../../queries/apptData'
+import {useGetMyAppointments} from '../../queries/apptData'
 
 import dayjs from "dayjs";
 
 const ProgressStepper = ({isHome}) => {
-  const { data: bookedApptData, isLoading: bookedApptDataisLoading, error: bookedApptDataError} = useGetBookedDates();
 
   const { data: myAppointmentsData, isLoading: myAppointmentsDataIsLoading, error: myAppointmentsDataError } = useGetMyAppointments();
 
@@ -64,14 +63,13 @@ const ProgressStepper = ({isHome}) => {
   ]
 
   // Errur Chiking ba
-  if ( bookedApptDataisLoading || myAppointmentsDataIsLoading ) return <div>Loading...</div>;
-  if ( bookedApptDataError || myAppointmentsDataError ) return <div>Error: {bookedApptDataError.message}</div>;
+  if (  myAppointmentsDataIsLoading ) return <div>Loading...</div>;
+  if (  myAppointmentsDataError ) return <div>Error: {myAppointmentsDataError.message}</div>;
 
   const mappedApptData = myAppointmentsData.userAppointments;
   // console.log(mappedApptData.appt_date)
   // console.log(dayjs(mappedApptData[0].appt_date).format('YYYY MM DD'))
   // console.log(mappedApptData[0].appt_status)
-  console.log(useGetBookedDates)
   const getStatusStyle = (status) => {
     switch (status) {
       case 'pending':
@@ -90,7 +88,6 @@ const ProgressStepper = ({isHome}) => {
   }
 
   const getStatusIndicatorStyles = (status) => {
-    console.log(status)
     switch (status) {
       case 'pending':
         return {"--apptStatusColor":'orange'};

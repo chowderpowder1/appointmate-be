@@ -11,11 +11,16 @@ dayjs.extend(customParseFormat);
 dayjs.extend(duration)
 
 async function getBookedDates (req, res) {
-
     // Fetches all booked dates from the current day onwards
-
+    // console.log('this is the query:'+req.query)
+    // console.log(typeof req.query.therapistId)
     try{
-        const slots = await dbConnection.query(`select appt_date, appt_start from awp_appt_tbl WHERE appt_status != 'cancelled' AND appt_start >= (CURRENT_DATE - INTERVAL '1 days') ORDER BY appt_start;`)
+        const selectedTherapist = req.query?.therapistId
+        const therapistIdQuery = await dbConnection.query(`SELECT pthera_id from awp_pthera_tbl WHERE user_id=$1`,[selectedTherapist])
+        const therapistId= therapistIdQuery?.rows[0]?.pthera_id
+        
+
+        const slots = await dbConnection.query(`select appt_date, appt_start from awp_appt_tbl WHERE therapist_id= $1 AND appt_status != 'cancelled' AND appt_start >= (CURRENT_DATE - INTERVAL '1 days') ORDER BY appt_start;`, [therapistId])
         const bookedSlots = {}
         
         slots.rows.forEach(row => {
@@ -138,12 +143,15 @@ async function bookAppointment (req, res){
     try{
         console.log("Appointment Booking data: "+JSON.stringify(req.body));
         const userId = req.session.user.id
-        const theraFname = req.body.apptTherapist.split(' ')[0]
-        const theraLname = req.body.apptTherapist.split(' ')[1]
+        const therapistUserId = req.body.apptTherapist;
+
+        const therapistIdQuery = await dbConnection.query(`SELECT pthera_id from awp_pthera_tbl WHERE user_id=$1`,[therapistUserId])
+        const therapistId= therapistIdQuery.rows[0].pthera_id
+        
         // console.log(theraFname)
         // The query below is susceptible to a case where therapists both have the same name and last name, in which case the query would return two users
-        const theraIdLookup = await dbConnection.query(`SELECT pthera_id from awp_pthera_tbl WHERE user_id=(WITH x AS (select * from awp_users_tbl where user_role=3) Select user_id from x WHERE user_fname=$1 AND user_lname=$2);`,[theraFname, theraLname])
-        const theraId = theraIdLookup?.rows[0]?.pthera_id;
+        // const theraIdLookup = await dbConnection.query(`SELECT pthera_id from awp_pthera_tbl WHERE user_id=(WITH x AS (select * from awp_users_tbl where user_role=3) Select user_id from x WHERE user_fname=$1 AND user_lname=$2);`,[theraFname, theraLname])
+        // const theraId = theraIdLookup?.rows[0]?.pthera_id;
 
         const patientIdLookup = await dbConnection.query(`SELECT patient_id from awp_patient_tbl WHERE user_id=$1;`,[userId])
         const patientId= patientIdLookup?.rows[0]?.patient_id
@@ -165,7 +173,7 @@ async function bookAppointment (req, res){
         // console.log(dayjs(apptTime))
         // console.log((dayjs(`${apptDate}T${testVal}`)));
         // console.log(dayjs(apptTime).format("hh:mm"))
-        await dbConnection.query(`insert into awp_appt_tbl (patient_id, therapist_id, appt_date, appt_start, appt_end, appt_status,  mode_of_payment) values ($1, $2, $3, $4, $5, 'pending', $6 );`,[patientId, (theraId || null), apptDate, calculatedApptStartTime, calculatedApptEndTime, mop])
+        await dbConnection.query(`insert into awp_appt_tbl (patient_id, therapist_id, appt_date, appt_start, appt_end, appt_status,  mode_of_payment) values ($1, $2, $3, $4, $5, 'pending', $6 );`,[patientId, (therapistId || null), apptDate, calculatedApptStartTime, calculatedApptEndTime, mop])
 
         }
     
@@ -174,7 +182,6 @@ async function bookAppointment (req, res){
         res.send(err);
     }
 
-    // dbConnection.query(`INSERT INTO awp_appt_tbl () values ()`)
 }
 
 async function getApptOverview(req, res) {
@@ -182,7 +189,7 @@ async function getApptOverview(req, res) {
     try{
         if(req?.session?.user?.id){
             const isAuthorized = await dbConnection.query(`SELECT user_role from awp_users_tbl WHERE user_id=$1`, [req.session.user.id])
-
+            console.log(isAuthorized.rows[0].user_role)
             if( isAuthorized.rows[0].user_role === 3){
                 const therapistID = await dbConnection.query(`SELECT pthera_id from awp_pthera_tbl WHERE user_id=$1`, [req.session.user.id])
                 const totalAppt = await dbConnection.query('SELECT COUNT(appt_id) from awp_appt_tbl WHERE therapist_id=$1;',[therapistID.rows[0].pthera_id])
@@ -239,6 +246,7 @@ async function getApptOverview(req, res) {
         }
 
     }catch(err){
+        console.log(err);
         res.status(404).send('idk')
     }
 }

@@ -5,16 +5,15 @@ import PersonalInfoTab from '../../components/Therapist/ViewPxRecord/PxPersonalI
 import InitialEvalTab from '../../components/Therapist/ViewPxRecord/InitialEvalTab'
 import PxMedicalHistoryTab from '../../components/Therapist/ViewPxRecord/PxMedicalHistory'
 import PxAttendanceTab from '../../components/Therapist/ViewPxRecord/PxAttendanceTab'
-
+import { useParams } from 'react-router';
 import { IoIosArrowForward } from "react-icons/io";
 
 const ViewPatientRecordPage = () => {
   const [toggleState, setToggleState] = useState(1);
+  const { id } = useParams();
   const toggleTab = ( index ) => {
-    
     setToggleState((toggleState+index) === 4  ? 1 : ((toggleState+index)===0 ? 3 : toggleState+index) );
   }
-
   return (
     <div className={ViewStyles.container}>
         <div className={ViewStyles.directoryContainer}>

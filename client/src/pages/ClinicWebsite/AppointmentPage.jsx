@@ -41,6 +41,7 @@ import AwValenzuela from '../../assets/AwValenzuela.jpg'
 
 import axios from 'axios';
 import { useUsers } from '../../queries/users'
+import { useGetTherapists } from '../../queries/useEmployees'
 import { useGetBookedDates, useBookAppt } from '../../queries/apptData'
 
 // Imports fixed time slots of AWP
@@ -108,9 +109,14 @@ const AppointmentPage = () => {
             { Hmo: 'valuCare' },
             { Hmo: 'wellCare' }
   ]
+  const [ selectedTherapist, setSelectedTherapist] = useState(null);
   const bookApptMutation = useBookAppt()
   const {data : userData, isLoading: userDataIsLoading, error: userDataError} = useUsers();
-  const { data: bookedApptData, isLoading: bookedApptDataisLoading, error: bookedApptDataError, refetch: refetchBookedApptData } = useGetBookedDates();
+
+  const { data: therapistData, isLoading: therapistDataIsLoading, error: therapistDataError} = useGetTherapists();
+
+  const { data: bookedApptData, isLoading: bookedApptDataisLoading, error: bookedApptDataError, refetch: refetchBookedApptData } = useGetBookedDates(selectedTherapist);
+
   const [ activeTab, setActiveTab ] = useState(0);
   const [ disabledSlots, setDisabledSlots] = useState([]);
   const [ disabledDates, setDisabledDates] = useState([]);
@@ -124,13 +130,13 @@ const AppointmentPage = () => {
     apptDate: '',
     apptTime:'',
     apptTherapist: '',
+    apptId:'',
     mop:'',
     hmoProvider: '',
   });
   const inputHandler = (e) => {
     const {name, value} = e.target;
     console.log("Payload Structure before send: ", appointmentForm)
-
     setAppointmentForm( prev => ({
       ...prev, 
       [name] : value
@@ -167,12 +173,10 @@ useEffect(()=>{
             console.log(key)
             disabledDates.push(dayjs(key).format('YYYY-MM-DD'))
           }
-          console.log(dayjs().format('hh:mm A'))
-          // key == dayjs().format('YYYY-MM-DD')
-          if(dayjs().isAfter(dayjs('03:30 PM', 'hh:mm A')) && dayjs().isBefore(dayjs().add(1, 'day'))){
-            console.log('its today')
-            disabledDates.push(dayjs(key).format('YYYY-MM-DD'))
-          }
+          // if(dayjs().isAfter(dayjs('03:30 PM', 'hh:mm A')) && dayjs().isBefore(dayjs().add(1, 'day'))){
+          //   console.log('its today')
+          //   disabledDates.push(dayjs(key).format('YYYY-MM-DD'))
+          // }
           console.log(key + '=>' + bookedApptData.appointments[key].length)
         }
       }
@@ -199,8 +203,8 @@ useEffect(()=>{
     return disabledSlots.includes(timeSlot)
   }
   
-  if (userDataIsLoading || bookedApptDataisLoading) return <div>Loading...</div>;
-  if (userDataError || bookedApptDataError) return <div>Error: {bookedApptDataError.message || userDataError.message}</div>;
+  if (userDataIsLoading || bookedApptDataisLoading || therapistDataIsLoading) return <div>Loading...</div>;
+  if (userDataError || bookedApptDataError || therapistDataError) return <div>Error: {bookedApptDataError.message || userDataError.message}</div>;
   // const disabledDates = new Set(Object.keys(bookedApptData.appointments));
   // const disabledTimes = new Set(Object.values(bookedApptData.appointments));
   // console.log(bookedApptData);
@@ -221,7 +225,7 @@ useEffect(()=>{
       hmoProvider: '',
     })
   }
-  console.log(userData)
+  console.log(therapistData)
   return (
     <div className={AppointmentStyles.appointmentContainer}>
 
@@ -241,6 +245,29 @@ useEffect(()=>{
             <TextField required slotProps={{input: {readOnly: true,}}} value={userData.lastName} fullWidth id="outlined-basic" label="Last Name" variant="outlined" />
             <TextField required slotProps={{input: {readOnly: true,}}} value={userData.email}fullWidth id="outlined-basic" label="Email" variant="outlined" />
             <TextField required slotProps={{input: {readOnly: true,}}} value={userData.contact_number} fullWidth id="outlined-basic" label="Contact Number" variant="outlined" />
+              <FormControl fullWidth required>
+             <InputLabel id="demo-simple-select-label">Choose Physical Therapist</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                label="Choose Physical Therapist"
+                onChange= {(e) => {
+                  inputHandler(e)
+                  setSelectedTherapist(e.target.value)
+                }}
+
+                name='apptTherapist'
+                value={appointmentForm.apptTherapist}
+
+                >
+                 { therapistData.map((e)=>(
+                    <MenuItem value={e.therapistId}>{e.therapistName}</MenuItem>
+                  ))}
+                {/* <MenuItem value={'Rafael Ong'}>Rafael Ong</MenuItem>
+                <MenuItem value={'Lucia Reyes'}>Lucia Reyes</MenuItem>
+                <MenuItem value={'shiquina reyes'}>Shiquina Reyes</MenuItem> */}
+              </Select>
+              </FormControl>
               <Box sx={{
                 width:'100%',
                 display:'flex',
@@ -312,24 +339,7 @@ useEffect(()=>{
               </Select>
               </FormControl> */}
 
-            <FormControl fullWidth required>
-             <InputLabel id="demo-simple-select-label">Choose Physical Therapist</InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                label="Choose Physical Therapist"
-                onChange={inputHandler}
-                name='apptTherapist'
-                value={appointmentForm.apptTherapist}
-
-                >
-                <MenuItem value={'Rafael Ong'}>Rafael Ong</MenuItem>
-                <MenuItem value={'Lucia Reyes'}>Lucia Reyes</MenuItem>
-                <MenuItem value={'shiquina reyes'}>Shiquina Reyes</MenuItem>
-              </Select>
-              </FormControl>
-              {/* <p>Mode of Payment:</p> */}
-
+        
                 <Box sx={{flexDirection:'row', gap:'1rem'}}fullWidth>
 
 

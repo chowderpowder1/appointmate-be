@@ -56,3 +56,15 @@ export const useUpdatePatientData = () => {
         }
     })
 }
+
+export const useGetAllPatientsData = () => {
+    return useQuery({
+        queryKey:['allPatients'],
+        queryFn: async() => {
+            const res = await axios.get('http://localhost:8080/clinic/getPatients', {
+                withCredentials:true
+            })
+            return res.data;
+        }
+    })
+}

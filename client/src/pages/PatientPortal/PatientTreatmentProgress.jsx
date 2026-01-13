@@ -14,8 +14,14 @@ import SessionBg from '../../assets/runningPersonBg.png'
 import RescheduleStatus from '../../components/PatientPortal/RescheduleStatus'
 import { FaCheck } from "react-icons/fa";
 
+// Query imports
+
+import {useGetMyAppointments} from '../../queries/apptData'
+
 const PatientAppointment = () => {
 
+    const { data: myAppointmentsData, isLoading: myAppointmentsDataIsLoading, error: myAppointmentsDataError } = useGetMyAppointments();
+  
   const percentage = 10;
   
   const [ treatmentLength, setTreatmentLength] = useState(0);
@@ -59,6 +65,10 @@ const PatientAppointment = () => {
     ] 
     }
   ]
+  if (  myAppointmentsDataIsLoading ) return <div>Loading...</div>;
+  if (  myAppointmentsDataError ) return <div>Error: {myAppointmentsDataError.message}</div>;
+
+  const nextApptData =myAppointmentsData.userAppointments[0];
   return (
     <div className={TreatmentStyles.container}>
       {/* <div className={TreatmentStyles.stepperContainer}>
@@ -153,7 +163,7 @@ const PatientAppointment = () => {
         <ProgressStepper isHome={false}/>
       </div>
       <div className={TreatmentStyles.columnTwo}>
-        {/* <CircularStepper/> */}
+        <CircularStepper/>
         <div className={TreatmentStyles.scheduledSessionContainer}>
               <div className={TreatmentStyles.sessionData}>
                 <div className={TreatmentStyles.sessionBackground}>
@@ -161,23 +171,26 @@ const PatientAppointment = () => {
                 </div>
                 <h2 className={TreatmentStyles.sessionDataTitle}>Your Next Session</h2>
                 <div>
-                  <h4>22 May 2025</h4>
-                  <p>Monday</p>
+                  <p className={TreatmentStyles.sessionText}>Date</p>
+                  <h4 className={TreatmentStyles.sessionText}>{nextApptData.appt_date}</h4>
+                  <p className={TreatmentStyles.sessionText}>{nextApptData.appt_day_of_week}</p>
                 </div>
 
                 <div>
-                  <h4>09:30 AM - 10:00 AM</h4>
-                  <p>Accelerated Wellness Zabarte Road QC </p>
+                  <p className={TreatmentStyles.sessionText}>Time & Location</p>
+                  <h4 className={TreatmentStyles.sessionText}>{nextApptData.appt_start} - {nextApptData.appt_end}</h4>
+                  <p className={TreatmentStyles.sessionText}>Accelerated Wellness Zabarte Road QC </p>
                 </div>
 
                 <div>
-                  <h4> PT Lee Ji-eun</h4>
+                  <p className={TreatmentStyles.sessionText}>Therapist</p>
+                  <h4 className={TreatmentStyles.sessionText}>{nextApptData.therapist_name}</h4>
                 </div>
 
                 <button className={TreatmentStyles.viewBtn}> <FaExternalLinkAlt/> View Appointment Details</button>
               </div>
         </div>
-              {/* <RescheduleStatus/> */}
+              <RescheduleStatus/>
       </div>
     </div>
   )
