@@ -24,6 +24,7 @@ import ManageAppointments from './pages/Therapist/ManageAppointments'
 import EditAppointments from './pages/Therapist/EditApptPage'
 import PatientRecordsOverview from './pages/Therapist/PatientRecordsOverviewPage'
 import AddPatientRecord from './pages/Therapist/AddPatientRecordPage'
+import EditPatientRecord from './pages/Therapist/EditPatientRecordPage'
 import ViewPatientRecord from './pages/Therapist/ViewPxRecordPage'
 import TherapistDocuments from './pages/Therapist/TherapistDocumentsPage'
 import OnboardingPage from './pages/OnBoarding/OnboardingPage'
@@ -77,6 +78,7 @@ function App() {
       <Route path='manage-appointments/edit-appointment/:id' element={<EditAppointments/>}/>
       <Route path='patient-records' element={<PatientRecordsOverview/>}/>
       <Route path='patient-records/add-patient-record' element={<AddPatientRecord/>}/>
+      <Route path='patient-records/initial-eval/:id' element={<EditPatientRecord/>}/>
       <Route path='patient-records/view-patient-record/:id' element={<ViewPatientRecord/>}/>
       <Route path='my-documents' element={<TherapistDocuments/>}/>
     </Route>

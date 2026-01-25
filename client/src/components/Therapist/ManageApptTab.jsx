@@ -1,18 +1,22 @@
-import React from 'react'
+import {React, useState, useEffect} from 'react'
 import { Link } from 'react-router'
 import ManageStyles from './ManageApptTab.module.css'
 import MockPxPhoto from '../../assets/aw_mock-px.png'
 import { FaEye } from "react-icons/fa";
 import { MdEditDocument } from "react-icons/md";
 import { Button } from '@mui/material';
-import { useGetAllAppt, useUpdateApptStatus } from '../../queries/useEmployees'
+import { useGetAllAppt, useUpdateApptStatus } from '../../queries/useEmployees' 
+import Pagination from '../../features/Pagination.jsx'
 
 const ManageAppt = () => {
   const {mutate: updateApptStatus } = useUpdateApptStatus();
   const { data: allApptData, isLoading: allAptDataIsLoading, error: allAptDataError} = useGetAllAppt();
 
-  if (allAptDataIsLoading ) return <div>Loading...</div>;
-  if (allAptDataError) return <div>Error: {allAptDataError.message}</div>
+  const [rowData, setRowData] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [ postsPerPage, setPostsPerPage] = useState(10);
+
+ 
   const apptStatusHandler = (status) =>{
     updateApptStatus({
       appt_id: status,
@@ -35,6 +39,22 @@ const ManageAppt = () => {
     }
   }
 
+  useEffect(() => {
+    if (allApptData?.allActiveAppt) {
+    setRowData(allApptData.allActiveAppt)
+    }
+    console.log(rowData)
+  }),[allApptData]
+
+  if (allAptDataIsLoading ) return <div>Loading...</div>;
+  if (allAptDataError) return <div>Error: {allAptDataError.message}</div>
+  
+
+  const lastPostIndex = currentPage * postsPerPage;
+  const firstPostIndex = lastPostIndex - postsPerPage;
+  const currentPosts = rowData?.slice(firstPostIndex, lastPostIndex);
+  
+  console.log(currentPosts)
   return (
     <div className={ManageStyles.container}>
 
@@ -51,8 +71,8 @@ const ManageAppt = () => {
                     <span>Action</span>
                 </div>
 
-                {allApptData.allActiveAppt.map((data, index)=>(
-                    <div className={ManageStyles.apptDataRow}>
+                {currentPosts?.map((data, index)=>(
+                    <div key={data.appt_id} className={ManageStyles.apptDataRow}>
                         <span className={ManageStyles.pxDataItem}>
                         <div className={ManageStyles.pxPhotoContainer}>
                             <img src={MockPxPhoto} className={ManageStyles.pxPhoto} alt="" />
@@ -91,7 +111,15 @@ const ManageAppt = () => {
                 ))}
             </div>
         </div>
-    </div>
+        <div className={ManageStyles.paginationContainer}>
+          <Pagination
+              totalPosts={rowData?.length || 0}
+              postsPerPage={postsPerPage}
+              currentPage={currentPage}
+              setCurrentPage={setCurrentPage}
+          />
+        </div>   
+      </div>
   )
 }
 

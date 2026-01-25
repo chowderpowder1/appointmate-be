@@ -10,10 +10,18 @@ import { IoCalendarClear } from "react-icons/io5";
 import { IoIosArrowForward } from "react-icons/io";
 
 import { useParams } from "react-router";
+import { useGetApptDetailsOverview, useGetApptDocuments } from '../../queries/useEmployees'
 
 const EditAppt = () => {
   const { id } = useParams();
+  const { data: apptDetailsData, isLoading: apptDetailsDataIsLoading, error: apptDetailsDataError} = useGetApptDetailsOverview(id);
   
+  const { data: apptDocuments, isLoading: apptDocumentsDataIsLoading, error: apptDocumentsDataError} = useGetApptDocuments(apptDetailsData?.patientID);
+
+  if (apptDetailsDataIsLoading || apptDocumentsDataIsLoading) return <div>Loading...</div>;
+  if (apptDetailsDataError || apptDocumentsDataError) return <div>⚠ Error: {apptDetailsDataError.message}</div>;
+
+  console.log(apptDocuments)
   return (
     <div className={EditStyles.mainContainer}>
       <div className={EditStyles.directoryContainer}> <IoCalendarClear/> <p>Appointments</p> <IoIosArrowForward/> <p>Edit Appointments</p></div>
@@ -24,23 +32,23 @@ const EditAppt = () => {
             <IoIosArrowBack/>
             <h2>Edit appointment</h2>
           </div>
-          {/* <div className={EditStyles.sessionIdContainer}>
-            <p><b>Session ID:</b> Approval Needed for a Session ID to be assigned</p>
-          </div> */}
+          <div className={EditStyles.sessionIdContainer}>
+            <p><b>Session ID:</b> Approval Needed</p>
+          </div>
         </div>
-        <AssignedPt apptID={id}/>
+        <AssignedPt apptData={apptDetailsData} apptID={id}/>
 
         <div className={EditStyles.apptDetailsContainer}>
           <ApptDetails apptID={id}/>
-          <PaymentMethod/>
-          {/* <PxAttachment/> */}
+          <PaymentMethod apptData={apptDetailsData}/>
+          <PxAttachment apptDocuments={apptDocuments}/>
         </div>
 
         <button className={EditStyles.applyBtn}> Apply Changes</button>
       </div>
-      {/* <div className={EditStyles.rowTwo}>
+      <div className={EditStyles.rowTwo}>
         <UpdateApptStatus/>
-      </div> */}
+      </div>
 
     </div>
   )

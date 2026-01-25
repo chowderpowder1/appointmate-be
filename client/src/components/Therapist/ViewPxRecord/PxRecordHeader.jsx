@@ -10,7 +10,7 @@ const PxRecordHeader = () => {
 
     if (patientDataRawIsLoading || userDataIsLoading ) return <div>Loading...</div>;
     if (patientDataRawError || userDataError ) return <div>Error:</div>;
-console.log(patientDataRaw)
+
   return (
         <div className={HeaderStyles.headerContainer}>
           <div className={HeaderStyles.pxNameContainer}>

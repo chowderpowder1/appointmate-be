@@ -33,6 +33,17 @@ const UpdateApptStatus = () => {
               <MenuItem value={10}>Request for Reschedule</MenuItem>
               <MenuItem value={20}>Request for Cancellation</MenuItem>
             </Select>
+            <InputLabel id="demo-simple-select-label">Appointment Status</InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={apptStatus}
+              label="Appointment Status"
+              onChange={handleChange}
+            >
+              <MenuItem value={10}>Request for Reschedule</MenuItem>
+              <MenuItem value={20}>Request for Cancellation</MenuItem>
+            </Select>
             {/* <InputLabel htmlFor="email">Email Address</InputLabel> */}
             <TextField
                 id="outlined-multiline-static"

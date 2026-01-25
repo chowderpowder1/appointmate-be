@@ -112,9 +112,9 @@ const ProgressStepper = ({isHome}) => {
             {isHome && <Link to='/patient/treatment-progress'><FaExternalLinkAlt style={{color:'var(--aw-gray)'}}/></Link>}</div>
             <div className={ProgressStyles.tabs}>
               <ul>
-                <li className={ProgressStyles.tabActive}>All Appointments</li>
-                <li>Upcoming</li>
-                <li>Completed</li>
+                <li className={ProgressStyles.tabActive}>Appointments</li>
+                <li>Sessions</li>
+                <li>Archived</li>
               </ul>
             </div>
             <div style={{

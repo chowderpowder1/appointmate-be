@@ -1,7 +1,7 @@
 .container{
     display:flex;
     max-width: 100%;
-    width:100%;
+    width:600px;
     height:auto;
     background: #1976D5;
     background: linear-gradient(90deg, rgba(25, 118, 213, 0.94) 40%, rgba(135, 178, 222, 0.61) 100%);

@@ -4,6 +4,7 @@ import ManageStyles from './FdManageAppt.module.css'
 import NotificationBelt from '../../components/Therapist/NotificationBelt'
 import ManageTab from '../../components/Therapist/ManageApptTab'
 import AddApptTab from '../../components/Therapist/AddApptTab'
+import RescheduleApptTab from './FdRescheduleTab'
 
 
 const FdManageAppt = () => {
@@ -30,11 +31,11 @@ const FdManageAppt = () => {
               Schedule Appointments
             </div>
             
-            {/* <div onClick={ ()=> toggleTab(2)} className={`${ManageStyles.tabItem} ${activeTab === 2 ? ManageStyles.tabActive:''}`}>
+            <div onClick={ ()=> toggleTab(2)} className={`${ManageStyles.tabItem} ${activeTab === 2 ? ManageStyles.tabActive:''}`}>
               Reschedule Appointments
             </div>
             
-            <div onClick={ ()=> toggleTab(3)} className={`${ManageStyles.tabItem} ${activeTab === 3 ? ManageStyles.tabActive:''}`}>
+            {/* <div onClick={ ()=> toggleTab(3)} className={`${ManageStyles.tabItem} ${activeTab === 3 ? ManageStyles.tabActive:''}`}>
               Cancel Appointments
             </div> */}
         </div>
@@ -49,11 +50,12 @@ const FdManageAppt = () => {
             <AddApptTab/>
           </div>
 
-          <div className={`${ManageStyles.branchSlide} ${ activeTab === 2 ? `${ManageStyles.branchSlideActive}` : ''}`}>
+          <div className={` ${ activeTab === 2 ? `${ManageStyles.branchSlideActive}` : `${ManageStyles.branchSlide}`}`}>
+              <RescheduleApptTab/>
           </div>
 
-          <div className={`${ManageStyles.branchSlide} ${ activeTab === 3 ? `${ManageStyles.branchSlideActive}` : ''}`}>
-          </div>
+          {/* <div className={`${ManageStyles.branchSlide} ${ activeTab === 3 ? `${ManageStyles.branchSlideActive}` : ''}`}>
+          </div> */}
 
         </div>
         

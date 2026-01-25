@@ -76,8 +76,13 @@
     overflow: hidden;
     height:50px;
     width: 50px;
+    
     /* background-color: #97ABC0; */
     flex-shrink:0;
+}
+.user-avatar{
+    object-fit:scale-down;
+    object-position: 50% 50%;
 }
 .user-icon:hover{
     outline:1px solid #1863B0;

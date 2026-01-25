@@ -15,15 +15,17 @@ import { IoMdMail } from "react-icons/io";
 import { FaExternalLinkAlt } from "react-icons/fa";
 
 // axios fetch user data 
-import { useUsers, usePatientData } from '../../queries/users.js'
+import { useUsers, usePatientData, useGetAvatar } from '../../queries/users.js'
 
 
 const Dashboard = () => {
     const {data : userData, isLoading: userDataIsLoading, error: userDataError} = useUsers();
     const {data : patientData, isLoading: patientDataIsLoading, error: patientDataError} = usePatientData();
   
-    if (patientDataIsLoading ) return <div>Loading...</div>;
-    if (patientDataError ) return <div>Error: {patientDataError.message}</div>;
+    const {data : userAvatar, isLoading: userAvatarIsLoading, error: userAvatarError} = useGetAvatar();
+
+    if (patientDataIsLoading || userDataIsLoading || userAvatarIsLoading ) return <div>Loading...</div>;
+    if (patientDataError || userDataError || userAvatarError) return <div>Error: {patientDataError.message}</div>;
 
 return (
     <div className={DashboardStyles.container}>
@@ -32,7 +34,7 @@ return (
 
           <div className={DashboardStyles.profileLeft}>
             <div className={DashboardStyles.patientPhoto}>
-              <img src={MockUser} alt="" />
+              <img src={userAvatar} className={DashboardStyles.userPhoto} alt="" />
             </div>
 
             <h2 className={DashboardStyles.PatientName}>{userData.firstName} {userData.lastName}</h2>
@@ -89,15 +91,15 @@ return (
       </div>
 
       <div className={`${DashboardStyles.columnTwo} ${DashboardStyles.column}`}>
-        {/* <DatePicker/>
+        <DatePicker/>
         <div className={`${DashboardStyles.progressContainer} ${DashboardStyles.miniVerticalStepperContainer}`}>
           <h1 className={DashboardStyles.subHeader}>Therapy Progress</h1>
           <p>Session Breakdown</p>
           <MiniVerticalStepper/>
-        </div> */}
+        </div>
       </div>
 
-      {/* <div className={`${DashboardStyles.columnThree} ${DashboardStyles.column}`}>
+      <div className={`${DashboardStyles.columnThree} ${DashboardStyles.column}`}>
 
         <div className={DashboardStyles.progressContainer}>
           <h2 className={DashboardStyles.smallHeader}>Notifications</h2>
@@ -150,7 +152,7 @@ return (
           </div>
           
         </div>
-      </div> */}
+      </div>
 
     </div>
   )

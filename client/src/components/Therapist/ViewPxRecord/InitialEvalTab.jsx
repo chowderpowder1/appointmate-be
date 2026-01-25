@@ -1,10 +1,16 @@
 import React from 'react'
 import EvalStyles from './InitialEvalTab.module.css'
+import { NavLink,Link,useParams } from 'react-router';
 
 const InitialEvalTab = () => {
+    const { id } = useParams();
+  console.log(id)
   return (
     <div className={EvalStyles.evalContainer}>
-      <h1 className={EvalStyles.evalTitle}>INITIAL EVALUATION</h1>
+      <div className={EvalStyles.evalHeader}>
+        <h1 className={EvalStyles.evalTitle}>INITIAL EVALUATION</h1>
+        <Link to={`/therapist/patient-records/initial-eval/${id}`} className={EvalStyles.evalEditBtn}>Update Evaluation</Link>
+      </div>
       <div className="divider"></div>
       <div className={EvalStyles.evalDataContainer}>
 

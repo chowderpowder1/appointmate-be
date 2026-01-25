@@ -1,0 +1,82 @@
+.mainContainer{
+
+}
+.dataContainer{
+    display:flex;
+    padding:2rem;
+    gap:3rem;
+    /* justify-content: space-around; */
+    border:1px solid var(--border-color);
+    border-radius:10px;
+}
+.columnOne{
+    display:flex;
+    flex-direction: column;
+    gap:1rem;
+    width:30%;
+}
+.claimBtn{
+    background-color: transparent;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    height:fit-content;
+    width:100%;
+    display:flex;
+    align-items: center;
+    justify-content:flex-start;
+    gap:1rem;
+    padding:.5rem;
+    cursor:pointer;
+}
+.therapistPhotoContainer{
+    width:50px;
+    height:50px;
+    border-radius: 50%;
+    overflow:hidden;    
+}
+.therapistPhoto{
+    width:100%;
+    height:auto;
+}
+.columnTwo{
+    display:flex;
+    gap:1rem;
+}
+.colTwoSubContainer{
+    display:flex;
+    flex-direction: column;
+    gap:2rem;
+    position:relative;
+}
+.timeSlotContainer{
+    display:grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-gap:.5rem;
+}
+/* .timeSlotContainer span{
+    border: 1px solid var(--primary-contrast);
+    color: var(--primary-contrast);
+    font-weight:500;
+    padding: .5rem 1.5rem;
+    border-radius: 10px;
+    cursor:pointer;
+    text-align: center;
+    white-space: nowrap;
+} */
+.addApptBtn{
+    position:absolute;
+    background-color: #079042;
+    color:white;
+    width: fit-content;
+    border-radius: 5px;
+    font-weight:300;
+    padding:.5rem 1rem;
+    bottom:-10px;
+    right:0;
+}
+.headerText{
+    color: var(--primary-color);
+    font-weight:500;
+    font-size:1rem;
+    margin-bottom:.5rem;
+}

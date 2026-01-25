@@ -6,12 +6,19 @@ import Button from '@mui/material/Button';
 
 import { FaFilePdf } from "react-icons/fa6";
 
-const ViewDocument = () => {
+import { useUpdateDocumentStatus } from '../../queries/useEmployees'
+
+const ViewDocument = (user) => {    
+
+   const { mutate: updateDocumentStatus} = useUpdateDocumentStatus();
+//    const { documentStatus, setDocumentStatus }= useState(null);
+    const userData = user.user;
+console.log(userData.documentId)
   return (
     <div className={DocumentStyles.container}>
         <div className={DocumentStyles.headerContainer}>
-            <p>PFC_Laboratory.pdf</p>
-            <p>#A2023141D16</p>
+            <p>{userData.file_name}</p>
+ 
         </div>
         <div className={DocumentStyles.subContainer}>
             <div className={DocumentStyles.downloadContainer}>
@@ -19,11 +26,11 @@ const ViewDocument = () => {
                 <p className={DocumentStyles.dlText}>Click to download file</p>
             </div>
             <div className={DocumentStyles.documentTextcontainer}>
-                <p>Patient Name: Belle Mariano</p>
-                <p>Date of Test: 02-10-25</p>
+                <p>Patient Name: {userData.patientName}</p>
+                {/* <p>Date of Test: 02-10-25</p> */}
                 <p>Date Uploaded: 02-10-25</p>
-                <p>Source: External Clinic</p>
-                <p>Status: Pending</p>
+                {/* <p>Source: External Clinic</p> */}
+                <p>Status: {userData.doc_status.toUpperCase()}</p>
             </div>
         </div>
         <Box
@@ -39,15 +46,38 @@ const ViewDocument = () => {
             
             />
         </Box>
-        <Box
-        sx={{ display:'flex', gap:'.5rem'
+        <Box fullWidth
+        sx={{ display:'flex', gap:'.5rem', justifyContent:'center', width:'100%'
         }}>        
             <Button variant="contained"
-            sx={{color:'white', backgroundColor:'#55e402ff', boxShadow:'none', borderRadius:'10px'}}>
-                Approve Document</Button>
+            disabled={userData.doc_status ==='approved'? true : false}
+            onClick={() => 
+                {
+                    updateDocumentStatus({id:userData.documentId, status:'verified'
+
+                })}}
+            sx={{color:'white', backgroundColor:'#2EAD6A', boxShadow:'none', borderRadius:'10px'}}>
+                Approve </Button>
+
             <Button variant="contained"
-            sx={{color:'white', backgroundColor:'#ff3737ff', boxShadow:'none', borderRadius:'10px'}}>
-                Reject Document</Button>
+            disabled={userData.doc_status ==='rejected'? true : false}
+            onClick={() => 
+                {
+                    updateDocumentStatus({id:userData.documentId, status:'rejected'
+
+                })}}
+            sx={{color:'white', backgroundColor:'#D64545', boxShadow:'none', borderRadius:'10px'}}>
+                Reject </Button>
+
+            <Button variant="contained"
+            onClick={() => 
+                {
+                    updateDocumentStatus({id:userData.documentId, status:'pending'
+
+                })}}
+                disabled={userData.doc_status ==='pending'? true : false}
+            sx={{color:'white', backgroundColor:'#F7960A', boxShadow:'none', borderRadius:'10px'}}>
+                Pending </Button>
 
         </Box>
 

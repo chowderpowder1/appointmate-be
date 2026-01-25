@@ -1,9 +1,12 @@
-import React from 'react'
+import {React, useState} from 'react'
 import ProfileStyles from './PatientProfile.module.css'
 import patientDefaultBg from '../../assets/patientProfileBg.png'
 import MockUser from '../../assets/aw_mock-px.png'
 import { FaPencilAlt } from "react-icons/fa";
 import { Link } from 'react-router'
+
+// icon
+import { TbPhotoEdit } from "react-icons/tb";
 
 import TextField from '@mui/material/TextField';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -19,14 +22,57 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 
 // axios fetch user data 
-import { useUsers, usePatientData } from '../../queries/users.js'
+import { useUsers, usePatientData, useUploadAvatar, useGetAvatar } from '../../queries/users.js'
+
+const MAX_SIZE_MB = 3;
+const MAX_SIZE_BYTES = MAX_SIZE_MB * 1024 * 1024;
 
 const PatientProfile = () => {
+    const {mutate: uploadAvatar} = useUploadAvatar();
     const {data : userData, isLoading: userDataIsLoading, error: userDataError} = useUsers();
     const {data : patientData, isLoading: patientDataIsLoading, error: patientDataError} = usePatientData();
+    const {data : userAvatar, isLoading: userAvatarIsLoading, error: userAvatarError} = useGetAvatar();
 
-    if (userDataIsLoading || patientDataIsLoading) return <div>Loading...</div>;
-    if (userDataError || patientDataError) return <div>Error: {error.message}</div>;
+    // Avatar upload state hooks
+    const [file, setFile] = useState(null);
+    const [uploading, setUploading] = useState(false);
+    const [imageUrl, setImageUrl] = useState('');
+    const [error, setError] = useState('');
+
+    if (userDataIsLoading || patientDataIsLoading || userAvatarIsLoading) return <div>Loading...</div>;
+    if (userDataError || patientDataError || userAvatarError) return <div>Error: {error.message}</div>;
+
+    const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    if (file.size > MAX_SIZE_BYTES) {
+    alert('File must be 5MB or smaller');
+    e.target.value = '';
+    return;
+  }
+        setFile(e.target.files[0]);
+        setError('');
+    };
+
+    const handleUpload = async (e) => {
+        e.preventDefault;
+
+        if (!file) {
+            setError('Please Select a file');
+            return    
+        }
+        
+        setUploading(true);
+        setError('');
+
+        const formData = new FormData();
+        formData.append('file', file);
+
+        uploadAvatar(formData)
+
+    }
+    console.log(userAvatar)
   return (
     <div className={ProfileStyles.profileContainer}>
       <div className={ProfileStyles.profileBanner}>
@@ -34,10 +80,30 @@ const PatientProfile = () => {
 
         <div className={ProfileStyles.userContainer}>
 
-            <img src={MockUser} className={ProfileStyles.userPhoto} alt="" />
+            <div className={ProfileStyles.imageContainer}>
+                <img src={userAvatar} className={ProfileStyles.userPhoto} alt="" />
+                <form onSubmit={handleUpload}>
+                    <input 
+                        style={{display:'none'}}
+                        type="file"
+                        onChange={handleFileChange}
+                        accept="image/*"
+                        name="myAvatar"
+                        id="myAvatar"
+                    />
+                    <label className={ProfileStyles.avatarUploadContainer} for="myAvatar"><TbPhotoEdit className={ProfileStyles.avatarUploadBtn}/></label>
+{/* 
+                    <button type="submit" disabled={uploading}>
+                        Upload
+                    </button> */}
+
+                </form>
+            </div>
             <div className={ProfileStyles.userInfo}>
                 <p className={ProfileStyles.userName}>{userData.firstName} {userData.lastName}</p>
                 <p className={ProfileStyles.patientId}>Patient ID #A2023141814</p>
+                
+                
             </div>
         </div>
         <div className={ProfileStyles.editBtn}> 

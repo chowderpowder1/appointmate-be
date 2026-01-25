@@ -67,6 +67,7 @@ const PatientAppointment = () => {
   ]
   if (  myAppointmentsDataIsLoading ) return <div>Loading...</div>;
   if (  myAppointmentsDataError ) return <div>Error: {myAppointmentsDataError.message}</div>;
+  const apptData = myAppointmentsData.userAppointments[0]
 
   const nextApptData =myAppointmentsData.userAppointments[0];
   return (
@@ -172,22 +173,22 @@ const PatientAppointment = () => {
                 <h2 className={TreatmentStyles.sessionDataTitle}>Your Next Session</h2>
                 <div>
                   <p className={TreatmentStyles.sessionText}>Date</p>
-                  <h4 className={TreatmentStyles.sessionText}>{nextApptData.appt_date}</h4>
-                  <p className={TreatmentStyles.sessionText}>{nextApptData.appt_day_of_week}</p>
+                  <h4 className={TreatmentStyles.sessionText}>{nextApptData?.appt_date}</h4>
+                  <p className={TreatmentStyles.sessionText}>{nextApptData?.appt_day_of_week}</p>
                 </div>
 
                 <div>
                   <p className={TreatmentStyles.sessionText}>Time & Location</p>
-                  <h4 className={TreatmentStyles.sessionText}>{nextApptData.appt_start} - {nextApptData.appt_end}</h4>
+                  <h4 className={TreatmentStyles.sessionText}>{nextApptData?.appt_start} - {nextApptData?.appt_end}</h4>
                   <p className={TreatmentStyles.sessionText}>Accelerated Wellness Zabarte Road QC </p>
                 </div>
 
                 <div>
                   <p className={TreatmentStyles.sessionText}>Therapist</p>
-                  <h4 className={TreatmentStyles.sessionText}>{nextApptData.therapist_name}</h4>
+                  <h4 className={TreatmentStyles.sessionText}>{nextApptData?.therapist_name}</h4>
                 </div>
 
-                <button className={TreatmentStyles.viewBtn}> <FaExternalLinkAlt/> View Appointment Details</button>
+                <Link to={`appointment-details/${apptData.appt_id}`} className={TreatmentStyles.viewBtn}> <FaExternalLinkAlt/> View Appointment Details</Link>
               </div>
         </div>
               <RescheduleStatus/>

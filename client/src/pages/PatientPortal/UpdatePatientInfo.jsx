@@ -21,6 +21,7 @@ const UpdatePatientInfo = () => {
     const {mutate: updatePatientInfoMutation} = useUpdatePatientData();
   const {data : patientData, isLoading: patientDataIsLoading, error: patientDataError} = usePatientData();
   const {data : userData, isLoading: userDataIsLoading, error: userDataError} = useUsers();
+  // I'm so close, I just need to power through. I'm sorry
   const [fetchedUserData, setFetchedUserData] = useState({
     email:'',
     firstName:'',
@@ -29,21 +30,21 @@ const UpdatePatientInfo = () => {
          // enumber: patient.ptn_econtactnum
 });
   const [fetchedPatientData, setFetchedPatientData] = useState({
-  dob: "",                  // dob: extractDob.rows[0].dob
-  age: "",                  // age: patientAge
-  gender: "",               // gender: patient.ptn_sex
-  unit: "",                 // unit: patient.ptn_addrunit
-  street: "",               // street: patient.ptn_addrst
-  barangay: "",             // barangay: patient.ptn_addrbrgy
-  city: "",                 // city: patient.ptn_addrcity
-  zipcode: "",              // zipcode: patient.zipcode
-  hmoCardPresented: "",     // hmoCardPresented: patient.ptn_hmoprov
-  hmoNumber: "",            // hmoNumber: patient.ptn_hmoidnum
-  id: "",                   // id: patient.ptn_validtype
-  idNumber: "",             // idNumber: patient.ptn_validnum
-  employer: "",             // employer: patient.ptn_employer
-  econtact: "",             // econtact: patient.ptn_econtactname
-  enumber: "",              // enumber: patient.ptn_econtactnum
+  dob: "",                  
+  age: "",                  
+  gender: "",               
+  unit: "",                 
+  street: "",               
+  barangay: "",             
+  city: "",                 
+  zipcode: "",              
+  hmoCardPresented: "",     
+  hmoNumber: "",            
+  id: "",                   
+  idNumber: "",             
+  employer: "",             
+  econtact: "",             
+  enumber: "",              
 });
     const [contactNumberError, setContactNumberError] = useState();
     const [contactNumberHelperText, setContactNumberHelperText] = useState();
@@ -54,21 +55,21 @@ middleInitial: '',
   firstName:'',
   lastName:'',
   contact_number:'',
-  dob: "",                  // dob: extractDob.rows[0].dob
-  age: "",                  // age: patientAge
-  gender: "",               // gender: patient.ptn_sex
-  unit: "",                 // unit: patient.ptn_addrunit
-  street: "",               // street: patient.ptn_addrst
-  barangay: "",             // barangay: patient.ptn_addrbrgy
-  city: "",                 // city: patient.ptn_addrcity
-  zipcode: "",              // zipcode: patient.zipcode
-  hmoCardPresented: "",     // hmoCardPresented: patient.ptn_hmoprov
-  hmoNumber: "",            // hmoNumber: patient.ptn_hmoidnum
-  id: "",                   // id: patient.ptn_validtype
-  idNumber: "",             // idNumber: patient.ptn_validnum
-  employer: "",             // employer: patient.ptn_employer
-  econtact: "",             // econtact: patient.ptn_econtactname
-  enumber: "",              // enumber: patient.ptn_econtactnum
+  dob: "",                 
+  age: "",                 
+  gender: "",              
+  unit: "",                
+  street: "",              
+  barangay: "",            
+  city: "",                
+  zipcode: "",             
+  hmoCardPresented: "",    
+  hmoNumber: "",           
+  id: "",                  
+  idNumber: "",            
+  employer: "",            
+  econtact: "",            
+  enumber: "",             
 });
   const [isInitialized, setIsInitialized] = useState(false);
 
@@ -129,8 +130,9 @@ middleInitial: '',
   if (userDataIsLoading ||patientDataIsLoading) return <div>Loading...</div>;
   if (userDataError || patientDataError) return <div>Error: {userDataError.message}</div>;
   console.log(updateUserData)
+  
   return (
-    <div>
+    <div className={updateStyles.container}>
         <div className={updateStyles.rowTwo}>
           <div className={updateStyles.fieldGrid}>
                 <p className={updateStyles.subHeader}>PERSONAL INFORMATION</p>
@@ -344,7 +346,7 @@ middleInitial: '',
           <Button
                       variant="outlined"
                       sx={{
-                        width: "80px",
+                        width: "auto",
                         position:'absolute',
                         right:'0',
                         bottom:'-50px',
@@ -352,7 +354,7 @@ middleInitial: '',
                         padding: "1rem",
                         backgroundColor: "var(--primary-color)",
                         fontWeight: 600,
-                        fontSize: "1.1rem",
+                        fontSize: "1rem",
                         whiteSpace: "nowrap",
                         color: "white",
                         textTransform: "none",
@@ -368,7 +370,7 @@ middleInitial: '',
                                     }
                                 })
                     }}
-                    >Update</Button>
+                    >Update Information</Button>
         </div>
       <ToastContainer />
     </div>

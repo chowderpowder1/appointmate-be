@@ -1,5 +1,5 @@
 import {useState, useEffect, React} from 'react'
-import AddStyles from './AddApptTab.module.css'
+import AddStyles from './FdRescheduleTab.module.css'
 import TextField from '@mui/material/TextField';
 import MockTherapist from '../../assets/mock-therapist.jpg'
 // import DatePicker from '../../components/PatientPortal/DatePicker'
@@ -17,20 +17,19 @@ import Select from '@mui/material/Select';
 // Date
 import dayjs from "dayjs";
 
+
 // Tanstack Imports
 import { useUsers } from '../../queries/users'
-import { useGetBookedDates, useBookAppt } from '../../queries/apptData'
-import { useGetAllPatients, useGetServicesList, useGetTherapists } from '../../queries/useEmployees'
+import { useGetBookedDates } from '../../queries/apptData'
+import { useGetAllPatients, useGetServicesList, useGetTherapists, useGetPatientsPendingAppt, useUpdateAppt} from '../../queries/useEmployees'
 
 import { ToastContainer, toast } from 'react-toastify';
 // Imports fixed time slots of AWP
 import {timeSlots} from '../../features/timeSlots'
 
-const AddApptTab = () => {
-    const notify = () => toast("Wow so easy!");
+const FdRescheduleTab = () => {
     
-    const { mutate, data, isSuccess, isError } = useBookAppt();    
-
+    const { mutate, data, isSuccess, isError } = useUpdateAppt();    
     const { data: therapistData, isLoading: therapistDataIsLoading, error: therapistDataError} = useGetTherapists();
     const [ selectedTherapist, setSelectedTherapist] = useState(null);
     
@@ -44,13 +43,15 @@ const AddApptTab = () => {
     const [ selectedSlot, setSelectedSlot] = useState('');
     const [ appointmentForm, setAppointmentForm] = useState({
         patientID:'',
-        patientName: '',
+        apptId:'',
         apptDate: '',
         apptTime:'',
         apptTherapist: '',
         service:'',
         mop:'',
     });
+    console.log(appointmentForm)
+    const { data: patientsPendingAppt =[], isLoading: patientsPendingApptIsLoading, error: patientsPendingApptError} = useGetPatientsPendingAppt(appointmentForm.patientID, {enabled: !!appointmentForm.patientID});
 
     const handleSelectedSlot = (timeSlot) =>{
         setSelectedSlot(timeSlot)
@@ -119,9 +120,8 @@ const AddApptTab = () => {
     }
 
     // Tanstack Error Checking
-    if (userDataIsLoading || bookedApptDataisLoading || allPatientsDataIsLoading ||servicesDataIsLoading || therapistDataIsLoading) return <div>Loading...</div>;
-    if (userDataError || bookedApptDataError || allPatientsDataError || servicesDataError || therapistDataError) return <div>Error: {bookedApptDataError.message || userDataError.message}</div>;
-    console.log(therapistData)
+    if (userDataIsLoading || bookedApptDataisLoading || allPatientsDataIsLoading ||servicesDataIsLoading || therapistDataIsLoading || patientsPendingApptIsLoading) return <div>Loading...</div>;
+    if (userDataError || bookedApptDataError || allPatientsDataError || servicesDataError || therapistDataError || patientsPendingApptError) return <div>Error: {bookedApptDataError.message || userDataError.message}</div>;
     // const x = Object.keys(allPatientsData.allPatients).map((key)=>{
     //     console.log(allPatientsData.allPatients[key].patientName)
     // })
@@ -130,7 +130,14 @@ const AddApptTab = () => {
     e.preventDefault();
     // console.log("Payload Structure before send: "+ JSON.stringify(appointmentForm))
     // console.log(appointmentForm)
-    mutate(appointmentForm)
+    mutate(appointmentForm, {
+        onSuccess: (data) => {
+            toast.success('Patients loaded successfully!');
+        },
+        onError: (error) => {
+            toast.error('Failed to load patients');
+        }
+    })
     setSelectedSlot('')
     
     setAppointmentForm({
@@ -143,7 +150,7 @@ const AddApptTab = () => {
         mop:'',
     })
   }
-    console.log(appointmentForm.apptTherapist)
+    console.log(patientsPendingAppt)
 
   return (
     <div className={AddStyles.mainContainer}>
@@ -202,6 +209,27 @@ const AddApptTab = () => {
                         <MenuItem
                         value={servicesData[e].serviceName}>{servicesData[e].serviceName}</MenuItem>
                       ))}
+                    </Select>
+                    </FormControl>     
+                </div>
+
+                <div>
+                    <h3 className={AddStyles.headerText}>Reschedule appointment:</h3>
+                    <FormControl sx={{flexDirection:'row', gap:'1rem'}} required fullWidth>
+                    <InputLabel sx={{width:'300px'}} id="demo-simple-select-label">Select Appointment</InputLabel>
+                    <Select sx={{width:'300px'}}
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      value={appointmentForm.apptId}
+                      name='apptId'
+                      label="Pick a pending appointment"
+                      onChange={inputHandler}
+                    >
+                     {patientsPendingAppt.map((t)=>(
+                            <MenuItem key={t.appt_id} value={t.appt_id}>Appointment ID: {t.appt_id} - Date: {t.appt_dateTime} </MenuItem>
+
+                          ))}
+
                     </Select>
                     </FormControl>     
                 </div>
@@ -326,4 +354,4 @@ const AddApptTab = () => {
   )
 }
 
-export default AddApptTab
+export default FdRescheduleTab

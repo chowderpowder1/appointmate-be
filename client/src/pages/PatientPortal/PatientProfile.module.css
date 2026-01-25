@@ -34,9 +34,12 @@
     height:200px;
     border-radius: 50%;
     background-color: white;
+    object-fit:cover;
+    box-shadow:rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
 }
 .userInfo, .userPhoto{
     display:inline-block;
+    color:var(--off-black)
 }
 .userInfo{
     display:flex;
@@ -144,4 +147,27 @@
     grid-template-rows: 85px;
     /* grid: 100px/ 1fr 1fr 1fr; */
     align-items: center;
+}
+.imageContainer{
+    position:relative;
+}
+.avatarUploadBtn{
+
+    background-color:#1976D5;
+    color:white;
+    font-size:1.5rem;
+
+}
+.avatarUploadContainer{
+    display:flex;
+    position:absolute;
+    bottom:10px;
+    right:10px;
+    padding:.4rem;
+    border-radius:50%;
+    background-color:#1976D5;
+    cursor:pointer;
+}
+.patientId{
+    color:var(--off-black)
 }

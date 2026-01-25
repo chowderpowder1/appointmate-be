@@ -125,3 +125,9 @@
     gap:.5rem;
     align-items: center;
 }
+.paginationContainer{
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    margin-top:1rem;
+}

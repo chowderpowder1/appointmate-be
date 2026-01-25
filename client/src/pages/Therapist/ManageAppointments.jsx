@@ -1,6 +1,6 @@
 import {React, useState} from 'react'
 import ManageStyles from './ManageAppointments.module.css'
-import NotificationBelt from '../../components/Therapist/NotificationBelt'
+import NotificationBelt from '../../components/Therapist/NotificationBelt.jsx'
 import ManageTab from '../../components/Therapist/ManageApptTab'
 import AddApptTab from '../../components/Therapist/AddApptTab'
 

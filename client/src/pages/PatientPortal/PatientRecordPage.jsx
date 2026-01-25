@@ -4,10 +4,13 @@ import PersonalInfo from '../../components/PatientPortal/PersonalInfo'
 import InitialEval from '../../components/PatientPortal/InitialEval'
 import PastMedicalHistory from '../../components/PatientPortal/PastMedicalHistory'
 
+
 const PatientRecordPage = () => {
 
     const [toggleState, setToggleState] = useState(1);
     const toggleTab = ( index ) => setToggleState(index);
+
+   
 
   return (
     <div className={RecordStyles.recordContainer}>

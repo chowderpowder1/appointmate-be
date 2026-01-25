@@ -8,57 +8,36 @@ import ClinicPhoto from '../../assets/AwZabarte.jpg'
 import ViewDocument from '../../components/FrontDesk/ViewDocument'
 import blankPx from '../../assets/blank-px.jpg'
 
-const FdManageDocuments = () => {
+import { useGetPatientDocumentList } from '../../queries/useEmployees'
 
-  const mockData = [
-    {
-        submissionId:'SUB_2024_001_7F8A9B2C',
-        patientId:'#A2023141818',
-        patientName: "John Doe",
-        fileName: "chest_xray_report.pdf",
-        fileType: "PDF",
-        status: "Approved"
-    },
-    {
-        submissionId:'SUB_2024_002_3D5E6F1A',
-        patientId:'#A2023141819',
-        patientName: "Jane Smith",
-        fileName: "blood_test_results.xlsx",
-        fileType: "Excel", 
-        status: "Rejected"
-    },
-    {
-        submissionId:'SUB_2024_003_9B4C7E8D',
-        patientId:'#A2023141820',
-        patientName: "Robert Johnson",
-        fileName: "mri_scan_brain.dcm",
-        fileType: "DICOM",
-        status: "Approved"
-    },
-    {
-        submissionId:'SUB_2024_004_5A1F2C9E',
-        patientId:'#A2023141821',
-        patientName: "Emily Davis",
-        fileName: "lab_report_2024.docx",
-        fileType: "Word Document",
-        status: "Pending"
-    }
-];
+const FdManageDocuments = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(false);
+
+  const handleOpenModal = (user) => {
+    setSelectedUser(user);
+    setIsOpen(true);  
+  }
+
+  const { data: patientDocumentList, isLoading: patientDocumentListIsLoading, error: patientDocumentListError} = useGetPatientDocumentList();
 
   const documentStatus = (type) =>{
-    switch (type) {
-      case 'Approved' : return 'approvedText';
-      case 'Rejected' : return 'rejectedText';
-      case 'Pending' : return 'pendingText';
+    switch (type.toLowerCase()) {
+      case 'verified' : return 'approvedText';
+      case 'rejected' : return 'rejectedText';
+      case 'pending': return 'pendingText';
 
     }
   }
-  const [isOpen, setIsOpen] = useState(false);
   
+    if (patientDocumentListIsLoading) return <div>Loading...</div>;
+    if (patientDocumentListError) return <div>⚠ Error: {patientDocumentListError.message}</div>;
+
+    console.log(patientDocumentList)
   return (
     <div className={DocumentStyles.container}>
       <Modal open={isOpen} onClose={() => setIsOpen(false)}> 
-        <ViewDocument/>
+        <ViewDocument user={selectedUser}/>
       </Modal>      
       <div className={DocumentStyles.header}>Manage documents</div>
       <div className={DocumentStyles.documentContainer}>
@@ -77,30 +56,7 @@ const FdManageDocuments = () => {
                       top:'-6px'
                   }
               }}/>
-            <TextField
-              id="outlined-search" label="Filter By" type="search" variant="outlined"
-            
-              sx={{
-                  '& .MuiOutlinedInput-root':{
-                      borderRadius:'30px',
-                      height:'40px',
-                  },
-                  label:{
-                      top:'-6px'
-                  }
-              }}/>
-            <TextField
-              id="outlined-search" label="Uploaded By" type="search" variant="outlined"
-            
-              sx={{
-                  '& .MuiOutlinedInput-root':{
-                      borderRadius:'30px',
-                      height:'40px',
-                  },
-                  label:{
-                      top:'-6px'
-                  }
-              }}/>
+           
           </div>
         </div>
 
@@ -116,28 +72,32 @@ const FdManageDocuments = () => {
                 </tr>
             </thead>
             <tbody className={DocumentStyles.tblBody}>
-              {mockData.map((data)=>(
-                <tr key={data.submissionId}>
+              {patientDocumentList.map((data)=>(
+                <tr key={data.documentId}>
                   <td className={DocumentStyles.tblData}>
                     <div className={DocumentStyles.pxContainer}>
                       <div className={DocumentStyles.blankPxContainer}>
-                        <img className={DocumentStyles.pxPhoto} src={blankPx} alt="" />
+                        <img className={DocumentStyles.pxPhoto} src={data.patientAvatar} alt="" />
                       </div>
-                      <div>
+                      <div style={{alignItems:'center', display:'flex'}}>
                         <p>{data.patientName}</p>
                         <p>{data.patientId}</p>
                       </div>
                     </div>
                   </td>
-                  <td className={DocumentStyles.tblData}>{data.fileName}</td>
-                  <td className={DocumentStyles.tblData}>{data.fileType}</td>
+                  <td className={DocumentStyles.tblData}>{data.file_name}</td>
+                  <td className={DocumentStyles.tblData}>{data.file_type.toUpperCase()}</td>
                   <td className={DocumentStyles.tblData}>
-                    <div className={`${DocumentStyles[documentStatus(data.status)]}`}>
-                      <p>{data.status}</p>
+                    <div 
+                    style={{
+                      margin:'auto',
+                    }} 
+                    className={`${DocumentStyles[documentStatus(data.doc_status)]}`}>
+                      <p>{data.doc_status.toUpperCase()}</p>
                     </div>
                   </td>                
                   <td className={DocumentStyles.tblData}>   
-                  <Button onClick={() => setIsOpen(true)} variant="contained"
+                  <Button onClick={() => handleOpenModal(data)} variant="contained"
                       sx={{
                           borderRadius:'35px',
                           boxShadow:'none'
@@ -145,32 +105,7 @@ const FdManageDocuments = () => {
                       >View</Button></td>
                 </tr>
               ))}
-              {/* <tr>
-                <td className={DocumentStyles.tblData}>P-01</td>
-                <td className={DocumentStyles.tblData}>Marian Rivera</td>
-                <td className={DocumentStyles.tblData}>Zabarte</td>
-                <td className={DocumentStyles.tblData}>HMO</td>                
-                <td className={DocumentStyles.tblData}>   
-                <Button onClick={() => setIsOpen(true)} variant="contained"
-                    sx={{
-                        borderRadius:'35px',
-                        boxShadow:'none'
-                        }}
-                    >View</Button></td>
-              </tr>
-              <tr>
-                <td className={DocumentStyles.tblData}>P-01</td>
-                <td className={DocumentStyles.tblData}>Marian Rivera</td>
-                <td className={DocumentStyles.tblData}>Zabarte</td>
-                <td className={DocumentStyles.tblData}>HMO</td>              
-                <td className={DocumentStyles.tblData}>   
-                <Button onClick={() => setIsOpen(true)} variant="contained"
-                    sx={{
-                        borderRadius:'35px',
-                        boxShadow:'none'
-                        }}
-                    >View</Button></td>
-              </tr> */}
+
             </tbody>
           </table>
         </div>

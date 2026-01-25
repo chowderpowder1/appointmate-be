@@ -9,6 +9,7 @@ const DatePicker = () => {
     <div className={DateStyles.dateContainer}>
           <LocalizationProvider sx={{width:'100%', height:'100%'}} dateAdapter={AdapterDayjs}>
             <DateCalendar />
+            
           </LocalizationProvider>
     </div>
   )

@@ -31,12 +31,12 @@ const PxAppointmentDetailsPage = () => {
         <AppointmentNotification/>
         <AppointmentDetails apptID={id}/>
         <ClinicLocation/>
-        {/* <Attachments/> */}
+        <Attachments/>
       </div>
 
       <div className={AppointmentStyles.columnTwo}>
-        {/* <RescheduleStatus/> */}
-        {/* <DatePicker/> */}
+        <RescheduleStatus/>
+        <DatePicker/>
         <CheckList/>
         <PxSupport/>
         

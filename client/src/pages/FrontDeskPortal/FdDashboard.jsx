@@ -24,13 +24,13 @@ const FdDashboard = () => {
       <h1 className={DashboardStyles.header}>Dashboard</h1>
       <div className={DashboardStyles.row}>
         <TherapistGreet name={userData.firstName}/>
-        <SchedulePxNotification/>
+        {/* <SchedulePxNotification/> */}
       </div>
       <div className={DashboardStyles.row}>
         <NotificationBelt/>
       </div>
-      {/* <div className={DashboardStyles.apptDataContainer}>
-        <div className={DashboardStyles.calendarContainer}>
+      <div className={DashboardStyles.apptDataContainer}>
+        {/* <div className={DashboardStyles.calendarContainer}>
 
              <LocalizationProvider dateAdapter={AdapterDayjs}>
   <DateCalendar
@@ -96,11 +96,11 @@ const FdDashboard = () => {
     }}
   />
 </LocalizationProvider>
-        </div>
+        </div> */}
         <div className={DashboardStyles.upcomingApptContainer}>
           <UpcomingAppt/>
         </div>
-      </div> */}
+      </div>
     </div>
   )
 }

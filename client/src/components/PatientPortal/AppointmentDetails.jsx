@@ -1,4 +1,4 @@
-import {React, useState} from 'react'
+import {React, useState, useEffect} from 'react'
 import AppointmentStyles from './AppointmentDetails.module.css'
 import MockupPt from '../../assets/aw_mock-px.png'
 import { FaPhoneAlt } from "react-icons/fa";
@@ -6,16 +6,23 @@ import { IoIosMail } from "react-icons/io";
 import { BsCalendarMinusFill } from "react-icons/bs";
 import Button from '@mui/material/Button';
 import Modal from '../../components/Ui/Modal'
+import TextField from "@mui/material/TextField";
 
 // React Icons
 import { MdOutlineCancel } from "react-icons/md";
 import { RiCalendarScheduleFill } from "react-icons/ri";
 
+import RescheduleTab from './RescheduleTab.jsx' 
 // Query
 import { UseGetAnAppointmentsDetails, useUpdateMyAppointment } from '../../queries/apptData.js'
 
+import { useGetMyRecords } from '../../queries/users.js'
+
 const AppointmentDetails = (apptID) => {
-    const { data: apptDetails, isLoading: apptDetailsLoading, error: apptDetailsError} = UseGetAnAppointmentsDetails(apptID);
+    const { data: evalData, isLoading: evalDataisLoading, error: evalDataError} = useGetMyRecords();
+
+    const [complaint, setComplaint] = useState('')
+    const { data: apptDetails, isLoading: apptDetailIsLoading, error: apptDetailsError} = UseGetAnAppointmentsDetails(apptID);
     const [isCancelOpen, setIsCancelOpen] = useState(false);
     const [isRescheduleOpen, setIsRescheduleOpen] = useState(false);
 
@@ -24,17 +31,23 @@ const AppointmentDetails = (apptID) => {
         apptID:apptID,
         apptNewStatus:'',
     })
-    if (apptDetailsLoading) return <div>Loading...</div>;
-    if (apptDetailsError) return <div>Error: {apptDetailsError.error}</div>;
 
-    console.log(apptDetails);
+    
+    useEffect(() => {
+      if (evalData?.complaint) {
+        setComplaint(evalData.complaint);
+      }
+    }, [evalData]);
+
+    if (apptDetailIsLoading || evalDataisLoading) return <div>Loading...</div>;
+    if (apptDetailsError || evalDataError) return <div>Error: {apptDetailsError.error}</div>;
+
+    console.log(evalData);
 
     const cancelApptSubmit = () =>{
-        console.log('payload sent')
         updateApptMutation(apptUpdatePayload)
     }
     const rescheduleApptSubmit = () =>{
-        console.log('payload sent')
         updateApptMutation(apptUpdatePayload)
     }
 
@@ -100,11 +113,12 @@ const AppointmentDetails = (apptID) => {
 
       {/* Reschedule Modal */}
         <Modal open={isRescheduleOpen} onClose={() => setIsRescheduleOpen(false)}> 
-        <div className={AppointmentStyles.confirmationCancelModal}>
+                    <RescheduleTab/>
+        {/* <div className={AppointmentStyles.confirmationCancelModal}>
                 <RiCalendarScheduleFill className={AppointmentStyles.rescheduleModalIcon} />
                 <div className={AppointmentStyles.cancelModalTextBox}>
                     <h4>Reschedule your Appointment?</h4>
-                    <p>Pick a date</p>
+                    
                 </div>
               <div className={AppointmentStyles.cancelModalBtnContainer}>
                   <Button
@@ -149,7 +163,7 @@ const AppointmentDetails = (apptID) => {
                     }}
                     >Confirm</Button>
               </div>
-        </div>
+        </div> */}
           {/* <button onClick={activeModal}>close</button> */}
       </Modal>
       <div className={AppointmentStyles.mainContainer}>
@@ -204,9 +218,19 @@ const AppointmentDetails = (apptID) => {
                  </div>
             </div>
             <div className={AppointmentStyles.rowBottom}>
-            <p>Chief Complaint</p>
+            <p></p>
+            
             <div className={AppointmentStyles.pxComplaintContainer}>
-                <p className={AppointmentStyles.pxComplaint}>Hi po! I’ve been feeling some mild lower back discomfort lately, baka dahil sa matagal na upo during tapings and shoots. Also po, I had a previous ankle injury na minsan umaalalay pa rin. Hoping to get this checked po, thank you!</p>
+                {/* <p className={AppointmentStyles.pxComplaint}>Hi po! I’ve been feeling some mild lower back discomfort lately, baka dahil sa matagal na upo during tapings and shoots. Also po, I had a previous ankle injury na minsan umaalalay pa rin. Hoping to get this checked po, thank you!</p> */}
+                <TextField
+                label="Chief Complaint"
+                name="patientName"
+                value={complaint}
+                onChange={''}
+                
+                variant="outlined"
+                size="small"
+              />
             </div>
             <div className={AppointmentStyles.btnContainer}>
 

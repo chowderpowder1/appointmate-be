@@ -83,22 +83,7 @@ const PatientRecordsOverview = () => {
                                     }}
                                 >View</Button></NavLink></td>
                         </tr>
-                    ))}
-
-                    {/* <tr>
-                        <td className={RecordStyles.tblData}>P-01</td>
-                        <td className={RecordStyles.tblData}>Marian Rivera</td>
-                        <td className={RecordStyles.tblData}>Zabarte</td>
-                        <td className={RecordStyles.tblData}>HMO</td>
-                        <td className={RecordStyles.tblData}>Date Created</td>
-                        <td className={RecordStyles.tblData}>
-                            <Button variant="contained"
-                            sx={{
-                                borderRadius:'35px',
-                                boxShadow:'none'
-                                }}
-                            >View</Button></td>
-                    </tr> */}
+                    ))}                
 
                 </tbody>
             </table>

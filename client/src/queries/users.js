@@ -40,9 +40,7 @@ export const useGenerateOtp = () => {
     })
 }
 
-export const useUpdatePatientData = () => {
-    const queryClient = useQueryClient();
-    
+export const useUpdatePatientData = () => {    
     return useMutation({
         mutationFn: async (updatePatientInfo) => {
             const res = await axios.patch('http://localhost:8080/userData/updateUserData', updatePatientInfo, {withCredentials: true})
@@ -63,6 +61,84 @@ export const useGetAllPatientsData = () => {
         queryFn: async() => {
             const res = await axios.get('http://localhost:8080/clinic/getPatients', {
                 withCredentials:true
+            })
+            return res.data;
+        }
+    })
+}
+
+export const useGetMyRecords = () => {
+    return useQuery({
+        queryKey:['myEvalData'],
+        queryFn: async() => {
+            const res = await axios.get('http://localhost:8080/userData/getMyRecords', {
+                withCredentials:true
+            })
+            return res.data;
+        }
+    })
+}
+
+export const useUploadAvatar = () => {    
+    return useMutation({
+        mutationFn: async (uploadAvatar) => {
+            const res = await axios.patch('http://localhost:8080/userData/uploadAvatar', uploadAvatar, {withCredentials: true})
+            return res.data
+        },
+        onSuccess: (data) => {
+            console.log('Avatar uploaded successfully')
+        },
+        onError: (error) => {
+            console.log('Failed to upload avatar')
+        }
+    })
+}
+
+export const useGetAvatar = () => {    
+    return useQuery({
+        queryKey:['myAvatar'],
+        queryFn: async() => {
+            const res = await axios.get('http://localhost:8080/userData/getAvatar', {
+                withCredentials:true
+            })
+            return res.data;
+        }
+    })
+}
+
+export const useUploadDocument = () => {    
+    return useMutation({
+        mutationFn: async (uploadDocument) => {
+            const res = await axios.patch('http://localhost:8080/userData/uploadDocument', uploadDocument, {withCredentials: true})
+            return res.data
+        },
+        onSuccess: (data) => {
+            console.log('Avatar uploaded successfully')
+        },
+        onError: (error) => {
+            console.log('Failed to upload avatar')
+        }
+    })
+}
+
+export const useGetMyDocumentsList = () => {    
+    return useQuery({
+        queryKey:['myDocumentsList'],
+        queryFn: async() => {
+            const res = await axios.get('http://localhost:8080/userData/getMyDocumentsList', {
+                withCredentials:true
+            })
+            return res.data;
+        }
+    })
+}
+
+export const useGetDocumentSignedUrl = () => {
+    return useMutation({
+        mutationFn: async (documentId) => {
+            const res= await axios.get('http://localhost:8080/userData/getDocumentSignedUrl', {
+                params: {documentId},
+                withCredentials: true
             })
             return res.data;
         }

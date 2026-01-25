@@ -2,7 +2,7 @@
     background-color: #F5F5F5;
     border-radius:10px;
     padding:1rem;
-    width:600px;
+    width:500px;
     height:400px;
     display:flex;
     flex-flow: column;
@@ -15,6 +15,8 @@
     width:100%;
     justify-content: space-between;
     color:var(--primary-color);
+    justify-content:center;
+
 }
 .subContainer{
     justify-content: center;

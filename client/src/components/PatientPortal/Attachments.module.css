@@ -6,6 +6,7 @@
     padding:2rem;
     gap:1rem;
     display: flex;
+    margin:2rem auto;
     flex-flow: column;
 }
 .attachmentTitleContainer{
@@ -32,11 +33,10 @@
 .uploadedAttachmentsContainer{
     width:100%;
     display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr;
+    grid-template-columns: 3fr 1fr 1fr 1fr;
     gap: 2rem;
     border:1px solid var(--primary-contrast);
     border-radius: 15px;
-    cursor: pointer;
     position: relative;
     overflow:hidden;
     padding: 1rem 2rem;
@@ -63,6 +63,10 @@
 }
 .row{
     color:var(--text-gray);
+    align-items:center;
+}
+.date{
+    padding-top:.5rem;
 }
 span{
     z-index:1;
@@ -95,4 +99,26 @@ span{
     width:fit-content;
     height:fit-content;
     padding: .5rem 1rem;
+}
+.downloadBtnContainer{
+    background-color: #1976D5;
+    width:40px;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    height:40px;
+    padding:.5rem;
+    color:white;
+    border-radius:25%;
+    flex-shrink:0;
+    font-size:1.3rem;
+}
+.bntContainer{
+    display:flex;
+    gap:1rem;
+}
+.noDocs{
+    color:#1B77D5;
+    text-align:left;
+    font-size:2rem;
 }

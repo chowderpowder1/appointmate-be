@@ -24,7 +24,7 @@ export const useBookAppt = () => {
 
     return useMutation({
         mutationFn: async (appData) => {
-            const res = await axios.post('http://localhost:8080/appt/bookAppointment', appData, {withCredentials: true})
+            const res = await axios.post('http://localhost:8080/clinic/bookAppointmentForPatient', appData, {withCredentials: true})
 
         return res.data;
         }, 

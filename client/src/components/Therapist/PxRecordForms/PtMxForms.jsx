@@ -10,7 +10,7 @@ import Typography from '@mui/material/Typography';
 const PtMxForms = () => {
   return (
     <div>
-      PT MX
+      <p>Physical Therapy Treatment</p>
       <FormGroup spacing={1} row={true} sx={{
         textAlign:'left'
       }}>
