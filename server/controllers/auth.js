@@ -152,41 +152,6 @@ async function session (req, res) {
             }
         }
 
-        // let otp = otpGenerator.generate(6, {
-        //   upperCaseAlphabets: false,
-        //   lowerCaseAlphabets: false,
-        //   specialChars: false,
-        // });
-
-        // await dbConnection.query(`UPDATE awp_users_tbl SET otp = $2 WHERE user_id=$1 `, [currentUserID, otp]``)
-        // console.log('Sample generated OTP:', otp);
-
-        // const transporter = nodemailer.createTransport({
-        //     service: "gmail", 
-        //     // smtp.gmail.com
-        //     auth:{
-        //         user:'jessee.dan.catli@gmail.com',
-        //         pass: 'oulz vxxd cejw rpwj'
-        //     },
-        //     tls: {
-        //         rejectedUnauthorized: false,
-        //     }
-        // })
-
-        // const info = await transporter.sendMail({
-        //     from: '"Accelerated Wellness & Pain Clinic" <jessee.dan.catli@gmail.com>',
-        //     to: "aizabblue@gmail.com, aizabblue@gmail.com",
-        //     subject:"Appointmate OTP verification",
-        //     text:"test test?",
-        //     html: "<b>Hello world?</b>",                
-        // })
-        // console.log("Message sent:", info.messageId);
-
-
-
-        // console.log('Here it is niel', (rows))
-
-// is_profile_complete
     return res.json({
         loggedIn: true,
         email: rows.email,

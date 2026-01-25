@@ -19,13 +19,33 @@ import nodemailer from 'nodemailer';
 // google auth dependencies
 import passport from 'passport'
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
+import multer from 'multer';
+import { v2 as cloudinary} from 'cloudinary';
 
 dotenv.config();
 
+
 const PORT = process.env.PORT;
 const app = express();
+
 const pgSession = connectPgSimple(session);
-// dbConnection();
+
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret : process.env.CLOUDINARY_API_SECRET,
+});
+
+// ( async function() {
+//     try{
+//  const results = await cloudinary.uploader.upload('../client/src/assets/about-commitment-section.png')
+//     console.log(results)
+//     }catch(err){
+//         console.log(err)
+//     }
+   
+// })();
+
 app.use(cors({
   origin: 'http://localhost:5173', 
   credentials: true, 

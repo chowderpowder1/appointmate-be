@@ -286,7 +286,8 @@ async function getPatientsList(req, res){
            const isAuthorized = await dbConnection.query(`SELECT user_role from awp_users_tbl WHERE user_id=$1`, [req.session.user.id])
 
            if( isAuthorized.rows[0].user_role < 5){
-                const patientListResponse = await dbConnection.query(`select user_id, user_fname, user_lname from awp_users_tbl WHERE user_role=5 ORDER BY user_fname`)
+
+                const patientListResponse = await dbConnection.query(`SELECT a.* FROM awp_users_tbl a INNER JOIN awp_patient_tbl b ON a.user_id = b.user_id`)
 
                 const allPatients = await Promise.all(patientListResponse.rows.map( async (p)=>{
                     return {
@@ -294,7 +295,7 @@ async function getPatientsList(req, res){
                         patientID: p.user_id
                     }
                 }))
-                res.json({allPatients})
+                res.json(allPatients)
             }
         }
         else if(!req.session.user.id){
@@ -312,12 +313,14 @@ async function getApptDetails(req,res){
             // const currentUserID = req?.session?.user?.id || req?.user?.id || null;
             const appointmentID = req.query.apptID;
             const apptDetails = await dbConnection.query(`SELECT * from awp_appt_tbl WHERE appt_id=$1`,[appointmentID])
-
             const apptRows = apptDetails.rows[0]
+
             const therapistID = apptRows.therapist_id
             const therapistSpecialization = await dbConnection.query(`SELECT * from awp_pthera_tbl WHERE pthera_id=$1`,[therapistID])
             const therapistUserID = therapistSpecialization.rows[0].user_id;
-            const therapistDetails = await dbConnection.query(`SELECT * from awp_users_tbl WHERE user_id=$1`,[therapistUserID])
+                        // console.log('PUTANGINA MO', therapistUserID)
+
+                        const therapistDetails = await dbConnection.query(`SELECT * from awp_users_tbl WHERE user_id=$1`,[therapistUserID])
             const therapistContact = await dbConnection.query(`SELECT contact_value from awp_ucontacts_tbl WHERE user_id=$1`,[therapistUserID])
             const assignedTherapistResult = await dbConnection.query(
               `SELECT u.*
@@ -330,18 +333,20 @@ async function getApptDetails(req,res){
             const userID = await dbConnection.query(`SELECT user_id from awp_patient_tbl where patient_id=$1`,[apptRows.patient_id])
             const patientData = await dbConnection.query(`SELECT * from awp_users_tbl where user_id=$1`,[userID.rows[0].user_id])
             const patientDataRows = patientData.rows[0]
-                console.log(`APPT DETAILS ENDPOINT: `,patientData.rows[0])
+                // console.log(`APPT DETAILS ENDPOINT: `,patientData.rows[0])
             return res.json({
                 patientID: apptRows.patient_id,
                 patientFName: patientDataRows.user_fname,
                 patientLName: patientDataRows.user_lname,
                 patientEmail: patientDataRows.user_logemail,
+                patientHmo: patientDataRows.ptn_hmoprov,
                 therapistID: therapistID,
                 therapistEmail: therapistDetails.rows[0].user_logemail,
                 therapistContactNumber: therapistContact.rows[0].contact_value,
                 assignedTherapist: assignedTherapist ? `${assignedTherapist.user_fname} ${assignedTherapist.user_lname}`: null,
                 therapistSpecialization: therapistSpecialization.rows[0].pthera_special,
                 apptStatus : apptRows.appt_status,
+                mop: apptRows.mode_of_payment,
                 appt_date: (dayjs(apptRows.appt_date).format('DD MMM YYYY')).toUpperCase(),
                 appt_start: dayjs(apptRows.appt_start).format('h:mm A'),
                 appt_end: dayjs(apptRows.appt_end).format('h:mm A'),        
@@ -406,6 +411,7 @@ async function getTherapistAppointments(req,res){
                     cancelledAppt:cancelledAppt.rows[0].count,
                     rescheduledAppt:rescheduledAppt.rows[0].count
                 })
+                
             }else{
                 res.json({message:'User is not a Therapist'})
             }
