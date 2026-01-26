@@ -113,7 +113,7 @@ const AppointmentDetails = (apptID) => {
 
       {/* Reschedule Modal */}
         <Modal open={isRescheduleOpen} onClose={() => setIsRescheduleOpen(false)}> 
-                    <RescheduleTab/>
+                    <RescheduleTab appDetails={apptDetails} />
         {/* <div className={AppointmentStyles.confirmationCancelModal}>
                 <RiCalendarScheduleFill className={AppointmentStyles.rescheduleModalIcon} />
                 <div className={AppointmentStyles.cancelModalTextBox}>

@@ -57,6 +57,7 @@ const PatientProfile = () => {
     };
 
     const handleUpload = async (e) => {
+        const file = e.target.files[0];
         e.preventDefault;
 
         if (!file) {
@@ -70,7 +71,7 @@ const PatientProfile = () => {
         const formData = new FormData();
         formData.append('file', file);
 
-        await uploadAvatar(formData)
+        uploadAvatar(formData)
 
     }
     console.log(userAvatar)

@@ -258,6 +258,7 @@ async function getMyRecords(req, res){
             const patientIdQuery = await dbConnection.query(`SELECT patient_id from awp_patient_tbl WHERE user_id=$1`,[patientUserId])
             const patientId = patientIdQuery.rows[0].patient_id;
             console.log('does it exist?', patientId)
+            
             const activeApptQuery = await dbConnection.query(`SELECT appt_id from awp_appt_tbl where patient_id=$1 ORDER BY CREATED_AT desc limit 1;`,[patientId])
             const activeAppt = activeApptQuery.rows[0].appt_id
 
@@ -427,7 +428,7 @@ var payload = {
 };
 
 async function uploadAvatar(req,res){
-    console.log('upload avatar endpoint')
+    console.log('Riana')
     try{
         if (req?.session?.user || req?.user) {
             const userId = req.session.user.id
@@ -459,11 +460,11 @@ async function uploadAvatar(req,res){
             
             const createAvatarRecord = await dbConnection.query(`INSERT INTO user_avatars(user_id, image_url, public_id, image_type) values($1, $2, $3, $4)`,[userId, url, public_id, format ])
             console.log('Upload Result', result)
-            // res.json({
-            //     success: true,
-            //     url: result.secure_url,
-            //     public_id: result.public_id,
-            // });
+            res.json({
+                success: true,
+                url: result.secure_url,
+                public_id: result.public_id,
+            });
         }
         
     }catch(err){
@@ -597,6 +598,14 @@ async function getDocumentSignedUrl(req,res){
         res.status(500).json({error: 'Signed Url Fetch Failed'});
     }
 };
+
+async function postReschedule(req,res){
+    try{
+
+    }catch(err){
+        console.log(err)
+    }
+}
 
 
 export {getDocumentSignedUrl, getAvatar, uploadAvatar, submitUserData, getUserData, getMyAppointments, updateUserData, getMyRecords, uploadDocument, getMyDocumentsList};

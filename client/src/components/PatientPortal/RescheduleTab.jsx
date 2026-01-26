@@ -14,6 +14,9 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
+// Icons
+import { IoIosAlert } from "react-icons/io";
+
 // Date
 import dayjs from "dayjs";
 
@@ -27,20 +30,21 @@ import { ToastContainer, toast } from 'react-toastify';
 // Imports fixed time slots of AWP
 import {timeSlots} from '../../features/timeSlots'
 
-const RescheduleTab = () => {
-    
+const RescheduleTab = (appDetails) => {
+    console.log(timeSlots)
 //     const { mutate, data, isSuccess, isError } = useUpdateAppt();    
-//     const { data: therapistData, isLoading: therapistDataIsLoading, error: therapistDataError} = useGetTherapists();
+//     const { data: therapistData, isLoading: therapistDataIsLoading, error: therapistDataError} = https://www.facebook.com/groups/useGetTherapists();
 //     const [ selectedTherapist, setSelectedTherapist] = useState(null);
     
 //     const {data : userData, isLoading: userDataIsLoading, error: userDataError} = useUsers();
 //     const {data : servicesData, isLoading: servicesDataIsLoading, error: servicesDataError} = useGetServicesList();
 //     const {data : allPatientsData, isLoading: allPatientsDataIsLoading, error: allPatientsDataError} = useGetAllPatients();
 //     const { data: bookedApptData, isLoading: bookedApptDataisLoading, error: bookedApptDataError, refetch: refetchBookedApptData} = useGetBookedDates(selectedTherapist);
-
+    const data = appDetails.appDetails
+    console.log(data)
     const [ disabledSlots, setDisabledSlots] = useState([]);
     const [ disabledDates, setDisabledDates] = useState([]);
-    const [ selectedSlot, setSelectedSlot] = useState('');
+    const [ selectedSlot, setSelectedSlot] = useState({ label: '11:30 AM', value: '11:30' });
     const [ appointmentForm, setAppointmentForm] = useState({
         patientID:'',
         apptId:'',
@@ -52,8 +56,11 @@ const RescheduleTab = () => {
     });
 //     console.log(appointmentForm)
 //     const { data: patientsPendingAppt =[], isLoading: patientsPendingApptIsLoading, error: patientsPendingApptError} = useGetPatientsPendingAppt(appointmentForm.patientID, {enabled: !!appointmentForm.patientID});
+    useEffect(()=>{
+    },[])
 
     const handleSelectedSlot = (timeSlot) =>{
+      console.log(selectedSlot)
         setSelectedSlot(timeSlot)
     }
 
@@ -113,9 +120,9 @@ const RescheduleTab = () => {
         const day = dayjs().format('YYYY-MM-DD')
         // console.log(day)
 
-        if(appointmentForm.apptDate <= day && timeSlot <= now){
-          return true;
-        }
+        // if(appointmentForm.apptDate <= day && timeSlot <= now){
+        //   return true;
+        // }
         return disabledSlots.includes(timeSlot)
     }
 
@@ -163,31 +170,47 @@ const RescheduleTab = () => {
             <h3> Reschedule Your Appointment</h3>
             <div className={AddStyles.apptDetailsContainer}>
                 <h4>Your Appointment Details</h4>
+                <p>Date & Time:</p>
+                <p>Jan 26, 2026 9:00 AM</p>
+
                 <p>Physical Therapist:</p>
                 <p>PT Lee Ji-eun</p>
-                <p>Physical Therapist:</p>
-                <p>PT Lee Ji-eun</p>
+
                 <p>Payment Method:</p>
                 <p>HMO, Maxicare</p>
             </div>
             <div className={AddStyles.rescheduleReasonContainer}>
-                <h4>Your Appointment Details</h4>
-                <p>Physical Therapist:</p>
-                <p>PT Lee Ji-eun</p>
-                <p>Physical Therapist:</p>
-                <p>PT Lee Ji-eun</p>
-                <p>Payment Method:</p>
-                <p>HMO, Maxicare</p>
+                <TextField
+                  label="Reason for rescheduling"
+                  name="patientName"
+                  // value={complaint}
+                  onChange={''}
+                  fullWidth
+                  multiline
+                  rows={5}
+                  variant="outlined"
+                  sx={{
+                    
+                    '& .MuiInputBase-input': {
+                      padding: '16px',
+                      borderRadius:'55px',  
+                    },
+                  }}
+                  size="small"
+                />
             </div>
          </div>
             <div className={AddStyles.columnTwo}>
                    <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <StaticDatePicker
                       sx={{
-    '& .MuiPickersToolbar-root': {
-      display: 'none',
-    },
-  }}
+                        '& .MuiPickersToolbar-root': {
+                          display: 'none',
+                        },
+                        '& .MuiDialogActions-root':{
+                          display:'none',
+                        }
+                      }}
                       label="Pick an Appointment Date"
                       onChange={(e)=> {
                         const formattedDate = dayjs(e).format("YYYY-MM-DD")                        
@@ -200,6 +223,7 @@ const RescheduleTab = () => {
                         }}
                     //   value={dayjs(appointmentForm?.apptDate)}
                       name="apptDate"
+                      value={dayjs('2026-02-15')}
                       slotProps={{
                         textField: {
                           fullWidth: true,
@@ -207,13 +231,11 @@ const RescheduleTab = () => {
                       }}
                       minDate={dayjs()}
                     />
-                </LocalizationProvider>                      
-                <div className={AddStyles.colTwoSubContainer}>
-                  
-                    <div>
+                </LocalizationProvider>   
+                                   <div>
                         <h3 className={AddStyles.headerText}>SELECT DATE AND TIME</h3>
                         <div className={AddStyles.timeSlotContainer}>
-                            {timeSlots?.map((slot, index)=>(
+                            {timeSlots?.map((slot, index)=>(                              
                             <Button key={slot} 
                             
                                 style={{
@@ -222,8 +244,8 @@ const RescheduleTab = () => {
                                   borderRadius: "6px",
                                   backgroundColor: timeSlotGenerator(slot.value) 
                                     ? 'gray' 
-                                    : (selectedSlot === slot ? '#079042' : '#1976d2'),                              
-                                  color: selectedSlot === slot ? "white": "white",
+                                    : (selectedSlot.value === slot ? '#079042' : '#1976d2'),                              
+                                  color: selectedSlot.value === slot.value ? "white": "white",
                                   cursor: "pointer", 
                                 }}
                              onClick={() =>{
@@ -237,11 +259,38 @@ const RescheduleTab = () => {
                             ))}
 
                         </div>
+                    </div>                   
+                <div className={AddStyles.colTwoSubContainer}>
+                  
+ 
+
+                    <div className={AddStyles.legendContainer}>
+                            <div className={AddStyles.legendItem}>
+                              <div className={AddStyles.legendIndicatorOne}></div>
+                              <p>Booked</p>
+                            </div>
+                            <div className={AddStyles.legendItem}>
+                              <div className={AddStyles.legendIndicatorTwo}></div>
+                              <p>Available</p>
+                            </div>
+                            <div className={AddStyles.legendItem}>
+                              <div className={AddStyles.legendIndicatorThree}></div>
+                              <p>Unavailable</p>
+                            </div>
+                            <div className={AddStyles.legendItem}>
+                              <div className={AddStyles.legendIndicatorFour}></div>
+                              <p>Requested Time</p>
+                            </div>
                     </div>
-                    <div>
-                        <p  className={AddStyles.alertContainer}> Approval may take time depending on therapist availability. You’ll be notified once the new schedule is confirmed. For urgent concerns, please contact the clinic.</p>
+
+                    <div className={AddStyles.alertContainer}>
+                      <IoIosAlert style={{fontSize:'6rem'}} />
+                        <p>  Approval may take time depending on therapist availability. You’ll be notified once the new schedule is confirmed. For urgent concerns, please contact the clinic.</p>
                     </div>
-                    <button type='submit' className={AddStyles.addApptBtn}>Add Appointment</button>
+                    <div className={AddStyles.btnContainer}>
+                      <button type='submit' className={AddStyles.addApptBtn}>Cancel</button>
+                      <button type='submit' className={AddStyles.addApptBtn}>Send Request</button>
+                    </div>
                 </div>
             </div>
         </div>

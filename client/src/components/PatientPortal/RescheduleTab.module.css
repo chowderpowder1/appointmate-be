@@ -2,7 +2,7 @@
     background-color: #FFFFFF;
     padding:2rem;
     border-radius:15px;
-    width:1200px;
+    width:1300px;
     height:fit-content;
 }
 .dataContainer{
@@ -56,8 +56,8 @@
 .columnTwo{
     display:flex;
     gap:1rem;
-    width:70%;
-    /* flex-flow:column; */
+    width:30%;
+    flex-flow:column;
 }
 .colTwoSubContainer{
     display:flex;
@@ -81,8 +81,72 @@
     text-align: center;
     white-space: nowrap;
 } */
+.headerText{
+    color: var(--primary-color);
+    font-weight:500;
+    font-size:1rem;
+    margin-bottom:.5rem;
+}
+.alertContainer{
+    gap:1rem;
+    flex-flow:row;
+    align-items:flex-start;
+    display:flex;
+    background-color: #FFFDDC;
+    padding:1rem;
+    border-radius:15px;
+    border-left: 8px solid #FFF86C;
+}
+.legendContainer{
+    font-size:.8rem;
+}
+.legendIndicator{
+    width: 20px;
+    height:20px;
+    background-color: #079042;
+    border-radius:5px;
+}
+.legendContainer{
+    display:flex;
+    gap:1rem;
+}
+.legendItem{
+    display:flex;
+    gap:.3rem;
+}
+.legendIndicatorOne{
+    width: 20px;
+    height:20px;
+    background-color: #1976D5;
+    border-radius:5px;
+}
+.legendIndicatorTwo{
+    width: 20px;
+    height:20px;
+    background-color: none;
+    border:1px solid #1976D5;
+    border-radius:5px;
+}
+.legendIndicatorThree{
+    width: 20px;
+    height:20px;
+    background-color: #B3B3B3;
+    border-radius:5px;
+}
+.legendIndicatorFour{
+    width: 20px;
+    height:20px;
+    background-color: #FFFDDC;
+    border:1px solid var(--off-black);
+    border-radius:5px;
+}
+.btnContainer{
+    display:flex;
+    gap:1rem;
+    justify-content: flex-end;
+}
 .addApptBtn{
-    position:absolute;
+    /* position:absolute; */
     background-color: #079042;
     color:white;
     width: fit-content;
@@ -92,10 +156,3 @@
     bottom:-10px;
     right:0;
 }
-.headerText{
-    color: var(--primary-color);
-    font-weight:500;
-    font-size:1rem;
-    margin-bottom:.5rem;
-}
-.alertContainer{}
