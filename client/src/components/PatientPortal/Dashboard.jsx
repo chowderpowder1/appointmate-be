@@ -70,7 +70,7 @@ return (
                 
                 <div className={DashboardStyles.divider}></div>
                 <p className={DashboardStyles.infoDataHeader}>Home Address:</p>
-                <p>{patientData.unit}, {patientData.street}, Barangay {patientData.barangay}, {patientData.city}, {patientData.zipcode}</p>
+                <p>{patientData.unit}, {patientData.street}, Barangay {patientData.barangay}, <br/>{patientData.city}, {patientData.zipcode}</p>
                 
                 <div className={DashboardStyles.divider}></div>
                 <p className={DashboardStyles.infoDataHeader}>ZIP Code:</p>

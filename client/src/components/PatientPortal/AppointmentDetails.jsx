@@ -227,8 +227,17 @@ const AppointmentDetails = (apptID) => {
                 name="patientName"
                 value={complaint}
                 onChange={''}
-                
+                fullWidth
+                multiline
+                rows={5}
                 variant="outlined"
+                sx={{
+                  borderRadius:'55px',
+                  '& .MuiInputBase-input': {
+                    padding: '16px',
+                    
+                  },
+                }}
                 size="small"
               />
             </div>

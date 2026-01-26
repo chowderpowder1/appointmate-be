@@ -44,6 +44,7 @@ const PatientProfile = () => {
 
     const handleFileChange = (e) => {
     const file = e.target.files[0];
+
     if (!file) return;
 
     if (file.size > MAX_SIZE_BYTES) {
@@ -69,7 +70,7 @@ const PatientProfile = () => {
         const formData = new FormData();
         formData.append('file', file);
 
-        uploadAvatar(formData)
+        await uploadAvatar(formData)
 
     }
     console.log(userAvatar)
@@ -82,11 +83,10 @@ const PatientProfile = () => {
 
             <div className={ProfileStyles.imageContainer}>
                 <img src={userAvatar} className={ProfileStyles.userPhoto} alt="" />
-                <form onSubmit={handleUpload}>
                     <input 
                         style={{display:'none'}}
                         type="file"
-                        onChange={handleFileChange}
+                        onChange={handleUpload}
                         accept="image/*"
                         name="myAvatar"
                         id="myAvatar"
@@ -97,7 +97,6 @@ const PatientProfile = () => {
                         Upload
                     </button> */}
 
-                </form>
             </div>
             <div className={ProfileStyles.userInfo}>
                 <p className={ProfileStyles.userName}>{userData.firstName} {userData.lastName}</p>

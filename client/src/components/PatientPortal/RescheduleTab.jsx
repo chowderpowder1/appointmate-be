@@ -183,7 +183,11 @@ const RescheduleTab = () => {
             <div className={AddStyles.columnTwo}>
                    <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <StaticDatePicker
-
+                      sx={{
+    '& .MuiPickersToolbar-root': {
+      display: 'none',
+    },
+  }}
                       label="Pick an Appointment Date"
                       onChange={(e)=> {
                         const formattedDate = dayjs(e).format("YYYY-MM-DD")                        
@@ -235,7 +239,7 @@ const RescheduleTab = () => {
                         </div>
                     </div>
                     <div>
-                        
+                        <p  className={AddStyles.alertContainer}> Approval may take time depending on therapist availability. You’ll be notified once the new schedule is confirmed. For urgent concerns, please contact the clinic.</p>
                     </div>
                     <button type='submit' className={AddStyles.addApptBtn}>Add Appointment</button>
                 </div>
