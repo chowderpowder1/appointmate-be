@@ -427,6 +427,7 @@ var payload = {
 };
 
 async function uploadAvatar(req,res){
+    console.log('upload avatar endpoint')
     try{
         if (req?.session?.user || req?.user) {
             const userId = req.session.user.id
