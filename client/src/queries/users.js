@@ -8,7 +8,7 @@ export const useUsers = () => {
     return useQuery({
         queryKey: ['users'],
         queryFn: users,
-        staleTime: 0,            // data always refreshes on mount // 4:27AM remove this if it causes bugs
+        // staleTime: 0,            // data always refreshes on mount // 4:27AM remove this if it causes bugs
     });
 };
 

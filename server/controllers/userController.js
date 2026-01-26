@@ -479,7 +479,7 @@ async function getAvatar(req,res){
         const userId = req.session.user.id
         console.log('User ID requesting Avatar: ',userId)
         const avatarQuery = await dbConnection.query(`SELECT image_url FROM user_avatars where user_id=$1 ORDER BY created_at desc`, [userId])
-        const avatarResult = avatarQuery.rows[0].image_url
+        const avatarResult = avatarQuery?.rows[0]?.image_url || ''
         return res.json(avatarResult);}
         else{
             return res.json({loggedIn:false})

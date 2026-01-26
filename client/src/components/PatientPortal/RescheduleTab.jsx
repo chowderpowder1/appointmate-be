@@ -161,25 +161,38 @@ const RescheduleTab = (appDetails) => {
 
   return (
     <div className={AddStyles.mainContainer}>
+        <h3 style={{marginBottom:'1rem',
+          color:'#1976D2',
+          fontWeight:'500',
+          fontSize:'1.5rem',
+        }}> Reschedule Your Appointment</h3>
+
       <form 
     //   onSubmit={submitFormData}
       >
        <div className={AddStyles.dataContainer}>
-
          <div className={AddStyles.columnOne}>
-            <h3> Reschedule Your Appointment</h3>
             <div className={AddStyles.apptDetailsContainer}>
                 <h4>Your Appointment Details</h4>
-                <p>Date & Time:</p>
-                <p>Jan 26, 2026 9:00 AM</p>
 
-                <p>Physical Therapist:</p>
-                <p>PT Lee Ji-eun</p>
 
-                <p>Payment Method:</p>
-                <p>HMO, Maxicare</p>
-            </div>
-            <div className={AddStyles.rescheduleReasonContainer}>
+                  <div className={AddStyles.apptDetailsItem}>
+                    <p>Session ID:</p>
+                    <p>#21AB8</p>
+                  </div>
+                  <div className={AddStyles.apptDetailsItem}>
+                    <p>Date & Time:</p>
+                    <p>{data.appt_date} - {data.appt_start}</p>
+                  </div>
+                  <div className={AddStyles.apptDetailsItem}>
+                    <p>Therapist:</p>
+                    <p>PT {data.assignedTherapist.charAt(0).toUpperCase() + data.assignedTherapist.slice(1)}</p>
+                  </div>
+                  <div className={AddStyles.apptDetailsItem}>
+                    <p>Payment Method:</p>
+                    <p>{data.mop}</p>
+                  </div>
+                  <div className={AddStyles.rescheduleReasonContainer}>
                 <TextField
                   label="Reason for rescheduling"
                   name="patientName"
@@ -198,12 +211,42 @@ const RescheduleTab = (appDetails) => {
                   }}
                   size="small"
                 />
+            </div> 
+           
             </div>
+            {/* <div className={AddStyles.rescheduleReasonContainer}>
+                <TextField
+                  label="Reason for rescheduling"
+                  name="patientName"
+                  // value={complaint}
+                  onChange={''}
+                  fullWidth
+                  multiline
+                  rows={5}
+                  variant="outlined"
+                  sx={{
+                    
+                    '& .MuiInputBase-input': {
+                      padding: '16px',
+                      borderRadius:'55px',  
+                    },
+                  }}
+                  size="small"
+                />
+            </div> */}
          </div>
             <div className={AddStyles.columnTwo}>
-                   <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <div className={AddStyles.colTwoSubContainer}>
+                <div className={AddStyles.alertContainer}>
+                      <IoIosAlert style={{fontSize:'6rem'}} />
+                        <p>  Approval may take time depending on therapist availability. You’ll be notified once the new schedule is confirmed. For urgent concerns, please contact the clinic.</p>
+                    </div>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <StaticDatePicker
                       sx={{
+                        borderRadius:'15px',
+                        borderLeft:'8px solid #428CD8',
+                        backgroundColor:'#E8F1FB',
                         '& .MuiPickersToolbar-root': {
                           display: 'none',
                         },
@@ -231,8 +274,16 @@ const RescheduleTab = (appDetails) => {
                       }}
                       minDate={dayjs()}
                     />
-                </LocalizationProvider>   
-                                   <div>
+                </LocalizationProvider>
+                
+              </div>
+                             
+
+                <div 
+                style={{backgroundColor:''}}
+                className={AddStyles.colTwoSubContainer}>
+                  
+                    <div>
                         <h3 className={AddStyles.headerText}>SELECT DATE AND TIME</h3>
                         <div className={AddStyles.timeSlotContainer}>
                             {timeSlots?.map((slot, index)=>(                              
@@ -245,7 +296,7 @@ const RescheduleTab = (appDetails) => {
                                   backgroundColor: timeSlotGenerator(slot.value) 
                                     ? 'gray' 
                                     : (selectedSlot.value === slot ? '#079042' : '#1976d2'),                              
-                                  color: selectedSlot.value === slot.value ? "white": "white",
+                                  color: selectedSlot.value === slot ? "white": "white",
                                   cursor: "pointer", 
                                 }}
                              onClick={() =>{
@@ -259,10 +310,7 @@ const RescheduleTab = (appDetails) => {
                             ))}
 
                         </div>
-                    </div>                   
-                <div className={AddStyles.colTwoSubContainer}>
-                  
- 
+                    </div>
 
                     <div className={AddStyles.legendContainer}>
                             <div className={AddStyles.legendItem}>
@@ -283,10 +331,7 @@ const RescheduleTab = (appDetails) => {
                             </div>
                     </div>
 
-                    <div className={AddStyles.alertContainer}>
-                      <IoIosAlert style={{fontSize:'6rem'}} />
-                        <p>  Approval may take time depending on therapist availability. You’ll be notified once the new schedule is confirmed. For urgent concerns, please contact the clinic.</p>
-                    </div>
+                    
                     <div className={AddStyles.btnContainer}>
                       <button type='submit' className={AddStyles.addApptBtn}>Cancel</button>
                       <button type='submit' className={AddStyles.addApptBtn}>Send Request</button>
