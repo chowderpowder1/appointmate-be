@@ -144,3 +144,19 @@ export const useGetDocumentSignedUrl = () => {
         }
     })
 }
+
+export const useRescheduleMyAppt = () => {    
+    return useMutation({
+        mutationFn: async (rescheduleData) => {
+            const res = await axios.patch('http://localhost:8080/appt/patchRescheduleMyAppt', rescheduleData, {withCredentials: true})
+            return res.data
+        },
+        onSuccess: (data) => {
+            console.log('Avatar uploaded successfully')
+        },
+        onError: (error) => {
+            console.log('Failed to upload avatar')
+        }
+    })
+}
+

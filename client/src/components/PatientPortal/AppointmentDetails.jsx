@@ -42,7 +42,7 @@ const AppointmentDetails = (apptID) => {
     if (apptDetailIsLoading || evalDataisLoading) return <div>Loading...</div>;
     if (apptDetailsError || evalDataError) return <div>Error: {apptDetailsError.error}</div>;
 
-    console.log(evalData);
+    console.log(apptDetails);
 
     const cancelApptSubmit = () =>{
         updateApptMutation(apptUpdatePayload)
@@ -113,7 +113,7 @@ const AppointmentDetails = (apptID) => {
 
       {/* Reschedule Modal */}
         <Modal open={isRescheduleOpen} onClose={() => setIsRescheduleOpen(false)}> 
-                    <RescheduleTab appDetails={apptDetails} />
+                    <RescheduleTab id={apptID} evalData={evalData} apptDetails={apptDetails} />
         {/* <div className={AppointmentStyles.confirmationCancelModal}>
                 <RiCalendarScheduleFill className={AppointmentStyles.rescheduleModalIcon} />
                 <div className={AppointmentStyles.cancelModalTextBox}>

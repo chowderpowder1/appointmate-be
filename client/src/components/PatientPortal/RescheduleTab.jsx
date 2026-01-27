@@ -22,7 +22,7 @@ import dayjs from "dayjs";
 
 
 // Tanstack Imports
-import { useUsers } from '../../queries/users'
+import { useUsers, useRescheduleMyAppt } from '../../queries/users'
 import { useGetBookedDates } from '../../queries/apptData'
 import { useGetAllPatients, useGetServicesList, useGetTherapists, useGetPatientsPendingAppt, useUpdateAppt} from '../../queries/useEmployees'
 
@@ -30,86 +30,93 @@ import { ToastContainer, toast } from 'react-toastify';
 // Imports fixed time slots of AWP
 import {timeSlots} from '../../features/timeSlots'
 
-const RescheduleTab = (appDetails) => {
-    console.log(timeSlots)
-//     const { mutate, data, isSuccess, isError } = useUpdateAppt();    
+const RescheduleTab = ({id, evalData, apptDetails}) => {
+    console.log(evalData)
+    const { mutate, data, isSuccess, isError } = useRescheduleMyAppt();    
+    const [complaint, setComplaint] = useState('')
 //     const { data: therapistData, isLoading: therapistDataIsLoading, error: therapistDataError} = https://www.facebook.com/groups/useGetTherapists();
-//     const [ selectedTherapist, setSelectedTherapist] = useState(null);
+    const [ selectedTherapist, setSelectedTherapist] = useState(null);
     
 //     const {data : userData, isLoading: userDataIsLoading, error: userDataError} = useUsers();
 //     const {data : servicesData, isLoading: servicesDataIsLoading, error: servicesDataError} = useGetServicesList();
 //     const {data : allPatientsData, isLoading: allPatientsDataIsLoading, error: allPatientsDataError} = useGetAllPatients();
-//     const { data: bookedApptData, isLoading: bookedApptDataisLoading, error: bookedApptDataError, refetch: refetchBookedApptData} = useGetBookedDates(selectedTherapist);
-    const data = appDetails.appDetails
-    console.log(data)
+    const { data: bookedApptData, isLoading: bookedApptDataisLoading, error: bookedApptDataError, refetch: refetchBookedApptData} = useGetBookedDates(selectedTherapist);
+
+    const apptID = id;
+    const apptData = apptDetails;
+    const eData = evalData.evalData;
+    console.log(apptData)
     const [ disabledSlots, setDisabledSlots] = useState([]);
     const [ disabledDates, setDisabledDates] = useState([]);
     const [ selectedSlot, setSelectedSlot] = useState({ label: '11:30 AM', value: '11:30' });
     const [ appointmentForm, setAppointmentForm] = useState({
-        patientID:'',
-        apptId:'',
-        apptDate: '',
-        apptTime:'',
-        apptTherapist: '',
+        apptId:id,
+        complaint:evalData?.complaint,
+        patientID:apptData.patientID,
+        apptId:apptID,
+        apptDate: apptData.appt_date,
+        apptTime:apptData.appt_start,
+        apptTherapist: apptData.therapistID,
         service:'',
-        mop:'',
+        mop:apptData.mop,
     });
 //     console.log(appointmentForm)
 //     const { data: patientsPendingAppt =[], isLoading: patientsPendingApptIsLoading, error: patientsPendingApptError} = useGetPatientsPendingAppt(appointmentForm.patientID, {enabled: !!appointmentForm.patientID});
     useEffect(()=>{
-    },[])
+      setSelectedTherapist(apptDetails?.therapistID)
+      setComplaint(evalData?.complaint)
+    },[selectedTherapist])
 
-    const handleSelectedSlot = (timeSlot) =>{
+ const handleSelectedSlot = (timeSlot) =>{
       console.log(selectedSlot)
         setSelectedSlot(timeSlot)
-    }
-
-//     const inputHandler = (e) => {
-//     const {name, value} = e.target;
-//     setAppointmentForm( prev => ({
-//       ...prev, 
-//       [name] : value
-//     }))
-//     calculateDisabledSlots()
-//   }
-//     useEffect(()=>{
+ }
+    const inputHandler = (e) => {
+    const {name, value} = e.target;
+    setAppointmentForm( prev => ({
+      ...prev, 
+      [name] : value
+    }))
+    calculateDisabledSlots()
+  }
+    useEffect(()=>{
     
-//         const newTimeSlots = []
-//         const disabledDates = []
-//         console.log(appointmentForm)
-//         setDisabledSlots('')
-//         refetchBookedApptData()
-//         if(bookedApptData?.appointments){
-//           for ( const [key, val] of Object.entries(bookedApptData.appointments)){
-//             console.log( 'key value pair for disabled slots:', key, val);
-//             if ( (appointmentForm.apptDate).toString() == key){
-//               // console.log(key)
-//               // console.log(val)
-//               val.forEach((timeSlot)=> {
-//                 // console.log(timeSlot)
-//                 // console.log(newTimeSlots);
-//                 newTimeSlots.push(timeSlot)
-//                 setDisabledSlots(newTimeSlots);
-//                 // console.log(disabledSlots);
-//               })
-//               // 
-//             }
-//           }
+        const newTimeSlots = []
+        const disabledDates = []
+        console.log(appointmentForm)
+        setDisabledSlots('')
+        refetchBookedApptData()
+        if(bookedApptData?.appointments){
+          for ( const [key, val] of Object.entries(bookedApptData.appointments)){
+            console.log( 'key value pair for disabled slots:', key, val);
+            if ( (appointmentForm.apptDate).toString() == key){
+              // console.log(key)
+              // console.log(val)
+              val.forEach((timeSlot)=> {
+                // console.log(timeSlot)
+                // console.log(newTimeSlots);
+                newTimeSlots.push(timeSlot)
+                setDisabledSlots(newTimeSlots);
+                // console.log(disabledSlots);
+              })
+              // 
+            }
+          }
     
-//           for (var key in bookedApptData.appointments){
-//             if(bookedApptData.appointments.hasOwnProperty(key)){
-//               if(bookedApptData.appointments[key].length > 10){
-//                 console.log(key)
-//                 disabledDates.push(dayjs(key).format('YYYY-MM-DD'))
-//               }
-//               // console.log(key + '=>' + bookedApptData.appointments[key].length)
-//             }
-//           }
-//           setDisabledDates(disabledDates)
-//         }
-//         // bookApptMutation.mutate(appointmentForm)
-//     },[appointmentForm.apptDate, bookedApptData, selectedTherapist, data, isSuccess])
-//             console.log(bookedApptData)
+          for (var key in bookedApptData.appointments){
+            if(bookedApptData.appointments.hasOwnProperty(key)){
+              if(bookedApptData.appointments[key].length > 10){
+                console.log(key)
+                disabledDates.push(dayjs(key).format('YYYY-MM-DD'))
+              }
+              // console.log(key + '=>' + bookedApptData.appointments[key].length)
+            }
+          }
+          setDisabledDates(disabledDates)
+        }
+        // bookApptMutation.mutate(appointmentForm)
+    },[appointmentForm.apptDate, bookedApptData, selectedTherapist, data, isSuccess])
+            console.log(bookedApptData)
 
 
     // Returns boolean values for disabled timeslots 
@@ -120,45 +127,67 @@ const RescheduleTab = (appDetails) => {
         const day = dayjs().format('YYYY-MM-DD')
         // console.log(day)
 
-        // if(appointmentForm.apptDate <= day && timeSlot <= now){
-        //   return true;
-        // }
+        if(appointmentForm.apptDate <= day && timeSlot <= now){
+          return true;
+        }
         return disabledSlots.includes(timeSlot)
     }
 
-//     // Tanstack Error Checking
-//     if (userDataIsLoading || bookedApptDataisLoading || allPatientsDataIsLoading ||servicesDataIsLoading || therapistDataIsLoading || patientsPendingApptIsLoading) return <div>Loading...</div>;
-//     if (userDataError || bookedApptDataError || allPatientsDataError || servicesDataError || therapistDataError || patientsPendingApptError) return <div>Error: {bookedApptDataError.message || userDataError.message}</div>;
+    // Tanstack Error Checking
+const isLoading = [
+  // userDataIsLoading,
+  bookedApptDataisLoading,
+  // allPatientsDataIsLoading,
+  // servicesDataIsLoading,
+  // therapistDataIsLoading,
+  // patientsPendingApptIsLoading,
+].some(Boolean);
+
+if (isLoading) return <div>Loading...</div>;
+    
+const errors = [
+  // userDataError,
+  bookedApptDataError,
+  // allPatientsDataError,
+  // servicesDataError,
+  // therapistDataError,
+  // patientsPendingApptError,
+].filter(Boolean);
+
+if (errors.length > 0) {
+  return <div>Error: {errors[0].message}</div>;
+}
+
 //     // const x = Object.keys(allPatientsData.allPatients).map((key)=>{
 //     //     console.log(allPatientsData.allPatients[key].patientName)
 //     // })
 
-//     const submitFormData = async (e) => {
-//     e.preventDefault();
-//     // console.log("Payload Structure before send: "+ JSON.stringify(appointmentForm))
-//     // console.log(appointmentForm)
-//     mutate(appointmentForm, {
-//         onSuccess: (data) => {
-//             toast.success('Patients loaded successfully!');
-//         },
-//         onError: (error) => {
-//             toast.error('Failed to load patients');
-//         }
-//     })
-//     setSelectedSlot('')
-    
-//     setAppointmentForm({
-//         patientID:'',
-//         patientName: '',
-//         apptDate: '',
-//         apptTime:'',
-//         apptTherapist: '',
-//         service:'',
-//         mop:'',
-//     })
-//   }
-//     console.log(patientsPendingAppt)
+    const submitFormData = async (e) => {
+    e.preventDefault();
 
+    mutate(appointmentForm, {
+        onSuccess: (data) => {
+            toast.success('Reschedule Request sent!');
+        },
+        onError: (error) => {
+            toast.error('There was a problem with your request');
+        }
+    })
+    setSelectedSlot('')
+    
+    setAppointmentForm({
+      complaint:evalData?.complaint,
+      patientID:apptData.patientID,
+      apptId:apptID,
+      apptDate: apptData.appt_date,
+      apptTime:apptData.appt_start,
+      apptTherapist: apptData.therapistID,
+      service:'',
+      mop:apptData.mop,
+    })
+  }
+//     console.log(patientsPendingAppt)
+console.log(bookedApptData)
   return (
     <div className={AddStyles.mainContainer}>
         <h3 style={{marginBottom:'1rem',
@@ -168,7 +197,7 @@ const RescheduleTab = (appDetails) => {
         }}> Reschedule Your Appointment</h3>
 
       <form 
-    //   onSubmit={submitFormData}
+      onSubmit={submitFormData}
       >
        <div className={AddStyles.dataContainer}>
          <div className={AddStyles.columnOne}>
@@ -182,22 +211,22 @@ const RescheduleTab = (appDetails) => {
                   </div>
                   <div className={AddStyles.apptDetailsItem}>
                     <p>Date & Time:</p>
-                    <p>{data.appt_date} - {data.appt_start}</p>
+                    <p>{apptData.appt_date} - {apptData.appt_start}</p>
                   </div>
                   <div className={AddStyles.apptDetailsItem}>
                     <p>Therapist:</p>
-                    <p>PT {data.assignedTherapist.charAt(0).toUpperCase() + data.assignedTherapist.slice(1)}</p>
+                    <p>PT {apptData.assignedTherapist.charAt(0).toUpperCase() + apptData.assignedTherapist.slice(1)}</p>
                   </div>
                   <div className={AddStyles.apptDetailsItem}>
                     <p>Payment Method:</p>
-                    <p>{data.mop}</p>
+                    <p>{apptData.mop}</p>
                   </div>
                   <div className={AddStyles.rescheduleReasonContainer}>
                 <TextField
                   label="Reason for rescheduling"
-                  name="patientName"
-                  // value={complaint}
-                  onChange={''}
+                  name="complaint"
+                  value={appointmentForm.complaint}
+                  onChange={inputHandler}
                   fullWidth
                   multiline
                   rows={5}
@@ -295,8 +324,8 @@ const RescheduleTab = (appDetails) => {
                                   borderRadius: "6px",
                                   backgroundColor: timeSlotGenerator(slot.value) 
                                     ? 'gray' 
-                                    : (selectedSlot.value === slot ? '#079042' : '#1976d2'),                              
-                                  color: selectedSlot.value === slot ? "white": "white",
+                                    : (selectedSlot.value === slot.value ? '#079042' : '#1976d2'),                              
+                                  color: selectedSlot.value === slot.value ? "white": "white",
                                   cursor: "pointer", 
                                 }}
                              onClick={() =>{

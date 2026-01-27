@@ -68,7 +68,7 @@ const PatientAppointment = () => {
   if (  myAppointmentsDataIsLoading ) return <div>Loading...</div>;
   if (  myAppointmentsDataError ) return <div>Error: {myAppointmentsDataError.message}</div>;
   const apptData = myAppointmentsData.userAppointments[0]
-
+  console.log(apptData)
   const nextApptData =myAppointmentsData.userAppointments[0];
   return (
     <div className={TreatmentStyles.container}>
@@ -188,7 +188,7 @@ const PatientAppointment = () => {
                   <h4 className={TreatmentStyles.sessionText}>{nextApptData?.therapist_name}</h4>
                 </div>
 
-                <Link to={`appointment-details/${apptData.appt_id}`} className={TreatmentStyles.viewBtn}> <FaExternalLinkAlt/> View Appointment Details</Link>
+                <Link to={`appointment-details/${apptData?.appt_id}`} className={TreatmentStyles.viewBtn}> <FaExternalLinkAlt/> View Appointment Details</Link>
               </div>
         </div>
               <RescheduleStatus/>

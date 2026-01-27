@@ -262,8 +262,16 @@ async function getMyRecords(req, res){
             const activeApptQuery = await dbConnection.query(`SELECT appt_id from awp_appt_tbl where patient_id=$1 ORDER BY CREATED_AT desc limit 1;`,[patientId])
             const activeAppt = activeApptQuery.rows[0].appt_id
 
+            if (activeApptQuery.rows === 0){
+                res.json({message:'No Session Yet.'})
+            }
+
             const evalQuery = await dbConnection.query(`SELECT * from awp_ptneval_tbl where patient_id=$1`,[patientId])
             const evalData = evalQuery.rows[0]
+
+            if (evalQuery.rows === 0){
+                res.json({message:'No Patient Evaluation Yet.'})
+            }
 
             const medHistoryQuery = await dbConnection.query(`SELECT * from awp_ptnmedhistory_tbl where patient_id=$1`,[patientId])
             const medhistoryData = medHistoryQuery.rows[0]
@@ -558,6 +566,7 @@ async function getMyDocumentsList(req,res){
 
 async function getDocumentSignedUrl(req,res){
     console.log('get Document Signed Url Endoint')
+    
     try{
         if (req?.session?.user || req?.user) {
         const userId = req.session.user.id

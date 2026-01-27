@@ -34,7 +34,7 @@ return (
 
           <div className={DashboardStyles.profileLeft}>
             <div className={DashboardStyles.patientPhoto}>
-              <img src={userAvatar} className={DashboardStyles.userPhoto} alt="" />
+              <img src={userAvatar || MockUser} className={DashboardStyles.userPhoto} alt="" />
             </div>
 
             <h2 className={DashboardStyles.PatientName}>{userData.firstName} {userData.lastName}</h2>

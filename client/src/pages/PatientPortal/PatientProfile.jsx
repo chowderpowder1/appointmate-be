@@ -83,7 +83,7 @@ const PatientProfile = () => {
         <div className={ProfileStyles.userContainer}>
 
             <div className={ProfileStyles.imageContainer}>
-                <img src={userAvatar} className={ProfileStyles.userPhoto} alt="" />
+                <img src={userAvatar || MockUser} className={ProfileStyles.userPhoto} alt="" />
                     <input 
                         style={{display:'none'}}
                         type="file"

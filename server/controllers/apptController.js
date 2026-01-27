@@ -16,13 +16,20 @@ async function getBookedDates (req, res) {
     // console.log(typeof req.query.therapistId)
     try{
         const selectedTherapist = req.query?.therapistId
+        console.log('Selected Therapist', selectedTherapist)
         const therapistIdQuery = await dbConnection.query(`SELECT pthera_id from awp_pthera_tbl WHERE user_id=$1`,[selectedTherapist])
-        const therapistId= therapistIdQuery?.rows[0]?.pthera_id
+        let therapistId;
+        if (therapistIdQuery.rows.legnth === 1){
+            therapistId= therapistIdQuery?.rows[0]?.pthera_id
+        } else{
+            therapistId= req.query?.therapistId
+        }
+
         
 
         const slots = await dbConnection.query(`select appt_date, appt_start from awp_appt_tbl WHERE therapist_id= $1 AND appt_status != 'cancelled' AND appt_start >= (CURRENT_DATE - INTERVAL '1 days') ORDER BY appt_start;`, [therapistId])
         const bookedSlots = {}
-        
+        // console.log('slots', slots.rows)
         slots.rows.forEach(row => {
             const tzConvertedDate = dayjs(row.appt_start).tz("Asia/Manila").format("YYYY-MM-DD HH:mm")          
               const date = tzConvertedDate.split(' ')[0];
@@ -424,4 +431,49 @@ async function getTherapistAppointments(req,res){
         res.status(404).send('idk')
     }
 }
-export {getBookedDates, bookAppointment, getApptOverview, getAllApptData, updateApptStatus, getPatientsList, getApptDetails, patientUpdateApptStatus, getTherapistAppointments};
+
+async function patchRescheduleMyAppt (req, res){
+    console.log('patient rechedule patch')
+    console.log(req.body)
+    try{
+        // console.log("Appointment Booking data: "+JSON.stringify(req.body));
+        const userId = req.session.user.id
+        const patientUserId = req.body.patientID;
+
+        const therapistId= req.body.therapistID;
+        
+        
+        const {           
+            apptDate,
+            apptId,
+            apptTime,
+            apptTherapist,
+            service,
+            mop,
+            hmoProvider,
+        } = req.body
+
+        // const therapistQuery = await dbConnection.query(`SELECT * from awp_pthera_tbl where pthera_id=$1`,[apptTherapist])
+        // const therapistResult = therapistQuery.rows[0]
+        // console.log(therapistResult)
+        const formattedDate=dayjs(apptDate).format('YYYY-MM-DD');
+        console.log()
+        // return res.json({message:'cut'})
+        const calculatedApptStartTime = dayjs(`${formattedDate}T${apptTime}`); 
+        console.log('Calculated Start', dayjs(calculatedApptStartTime).format('YYYY-MM-DD'))
+        return res.json({message:'cut'})
+        const calculatedApptEndTime = (dayjs(calculatedApptStartTime).add(30, 'minute')).format();
+        
+        const result = await dbConnection.query(`UPDATE awp_appt_tbl SET appt_date=$1, appt_start=$2, appt_end=$3, appt_status=$4, mode_of_payment=$5 WHERE appt_id=$6 ;`,[ apptDate, calculatedApptStartTime, calculatedApptEndTime, 'reschedule',mop, req.body.apptId.apptId])
+            console.log('Query Status:', result.rowCount)
+        }
+    
+    catch(err){
+        console.log(err);
+        res.send(err);
+    }
+
+}
+
+
+export {patchRescheduleMyAppt, getBookedDates, bookAppointment, getApptOverview, getAllApptData, updateApptStatus, getPatientsList, getApptDetails, patientUpdateApptStatus, getTherapistAppointments};
