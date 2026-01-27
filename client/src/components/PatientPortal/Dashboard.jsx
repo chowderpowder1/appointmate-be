@@ -14,6 +14,8 @@ import { FaPhoneAlt } from "react-icons/fa";
 import { IoMdMail } from "react-icons/io";
 import { FaExternalLinkAlt } from "react-icons/fa";
 
+import { useGetMyDocumentsList } from '../../queries/users.js'
+
 // axios fetch user data 
 import { useUsers, usePatientData, useGetAvatar } from '../../queries/users.js'
 
@@ -21,12 +23,13 @@ import { useUsers, usePatientData, useGetAvatar } from '../../queries/users.js'
 const Dashboard = () => {
     const {data : userData, isLoading: userDataIsLoading, error: userDataError} = useUsers();
     const {data : patientData, isLoading: patientDataIsLoading, error: patientDataError} = usePatientData();
+    const {data : documentList, isLoading: documentListIsLoading, error: documentListError} = useGetMyDocumentsList();
   
     const {data : userAvatar, isLoading: userAvatarIsLoading, error: userAvatarError} = useGetAvatar();
 
-    if (patientDataIsLoading || userDataIsLoading || userAvatarIsLoading ) return <div>Loading...</div>;
-    if (patientDataError || userDataError || userAvatarError) return <div>Error: {patientDataError.message}</div>;
-
+    if (patientDataIsLoading || userDataIsLoading || userAvatarIsLoading || documentListIsLoading ) return <div>Loading...</div>;
+    if (patientDataError || userDataError || userAvatarError || documentListError) return <div>Error: {patientDataError.message}</div>;
+  console.log(documentList)
 return (
     <div className={DashboardStyles.container}>
       <div className={`${DashboardStyles.columnOne} ${DashboardStyles.column}`}>
@@ -90,46 +93,56 @@ return (
           </div>
       </div>
 
-      <div className={`${DashboardStyles.columnTwo} ${DashboardStyles.column}`}>
-        <DatePicker/>
-        <div className={`${DashboardStyles.progressContainer} ${DashboardStyles.miniVerticalStepperContainer}`}>
+      {/* <div className={`${DashboardStyles.columnTwo} ${DashboardStyles.column}`}> */}
+        {/* <DatePicker/> */}
+        {/* <div className={`${DashboardStyles.progressContainer} ${DashboardStyles.miniVerticalStepperContainer}`}>
           <h1 className={DashboardStyles.subHeader}>Therapy Progress</h1>
           <p>Session Breakdown</p>
           <MiniVerticalStepper/>
         </div>
-      </div>
+      </div> */}
 
       <div className={`${DashboardStyles.columnThree} ${DashboardStyles.column}`}>
-
+{/* 
         <div className={DashboardStyles.progressContainer}>
           <h2 className={DashboardStyles.smallHeader}>Notifications</h2>
-        </div>
+        </div> */}
 
         <div className={`${DashboardStyles.progressContainer} ${DashboardStyles.documentsContainer}`}>
           <h2 className={DashboardStyles.smallHeader}>Files/Documents</h2>
 
           <div className={DashboardStyles.documentRowContainer}>
-            <div className={DashboardStyles.documentRow}>
-              <div className={DashboardStyles.documentIcon}><CgNotes/></div>
-              <div className={DashboardStyles.documentRowSubcontainer}>
-                <p >MRI_LUMBAR.pdf</p>
-                <p>1.3mb</p>
-                <p>21 May 2025</p>
-              </div>
-            </div>
-            <div className={DashboardStyles.documentRow}>
-              <div className={DashboardStyles.documentIcon}><CgNotes/></div>
-              <div className={DashboardStyles.documentRowSubcontainer}>
-                <p >MRI_LUMBAR.pdf</p>
-                <p>1.3mb</p>
-                <p>21 May 2025</p>
-              </div>
-            </div>
-          </div>
+  {documentList && documentList.length > 0 ? (
+    documentList.map((doc) => (
+      <div key={doc.ptn_doc_id} className={DashboardStyles.documentRow}>
+        <div className={DashboardStyles.documentIcon}>
+          <CgNotes/>
+        </div>
+        <div className={DashboardStyles.documentRowSubcontainer}>
+          <p>{doc.file_name}</p>
+          <p>
+            {doc.upload_date 
+              ? new Date(doc.upload_date).toLocaleDateString('en-GB', {
+                  day: '2-digit',
+                  month: 'short',
+                  year: 'numeric'
+                }).toUpperCase()
+              : 'N/A'
+            }
+          </p>
+        </div>
+      </div>
+    ))
+  ) : (
+    <div className={DashboardStyles.noDocuments}>
+      <p>No documents available</p>
+    </div>
+  )}
+</div>
           
         </div>
 
-        <div className={DashboardStyles.progressContainer}>
+        {/* <div className={DashboardStyles.progressContainer}>
           <h2 className={DashboardStyles.smallHeader}>Session Notes</h2>
           
            <div className={DashboardStyles.documentRowContainer}>
@@ -151,7 +164,7 @@ return (
             </div>
           </div>
           
-        </div>
+        </div> */}
       </div>
 
     </div>

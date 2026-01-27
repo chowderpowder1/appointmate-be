@@ -1,7 +1,7 @@
 .mainContainer{
     display:flex;
     flex-flow:column;
-    width:100%;
+    width:70%;
     margin-top:1rem;
 }
 .row{

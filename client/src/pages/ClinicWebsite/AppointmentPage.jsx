@@ -42,7 +42,7 @@ import AwValenzuela from '../../assets/AwValenzuela.jpg'
 import axios from 'axios';
 import { useUsers } from '../../queries/users'
 import { useGetTherapists } from '../../queries/useEmployees'
-import { useGetBookedDates, useBookAppt } from '../../queries/apptData'
+import { useGetBookedDates, usePatientBookAppt } from '../../queries/apptData'
 
 // Imports fixed time slots of AWP
 import {timeSlots} from '../../features/timeSlots'
@@ -110,7 +110,7 @@ const AppointmentPage = () => {
             { Hmo: 'wellCare' }
   ]
   const [ selectedTherapist, setSelectedTherapist] = useState(null);
-  const bookApptMutation = useBookAppt()
+  const bookApptMutation = usePatientBookAppt()
   const {data : userData, isLoading: userDataIsLoading, error: userDataError} = useUsers();
 
   const { data: therapistData, isLoading: therapistDataIsLoading, error: therapistDataError} = useGetTherapists();
@@ -182,8 +182,8 @@ useEffect(()=>{
       }
       setDisabledDates(disabledDates)
     }
-  bookApptMutation.mutate(appointmentForm)
-},[appointmentForm.apptDate, bookedApptData])
+  // bookApptMutation.mutate(appointmentForm)
+},[appointmentForm, bookedApptData])
 
   const toggleTab = (index) => {
     setActiveTab(index);
@@ -275,31 +275,28 @@ useEffect(()=>{
                 justifyContent:'space-between'
                 }}>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DatePicker
-                  
-                    label="Pick an Appointment Date"
-                    onChange={(e)=> {
-                      const formattedDate = dayjs(e).format("YYYY-MM-DD")                        
-                      inputHandler({target: { name: 'apptDate', value: formattedDate}})                    
-                    }}    
-                    shouldDisableDate={(day)=> {
-                        const formattedDate = day.format("YYYY-MM-DD")                        
-                        return disabledDates.includes(formattedDate)    
-                      }}
-                    value={dayjs(appointmentForm.apptDate)}
-                    name="apptDate"
-                    slotProps={{
-                      textField: {
-                        fullWidth: true,
-                      },
-                    }}
-                    minDate={dayjs()} // prevents selecting future dates
-                    // shouldDisableDate={(day)=> {
-                    //   const formatted= day.format("YYYY-MM-DD")
-                    //   return disabledDates.has(formatted)
-                    // }}
-                  />
-                    
+<DatePicker
+  label="Pick an Appointment Date"
+  onChange={(e)=> {
+    const formattedDate = dayjs(e).format("YYYY-MM-DD")                        
+    inputHandler({target: { name: 'apptDate', value: formattedDate}})                    
+  }}    
+  shouldDisableDate={(day)=> {
+    const formattedDate = day.format("YYYY-MM-DD")
+    const dayOfWeek = day.day() // 0=Sunday, 1=Monday, ..., 4=Thursday, 5=Friday, 6=Saturday
+    
+    // Disable if date is in disabledDates OR if it's Thursday (4) or Friday (5)
+    return disabledDates.includes(formattedDate) || dayOfWeek === 4 || dayOfWeek === 5
+  }}
+  value={dayjs(appointmentForm.apptDate)}
+  name="apptDate"
+  slotProps={{
+    textField: {
+      fullWidth: true,
+    },
+  }}
+  minDate={dayjs()} // prevents selecting past dates
+/>
                     {/* Time Slot Picker */}
                 <FormControl sx={{flexDirection:'row', gap:'1rem'}} required fullWidth>
                 <InputLabel sx={{width:'300px'}} id="demo-simple-select-label">Pick a time slot</InputLabel>
@@ -455,7 +452,7 @@ required
 
                 {branchData.map((slide, index)=>(
                   <div key={slide.id} className={`${AppointmentStyles.branchSlide} ${ activeTab === index ? `${AppointmentStyles.branchSlideActive}` : ''}`}>
-                    <h1 className={AppointmentStyles.branchTitle}>{slide.branchName} Branch</h1>
+                    <h1 className={AppointmentStyles.branchTitle}>Clinic Location</h1>
                     
 
                     <div className={AppointmentStyles.branchInfoPanel}>
@@ -483,17 +480,24 @@ required
                       </div>
 
                     <div className={AppointmentStyles.branchHours}>
-                      <p>Opening Hours</p>
+                      <p style={{fontSize:"1.2rem ", fontWeight:'600'}}>Opening Hours</p>
                       <div className={AppointmentStyles.branchHoursRow}>
-                        <p>Mon-Tues</p>
-                        <p>6am - 10pm </p>
+                        <p>Monday - Wednesday</p>
+                        <p>8am - 5pm </p>
                       </div>
 
                       <div className={AppointmentStyles.divider}></div>
                       <div className={AppointmentStyles.branchHoursRow}>
-                        <p>Mon-Tues</p>
-                        <p>6am - 10pm </p>
+                        <p>Thursday - Friday</p>
+                        <p>Closed </p>
                       </div>
+                      <div className={AppointmentStyles.divider}></div>
+
+                      <div className={AppointmentStyles.branchHoursRow}>
+                        <p>Sat-Sun</p>
+                        <p>8am - 5pm </p>
+                      </div>
+
 
                       <div className={AppointmentStyles.divider}></div>
                       

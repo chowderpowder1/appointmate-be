@@ -1,13 +1,14 @@
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
-export const usephCities = () => {
+export const usephCities = (regionCode) => {
     return useQuery({
-        queryKey:['cities'],
+        queryKey: ['cities', regionCode],
         queryFn: async () => {
-            const res = await axios
-            .get('https://psgc.gitlab.io/api/cities/');
+            // ✅ Changed from .get`` to .get()
+            const res = await axios.get(`https://psgc.gitlab.io/api/regions/${regionCode}/cities-municipalities/`);
             return res.data;
         },
+        enabled: !!regionCode
     })
 }

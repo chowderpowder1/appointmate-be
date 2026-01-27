@@ -32,7 +32,7 @@ const Attachments = () => {
           console.log(data.url)
           window.open(data.url, '_blank');
         }catch(err){
-          console.error('Download Failed:', error)
+          console.error('Download Failed:', err)
         }
     }
 
@@ -68,7 +68,7 @@ const Attachments = () => {
 
     if (documentListIsLoading) return <div>Loading...</div>;
     if (documentListError) return <div>Error: {documentListError.message}</div>;
-
+    console.log(documentList)
   return (
     <div styles={{width:'100%'}} className={AttachmentStyles.attachmentContainer}>
         <div className={AttachmentStyles.attachmentTitleContainer}>
@@ -116,7 +116,7 @@ const Attachments = () => {
               className={AttachmentStyles.downloadBtnContainer}
               disabled={isPending}
               ><HiOutlineDownload/></button>
-              <div className={AttachmentStyles.removeBntContainer}><FaTrash/></div>
+              {/* <div className={AttachmentStyles.removeBntContainer}><FaTrash/></div> */}
               </span>
           </div>
         ))}

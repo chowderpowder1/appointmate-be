@@ -25,7 +25,7 @@ const StepOne = () => {
 
     const {data : userData, isLoading: userDataIsLoading, error: userDataError} = useUsers();
     const {formData, setFormData} = useAppContext();
-  
+    const [religion, setReligion] = useState('');
     const fileInputRef = useRef();
     const [tempDob, setTempDob] = useState();
     const handleClick = () => {
@@ -102,6 +102,9 @@ const StepOne = () => {
 
             <h1 className={OneStyles.header}>Company Information</h1>
             <TextField onChange={handleInputChange('contactInfo')} id="outlined-basic" value={formData.contactInfo.employer} label="Enter your Company" variant="outlined" name="employer" />
+
+            <h1 className={OneStyles.header}>Religion</h1> 
+             <TextField name='religion' value={formData.contactInfo.religion} onChange={handleInputChange('contactInfo')} required id="outlined-required" label="Religion" fullWidth/>
         </div>
 
         <div className={OneStyles.rightContainer}>

@@ -58,7 +58,7 @@ const checkNestedEmpty = (obj) => {
         
          {currentStep !== numberOfSteps && <div className={OnboardingStyles.btnContainer}>
             <Button variant="contained" onClick={prevBtn}>Previous</Button>
-            <Button  disabled={currentStep === 3 && checkNestedEmpty(formData)}
+            <Button 
             variant="contained" onClick={()=>{
               nextBtn()
               }}>{currentStep != (numberOfSteps-1) ? 'Next' : 'Submit'}</Button>

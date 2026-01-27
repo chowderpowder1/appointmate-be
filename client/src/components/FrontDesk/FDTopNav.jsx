@@ -12,6 +12,15 @@ const FDTopNav = () => {
   
   if (userDataIsLoading) return <div>Loading...</div>;
   if (userDataError) return <div>⚠ Error: {userDataError.message}</div>;
+  const handleLogout = async (e) => {
+        try{
+            localStorage.clear();
+            const logoutStatus = await axios.post('http://localhost:8080/auth/logout', {}, { withCredentials: true } )
+            redirect('/login');
+        } catch(err){
+            console.log('Logout Failed: '+ err);
+        }
+    }
   return (
     <div className={NavStyles.main}>
       <h1>Appointment and Patient Record Management System</h1>

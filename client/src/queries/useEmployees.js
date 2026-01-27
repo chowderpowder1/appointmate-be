@@ -257,6 +257,20 @@ export const useGetApptDocuments = (id) => {
     })
 }
 
+export const useGetTherapistAssignedDocuments = () => {
+    return useQuery({
+        queryKey:['getAssignedDocuments'],
+        queryFn: async () => {
+            const res = await axios.get(`http://localhost:8080/clinic/getTherapistAssignedDocuments`, 
+                {
+                    withCredentials: true
+                }
+            )
+            return res.data;
+        }
+    })
+}
+
 export const usePatchReschedule = () => {
 
     return useMutation({

@@ -39,7 +39,7 @@ const StepComplete = () => {
     altNumber:formData.emergencyInfo.altNumber,
   },
   };
-
+console.log(payload)
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
 

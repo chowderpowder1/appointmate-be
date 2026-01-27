@@ -5,12 +5,14 @@ import { CgProfile } from "react-icons/cg";
 import { Link, NavLink, useNavigate } from 'react-router'
 import MockUser from '../../assets/aw_mock-px.png'
 import { IoMdLogOut } from "react-icons/io";
+import axios from 'axios';
 
 // Tanstack
 import { useUsers } from '../../queries/users'
 
 const TherapistNavBar = () => {
   const { data: userData, isLoading: userDataIsLoading, error: userDataError} = useUsers();
+      const redirect = useNavigate();
   
       const handleLogout = async (e) => {
         try{

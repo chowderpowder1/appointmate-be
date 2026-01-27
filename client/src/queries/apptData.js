@@ -36,6 +36,26 @@ export const useBookAppt = () => {
             console.log('Failed to book appointment', err)
         }
     })
+}
+
+export const usePatientBookAppt = () => {
+
+    const queryClient = useQueryClient(); 
+
+    return useMutation({
+        mutationFn: async (appData) => {
+            const res = await axios.post('http://localhost:8080/appt/bookAppointment', appData, {withCredentials: true})
+
+        return res.data;
+        }, 
+        onSuccess: () => {
+            console.log('Appointment Booked Successfully')
+            queryClient.invalidateQueries(['apptBookedDates']);
+        },
+        onError: () => {
+            console.log('Failed to book appointment', err)
+        }
+    })
 
 }
 

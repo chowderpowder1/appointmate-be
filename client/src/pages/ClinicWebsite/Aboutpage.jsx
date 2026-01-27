@@ -50,10 +50,10 @@ const Aboutpage = () => {
         </div>
             
     </section>
-
+{/* 
     <section>
         <AboutCarousel/>
-    </section>
+    </section> */}
 
     </>
   )

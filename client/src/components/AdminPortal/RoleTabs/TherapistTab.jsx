@@ -4,11 +4,12 @@ import TherapistStyles from './TherapistTab.module.css'
 import { FaEye } from "react-icons/fa";
 import { MdEdit } from "react-icons/md";
 import { FaTrash } from "react-icons/fa";
+import dayjs from 'dayjs';
 
 // Mui dependencies
 import TextField from '@mui/material/TextField';
 
-const TherapistTab = () => {
+const TherapistTab = ({therapistData}) => {
   return (
 <div className={TherapistStyles.container}>
       <div className={TherapistStyles.headerContainer}>
@@ -58,36 +59,35 @@ const TherapistTab = () => {
             <thead className={TherapistStyles.tblHeader}>
                 <tr>
                     <th className={TherapistStyles.tblHeaderItem}>Name</th>
-                    <th className={TherapistStyles.tblHeaderItem}>Branch</th>
+                    <th className={TherapistStyles.tblHeaderItem}>Last Name</th>
                     <th className={TherapistStyles.tblHeaderItem}>Date Added</th>
                     <th className={TherapistStyles.tblHeaderItem}>Action</th>
                 </tr>
             </thead>
             <tbody className={TherapistStyles.tblBody}>
-                <tr>
-                    <td className={TherapistStyles.tblBodyItem}>Mary Grace Buenaventura</td>
-                    <td className={TherapistStyles.tblBodyItem}>Zabarte</td>
-                    <td className={TherapistStyles.tblBodyItem}>September 30 2023</td>
-                    <td className={TherapistStyles.tblBodyItem}>
-                        <div className={TherapistStyles.tblActionContainer}>
-                            <div><FaEye/></div>
-                            <div><MdEdit/></div>
-                            <div><FaTrash/></div>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td className={TherapistStyles.tblBodyItem}>Mary Grace Buenaventura</td>
-                    <td className={TherapistStyles.tblBodyItem}>Zabarte</td>
-                    <td className={TherapistStyles.tblBodyItem}>September 30 2023</td>
-                    <td className={TherapistStyles.tblBodyItem}>
-                        <div className={TherapistStyles.tblActionContainer}>
-                            <div><FaEye/></div>
-                            <div><MdEdit/></div>
-                            <div><FaTrash/></div>
-                        </div>
-                    </td>
-                </tr>
+                  {therapistData?.map((user) => (
+    <tr key={user.user_id}>
+      <td className={TherapistStyles.tblBodyItem}>
+        {user.user_fname} {user.user_lname}
+      </td>
+
+      <td className={TherapistStyles.tblBodyItem}>
+        {user.user_lname}
+      </td>
+
+      <td className={TherapistStyles.tblBodyItem}>
+        {dayjs(user.created_at).format('MMMM D YYYY')}
+      </td>
+
+      <td className={TherapistStyles.tblBodyItem}>
+        <div className={TherapistStyles.tblActionContainer}>
+          <div><FaEye /></div>
+          <div><MdEdit /></div>
+          <div><FaTrash /></div>
+        </div>
+      </td>
+    </tr>
+  ))}
             </tbody>
         </table>
       </div>
