@@ -260,18 +260,20 @@ async function getMyRecords(req, res){
             console.log('does it exist?', patientId)
             
             const activeApptQuery = await dbConnection.query(`SELECT appt_id from awp_appt_tbl where patient_id=$1 ORDER BY CREATED_AT desc limit 1;`,[patientId])
-            const activeAppt = activeApptQuery.rows[0].appt_id
 
-            if (activeApptQuery.rows === 0){
+            if (activeApptQuery.rows.length === 0){
                 res.json({message:'No Session Yet.'})
             }
 
-            const evalQuery = await dbConnection.query(`SELECT * from awp_ptneval_tbl where patient_id=$1`,[patientId])
-            const evalData = evalQuery.rows[0]
+            const activeAppt = activeApptQuery.rows[0].appt_id
 
-            if (evalQuery.rows === 0){
+            const evalQuery = await dbConnection.query(`SELECT * from awp_ptneval_tbl where patient_id=$1`,[patientId])
+            
+
+            if (evalQuery.rows.length === 0){
                 res.json({message:'No Patient Evaluation Yet.'})
             }
+            const evalData = evalQuery.rows[0]
 
             const medHistoryQuery = await dbConnection.query(`SELECT * from awp_ptnmedhistory_tbl where patient_id=$1`,[patientId])
             const medhistoryData = medHistoryQuery.rows[0]
