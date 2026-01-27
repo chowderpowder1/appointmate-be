@@ -1,5 +1,5 @@
 import express from 'express';
-import { getPatientDocumentSignedUrl, getApptDocuments, getApptDetailsOverview, getAllUpcomingAppts, bookAppointmentForPatient, updateDocumentStatus, getServices, getTherapists, getPatients,getPatientData, getUserPersonalData, patchInitialEval, getPatientEval, getPatientDocumentsList, getPatientsPendingAppointments, patchRescheduleAppt } from '../controllers/clinicController.js'
+import { getTherapistAssignedDocuments, getPatientDocumentSignedUrl, getApptDocuments, getApptDetailsOverview, getAllUpcomingAppts, bookAppointmentForPatient, updateDocumentStatus, getServices, getTherapists, getPatients,getPatientData, getUserPersonalData, patchInitialEval, getPatientEval, getPatientDocumentsList, getPatientsPendingAppointments, patchRescheduleAppt } from '../controllers/clinicController.js'
 
 const router = express.Router();
 
@@ -28,6 +28,8 @@ router.get(`/getApptDetailsOverview/:id`, getApptDetailsOverview)
 router.get(`/getApptDocuments/:id`, getApptDocuments)
 
 router.get(`/getPatientDocumentSignedUrl`, getPatientDocumentSignedUrl)
+
+router.get(`/getTherapistAssignedDocuments`, getTherapistAssignedDocuments)
 
 router.post(`/bookAppointmentForPatient`, bookAppointmentForPatient)
 

@@ -6,6 +6,7 @@ import dotenv from 'dotenv'; // Environment Variables
 import dbConnection from './db.js';
 import authRouter from './routes/auth.js'
 import userRoutes from './routes/userRoutes.js'
+import adminRoutes from './routes/adminRoutes.js'
 import clinicRoutes from './routes/clinicRoutes.js'
 // import pxData from './routes/pxData.js'
 import path from 'path';
@@ -177,6 +178,7 @@ app.use('/auth', authRouter);
 app.use('/userData', userRoutes);
 app.use('/appt', apptRoutes);
 app.use('/clinic', clinicRoutes);
+app.use('/admin', adminRoutes);
 
 // app.use('/login', )
 app.get('/users', (req, res) => {

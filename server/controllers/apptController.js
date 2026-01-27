@@ -14,17 +14,18 @@ async function getBookedDates (req, res) {
     // Fetches all booked dates from the current day onwards
     // console.log('this is the query:'+req.query)
     // console.log(typeof req.query.therapistId)
-    try{
+    try{    
+        console.log(req.body)
         const selectedTherapist = req.query?.therapistId
         console.log('Selected Therapist', selectedTherapist)
         const therapistIdQuery = await dbConnection.query(`SELECT pthera_id from awp_pthera_tbl WHERE user_id=$1`,[selectedTherapist])
         let therapistId;
-        if (therapistIdQuery.rows.legnth === 1){
+        if (therapistIdQuery.rows.length === 1){
             therapistId= therapistIdQuery?.rows[0]?.pthera_id
         } else{
             therapistId= req.query?.therapistId
         }
-
+        console.log('Lookup you fuck', therapistId)
         
 
         const slots = await dbConnection.query(`select appt_date, appt_start from awp_appt_tbl WHERE therapist_id= $1 AND appt_status != 'cancelled' AND appt_start >= (CURRENT_DATE - INTERVAL '1 days') ORDER BY appt_start;`, [therapistId])
@@ -54,23 +55,23 @@ async function getAllApptData(req, res) {
             const isAuthorized = await dbConnection.query(`SELECT user_role from awp_users_tbl WHERE user_id=$1`, [req.session.user.id])
 
  if (isAuthorized.rows[0].user_role === 3) {
-    console.log(`Shiqi is a therapist`); // Fixed: parentheses, not backticks
+    console.log(`Shiqi is a therapist`);
     
     const therapistID = await dbConnection.query(
         `SELECT pthera_id FROM awp_pthera_tbl WHERE user_id=$1`, 
         [req.session.user.id]
-    ); // Fixed: parentheses syntax
+    ); 
     
     const therapistData = await dbConnection.query(
         `SELECT * FROM awp_users_tbl WHERE user_id=$1`,
         [req.session.user.id]
-    ); // Fixed: parentheses syntax
+    ); 
     
     const dbActiveAppt = await dbConnection.query(
         `SELECT * FROM awp_appt_tbl 
          WHERE appt_date >= (CURRENT_DATE - INTERVAL '7 days') 
-           AND therapist_id = $1`,
-        [therapistID.rows[0].pthera_id] // Fixed: extract the actual ID from result
+           AND therapist_id = $1 AND appt_status='scheduled' ORDER BY appt_status`,
+        [therapistID.rows[0].pthera_id]
     );
     
     const allActiveAppt = await Promise.all(dbActiveAppt.rows.map(async (r) => {
@@ -80,7 +81,7 @@ async function getAllApptData(req, res) {
              LEFT JOIN awp_patient_tbl AS b ON a.user_id = b.user_id 
              WHERE b.patient_id=$1`,
             [r.patient_id]
-        ); // Fixed: parentheses syntax
+        ); 
         
         return {
             appt_id: r.appt_id,
@@ -89,7 +90,7 @@ async function getAllApptData(req, res) {
                 ? `${assignedPatientResults.rows[0].user_fname} ${assignedPatientResults.rows[0].user_lname}` 
                 : null,
             therapist_id: r.therapist_id,
-            therapist_name: therapistData.rows[0] // Fixed: access rows[0]
+            therapist_name: therapistData.rows[0] 
                 ? `${therapistData.rows[0].user_fname} ${therapistData.rows[0].user_lname}` 
                 : null,
             appt_status: r.appt_status,
@@ -104,7 +105,7 @@ async function getAllApptData(req, res) {
 }
             if( isAuthorized.rows[0].user_role === 4){
 
-                const dbActiveAppt = await dbConnection.query(`SELECT * FROM awp_appt_tbl WHERE appt_date >= (CURRENT_DATE - INTERVAL '7 days') ORDER BY appt_date ASC, appt_status ;`)
+                const dbActiveAppt = await dbConnection.query(`SELECT * FROM awp_appt_tbl WHERE appt_date >= (CURRENT_DATE - INTERVAL '7 days') ORDER BY appt_status DESC;`)
 
                 const allActiveAppt = await Promise.all( dbActiveAppt.rows.map( async (r)=>{
                 {
@@ -269,12 +270,13 @@ async function updateApptStatus(req, res){
                     appt_id,
                     appt_status
                 } = req.body
-                const updateResult = await dbConnection.query(`UPDATE awp_appt_tbl SET appt_status='scheduled' WHERE appt_id=$1`, [appt_id])
-
+                const updateResult = await dbConnection.query(`UPDATE awp_appt_tbl SET appt_status='scheduled' WHERE appt_id=$1 RETURNING appt_id`, [appt_id])
+                console.log(updateResult.rows[0].appt_id)
+                const createSession = await dbConnection.query(`INSERT INTO awp_apptsession_tbl(appt_id)values($1)`,[updateResult.rows[0].appt_id])
                 if( updateResult.rowCount === 0){
                     return res.status(404).json({sucess: false, message: 'Appointment Not found'})
                 }
-
+                    console.log('Session', createSession)
                 return res.status(200).json({ success:true, message: "Updated"})
             }
         } 
@@ -365,7 +367,7 @@ async function getApptDetails(req,res){
                 appt_end: dayjs(apptRows.appt_end).format('h:mm A'),        
             })
         } else{
-            return res.status.json({
+            return res.json({
                 success:false,
                 message:'User not authorized'
             })
@@ -493,7 +495,8 @@ async function patchPatientReschedule (req, res){
             service,
         } = req.body
 
-        const result = await dbConnection.query(`UPDATE awp_appt_tbl SET appt_status=$1, therapist_id=$2, service_id=$3 WHERE appt_id=$4 ;`,['approved', apptTherapist, service, req.body.apptId])
+        console.log('logging service', service)
+        const result = await dbConnection.query(`UPDATE awp_appt_tbl SET appt_status=$1, therapist_id=$2, service_id=$3 WHERE appt_id=$4 ;`,[apptStatus, apptTherapist, service || undefined, req.body.apptId])
             console.log('Query Status:', result.rowCount)
         }
     

@@ -585,7 +585,7 @@ async function bookAppointmentForPatient (req, res){
         console.log("Appointment Booking data: "+JSON.stringify(req.body));
         const userId = req.body.patientID
         const therapistUserId = req.body.apptTherapist;
-
+        console.log('love',userId)
         const therapistIdQuery = await dbConnection.query(`SELECT pthera_id from awp_pthera_tbl WHERE user_id=$1`,[therapistUserId])
         const therapistId= therapistIdQuery.rows[0].pthera_id
         
@@ -867,5 +867,84 @@ async function getPatientDocumentSignedUrl(req,res){
     }
 };
 
+async function getTherapistAssignedDocuments(req,res){
+    
+    try{
+        if (req?.session?.user || req?.user) {
+            
+            const isAuthorized = await dbConnection.query(`SELECT user_role from awp_users_tbl WHERE user_id=$1`, [req.session.user.id])
+            
+            if(isAuthorized.rows[0].user_role < 5){
+                
+                const therapistQuery = await dbConnection.query(`SELECT * from awp_pthera_tbl where user_id=$1`, [req.session.user.id])
+                const therapistResult = therapistQuery.rows[0]
+                
+                const assignedAppts = await dbConnection.query(
+                  `
+                  SELECT DISTINCT ON (patient_id) patient_id
+                  FROM awp_appt_tbl
+                  WHERE therapist_id = $1
+                  `,
+                  [therapistResult.pthera_id]
+                );
+                
+                const patientIds = assignedAppts.rows.map(row => row.patient_id);
+                
+                if (patientIds.length === 0) {
+                  return res.status(200).json([]);
+                }
+                
+                const assignedDocs = await dbConnection.query(
+                  `
+                  SELECT *
+                  FROM awp_ptndocs_tbl
+                  WHERE patient_id = ANY($1) AND doc_status='verified' 
+                  ORDER BY created_at DESC, doc_status DESC
+                  `,
+                  [patientIds]
+                );
+                
+                // Map through documents and add patient information
+                const documentList = await Promise.all(assignedDocs.rows.map(async (doc) => {
+                    const patientUserIdQuery = await dbConnection.query(`SELECT user_id from awp_patient_tbl WHERE patient_id=$1`, [doc.patient_id])
+                    const patientUserId = patientUserIdQuery.rows[0].user_id;
+                    
+                    const patientName = await dbConnection.query(`SELECT user_fname, user_lname FROM awp_users_tbl WHERE user_id=$1`, [patientUserId])
+                    
+                    const patientAvatar = await dbConnection.query(`SELECT image_url FROM user_avatars WHERE user_id=$1`, [patientUserId])
+                    
+                    return {
+                        documentId: doc.ptn_doc_id,
+                        patientId: doc.patient_id,
+                        patientName: `${patientName.rows[0].user_fname} ${patientName.rows[0].user_lname}`,
+                        patientAvatar: patientAvatar.rows[0]?.image_url || null,
+                        fileName: doc.file_name,
+                        filePath: doc.file_path,
+                        fileType: doc.file_type,
+                        fileSize: doc.file_size,
+                        uploadDate: doc.upload_date,
+                        formattedDate: dayjs(doc.upload_date).format('MMM DD, YYYY'),
+                        uploadedBy: doc.uploaded_by,
+                        docStatus: doc.doc_status,
+                        docRemarks: doc.doc_remarks,
+                        verifiedBy: doc.verified_by,
+                        verifiedAt: doc.verified_atdate,
+                        publicId: doc.public_id
+                    }
+                }))
+                
+                return res.status(200).json(documentList)
+                
+            } else {
+                return res.status(403).json({message: 'Unauthorized'})
+            }
+        } else {
+            return res.status(401).json({message: 'User not authenticated'})
+        }
+    } catch(err) {
+        console.log('Error:', err)
+        return res.status(500).json({message: 'Internal server error', error: err.message})
+    }
+}
 
-export { getPatientDocumentSignedUrl, getApptDocuments, getApptDetailsOverview,getAllUpcomingAppts, patchRescheduleAppt, getPatientsPendingAppointments, bookAppointmentForPatient, updateDocumentStatus, getPatientDocumentsList, patchInitialEval, getPatientEval, getServices, getTherapists, getPatients, getPatientData, getUserPersonalData}
+export { getTherapistAssignedDocuments, getPatientDocumentSignedUrl, getApptDocuments, getApptDetailsOverview,getAllUpcomingAppts, patchRescheduleAppt, getPatientsPendingAppointments, bookAppointmentForPatient, updateDocumentStatus, getPatientDocumentsList, patchInitialEval, getPatientEval, getServices, getTherapists, getPatients, getPatientData, getUserPersonalData}

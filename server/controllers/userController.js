@@ -261,8 +261,9 @@ async function getMyRecords(req, res){
             
             const activeApptQuery = await dbConnection.query(`SELECT appt_id from awp_appt_tbl where patient_id=$1 ORDER BY CREATED_AT desc limit 1;`,[patientId])
 
+            // ❌ PROBLEM: This sends a response and exits
             if (activeApptQuery.rows.length === 0){
-                res.json({message:'No Session Yet.'})
+                return res.json({message:'No Session Yet.'}) // ✅ Added 'return'
             }
 
             const activeAppt = activeApptQuery.rows[0].appt_id
@@ -270,8 +271,9 @@ async function getMyRecords(req, res){
             const evalQuery = await dbConnection.query(`SELECT * from awp_ptneval_tbl where patient_id=$1`,[patientId])
             
 
+            // ❌ PROBLEM: This sends another response
             if (evalQuery.rows.length === 0){
-                res.json({message:'No Patient Evaluation Yet.'})
+                return res.json({message:'No Patient Evaluation Yet.'}) // ✅ Added 'return'
             }
             const evalData = evalQuery.rows[0]
 
@@ -292,18 +294,18 @@ async function getMyRecords(req, res){
             } = evalData || {};
                 
             const {
-                ptn_hasctscan,
-                ptn_hasxray,
-                ptn_hasmri,
-                ptn_hasallergies,
-                ptn_allergyinfo,
-                ptn_hasdse,
-                ptn_hospitalization,
-                ptn_hascancer,
-                ptn_hasdiabetes,
-                ptn_hashypertens,
-                ptn_medhistorynotes,
-                } = medhistoryData
+              ptn_hasctscan = false,
+              ptn_hasxray = false,
+              ptn_hasmri = false,
+              ptn_hasallergies = false,
+              ptn_allergyinfo = "",
+              ptn_hasdse = false,
+              ptn_hospitalization = false,
+              ptn_hascancer = false,
+              ptn_hasdiabetes = false,
+              ptn_hashypertens = false,
+              ptn_medhistorynotes = "",
+            } = medhistoryData || {};
 
             const {
                 ptn_edemaon: edemaOn = false,
@@ -320,7 +322,7 @@ async function getMyRecords(req, res){
                 ptn_lomnotes: lomNotes = "",
                 ptn_tendernesson: tendernessOn = false,
                 ptn_tendernessnotes: tendernessNotes = ""
-            } = palpationData;
+            } = palpationData || {}; // ✅ Added || {} for safety
 
             const{
                 ptn_pain_id,
@@ -329,7 +331,7 @@ async function getMyRecords(req, res){
                 ptn_reliefby,
                 ptn_elicitedby,
                 
-            } = painData
+            } = painData || {}; // ✅ Added || {} for safety
 
             const painTypeQuery = await dbConnection.query(`SELECT * from awp_ptnpaintype_tbl where pain_type_id=$1`,[pain_type_id])
             const painType = painTypeQuery?.rows[0]
@@ -344,98 +346,106 @@ async function getMyRecords(req, res){
             const appServiceData = appServiceQuery?.rows[0]?.service_name
 
             
-const {
-    ptn_posturaldev = '',
-    ptn_atrophy = '',
-    ptn_swellingon = '',
-    ptn_erythemaon = '',
-    ptn_ambulatory = '',
-    ptn_deformity = '',
-    ptn_othernotes = '',
-    ptn_erythemanotes = '',
-    ptn_swellingnotes = ''
-} = oIData || {};
+            const {
+                ptn_posturaldev = '',
+                ptn_atrophy = '',
+                ptn_swellingon = '',
+                ptn_erythemaon = '',
+                ptn_ambulatory = '',
+                ptn_deformity = '',
+                ptn_othernotes = '',
+                ptn_erythemanotes = '',
+                ptn_swellingnotes = ''
+            } = oIData || {};
 
-const {
-    pain_scale = 0,
-    pain_type = ''
-} = painType || {};
+            const {
+                pain_scale = 0,
+                pain_type = ''
+            } = painType || {};
 
-var payload = { 
-    // Diagnosis & Complaints
-    diagnosis: eval_diagnosis || '',
-    complaint: eval_chfcomplaint || '',
-    otherNotes: eval_othernotes || '',
-    specNotes: eval_specnotes || '',
-    
-    // Med History
-    CTScan: ptn_hasctscan || false,
-    XRay: ptn_hasxray || false,
-    mri: ptn_hasmri || false,
-    allergies: ptn_hasallergies || false,
-    allergyInfo: ptn_allergyinfo || '',
-    cardioPulmoDSE: ptn_hasdse || false,
-    hospitalization: ptn_hospitalization || '',
-    cancer: ptn_hascancer || false,
-    diabetesMellitus: ptn_hasdiabetes || false,
-    hypertension: ptn_hashypertens || false,
-    medHistoryNotes: ptn_medhistorynotes || '',
-    
-    // Palpation
-    edemaOn: edemaOn || '',
-    edemaNotes: edemaNotes || '',
-    nodulesOn: nodulesOn || '',
-    nodulesNotes: nodulesNotes || '',
-    musclesOn: musclesOn || '',
-    musclesNotes: musclesNotes || '',
-    tautBandsOn: tautBandsOn || '',
-    tautBandNotes: tautBandNotes || '',
-    jtEffusionOn: jtEffusionOn || '',
-    jtEffusionNotes: jtEffusionNotes || '',
-    lomOn: lomOn || '',
-    lomNotes: lomNotes || '',
-    tendernessOn: tendernessOn || '',
-    tendernessNotes: tendernessNotes || '',
-    
-    // Pain
-    localizedOnArea: ptn_locarea || '',
-    reliefBy: ptn_reliefby || '',
-    elicitedBy: ptn_elicitedby || '',
-    
-    // Pain Details
-    painScale: pain_scale || 0,
-    painType: pain_type || '',
-    
-    // Objective Information
-    posturalDeviation: ptn_posturaldev || '',
-    atrophy: ptn_atrophy || '',
-    swellingOn: ptn_swellingon || '',
-    erythemaOn: ptn_erythemaon || '',
-    ambulatory: ptn_ambulatory || '',
-    deformity: ptn_deformity || '',
-    othersOi: ptn_othernotes || '',
-    erythemaNotes: ptn_erythemanotes || '',
-    swellingNotes: ptn_swellingnotes || '',
-    
-    therapyService: appServiceData || ''
-};
+            var payload = { 
+                // Diagnosis & Complaints
+                diagnosis: eval_diagnosis || '',
+                complaint: eval_chfcomplaint || '',
+                otherNotes: eval_othernotes || '',
+                specNotes: eval_specnotes || '',
+                
+                // Med History
+                CTScan: ptn_hasctscan || false,
+                XRay: ptn_hasxray || false,
+                mri: ptn_hasmri || false,
+                allergies: ptn_hasallergies || false,
+                allergyInfo: ptn_allergyinfo || '',
+                cardioPulmoDSE: ptn_hasdse || false,
+                hospitalization: ptn_hospitalization || '',
+                cancer: ptn_hascancer || false,
+                diabetesMellitus: ptn_hasdiabetes || false,
+                hypertension: ptn_hashypertens || false,
+                medHistoryNotes: ptn_medhistorynotes || '',
+                
+                // Palpation
+                edemaOn: edemaOn || '',
+                edemaNotes: edemaNotes || '',
+                nodulesOn: nodulesOn || '',
+                nodulesNotes: nodulesNotes || '',
+                musclesOn: musclesOn || '',
+                musclesNotes: musclesNotes || '',
+                tautBandsOn: tautBandsOn || '',
+                tautBandNotes: tautBandNotes || '',
+                jtEffusionOn: jtEffusionOn || '',
+                jtEffusionNotes: jtEffusionNotes || '',
+                lomOn: lomOn || '',
+                lomNotes: lomNotes || '',
+                tendernessOn: tendernessOn || '',
+                tendernessNotes: tendernessNotes || '',
+                
+                // Pain
+                localizedOnArea: ptn_locarea || '',
+                reliefBy: ptn_reliefby || '',
+                elicitedBy: ptn_elicitedby || '',
+                
+                // Pain Details
+                painScale: pain_scale || 0,
+                painType: pain_type || '',
+                
+                // Objective Information
+                posturalDeviation: ptn_posturaldev || '',
+                atrophy: ptn_atrophy || '',
+                swellingOn: ptn_swellingon || '',
+                erythemaOn: ptn_erythemaon || '',
+                ambulatory: ptn_ambulatory || '',
+                deformity: ptn_deformity || '',
+                othersOi: ptn_othernotes || '',
+                erythemaNotes: ptn_erythemanotes || '',
+                swellingNotes: ptn_swellingnotes || '',
+                
+                therapyService: appServiceData || ''
+            };
 
             console.log('Payload:', payload)
-            for (const pain in pain_type){
-                var temp = pain_type[pain]
-                payload = {
-                    ...payload,
-                    [temp]:true
+            
+            // Process pain_type if it exists
+            if (pain_type) {
+                for (const pain in pain_type){
+                    var temp = pain_type[pain]
+                    payload = {
+                        ...payload,
+                        [temp]:true
+                    }
                 }
-                
             }
-            return res.json(payload)            
+            
+            return res.json(payload) // ✅ Final response with 'return'
+        } else {
+            // ✅ Handle case when user is not authenticated
+            return res.status(401).json({message: 'User not authenticated'})
         }
-        console.log('Get Initial Eval Endpoint')
     }catch(err){
         console.log(err)
+        // ✅ Send error response if something fails
+        return res.status(500).json({message: 'Internal server error', error: err.message})
     }
-};
+}
 
 async function uploadAvatar(req,res){
     console.log('Riana')
