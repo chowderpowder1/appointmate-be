@@ -319,15 +319,16 @@ async function getApptDetails(req,res){
         if (req.session.user || req.user) {
             // const currentUserID = req?.session?.user?.id || req?.user?.id || null;
             const appointmentID = req.query.apptID;
+            console.log('niello',req.query)
+
             const apptDetails = await dbConnection.query(`SELECT * from awp_appt_tbl WHERE appt_id=$1`,[appointmentID])
             const apptRows = apptDetails.rows[0]
-
             const therapistID = apptRows.therapist_id
             const therapistSpecialization = await dbConnection.query(`SELECT * from awp_pthera_tbl WHERE pthera_id=$1`,[therapistID])
             const therapistUserID = therapistSpecialization.rows[0].user_id;
                         // console.log('PUTANGINA MO', therapistUserID)
 
-                        const therapistDetails = await dbConnection.query(`SELECT * from awp_users_tbl WHERE user_id=$1`,[therapistUserID])
+            const therapistDetails = await dbConnection.query(`SELECT * from awp_users_tbl WHERE user_id=$1`,[therapistUserID])
             const therapistContact = await dbConnection.query(`SELECT contact_value from awp_ucontacts_tbl WHERE user_id=$1`,[therapistUserID])
             const assignedTherapistResult = await dbConnection.query(
               `SELECT u.*
@@ -337,11 +338,13 @@ async function getApptDetails(req,res){
                WHERE p.pthera_id = $1`,
               [therapistID])            
             const assignedTherapist = assignedTherapistResult.rows[0];
-            const userID = await dbConnection.query(`SELECT user_id from awp_patient_tbl where patient_id=$1`,[apptRows.patient_id])
+            const userID = await dbConnection.query(`SELECT user_id,ptn_hmoprov from awp_patient_tbl where patient_id=$1`,[apptRows.patient_id])
+            // const patientHmo = await dbConnection.query(`SELECT ptn_hmoprov FROM awp_patient_tbl where patient_id=$1`)
             const patientData = await dbConnection.query(`SELECT * from awp_users_tbl where user_id=$1`,[userID.rows[0].user_id])
             const patientDataRows = patientData.rows[0]
-                // console.log(`APPT DETAILS ENDPOINT: `,patientData.rows[0])
+                console.log(`APPT DETAILS ENDPOINT: `,patientData.rows[0])
             return res.json({
+                patientUserID: userID.rows[0].user_id,
                 patientID: apptRows.patient_id,
                 patientFName: patientDataRows.user_fname,
                 patientLName: patientDataRows.user_lname,
@@ -353,7 +356,10 @@ async function getApptDetails(req,res){
                 assignedTherapist: assignedTherapist ? `${assignedTherapist.user_fname} ${assignedTherapist.user_lname}`: null,
                 therapistSpecialization: therapistSpecialization.rows[0].pthera_special,
                 apptStatus : apptRows.appt_status,
+                apptId: apptRows.appt_id,
+                apptService: apptRows.service_id || '',
                 mop: apptRows.mode_of_payment,
+                hmo:userID?.rows[0]?.ptn_hmoprov || '',
                 appt_date: (dayjs(apptRows.appt_date).format('DD MMM YYYY')).toUpperCase(),
                 appt_start: dayjs(apptRows.appt_start).format('h:mm A'),
                 appt_end: dayjs(apptRows.appt_end).format('h:mm A'),        
@@ -442,7 +448,6 @@ async function patchRescheduleMyAppt (req, res){
 
         const therapistId= req.body.therapistID;
         
-        
         const {           
             apptDate,
             apptId,
@@ -453,18 +458,14 @@ async function patchRescheduleMyAppt (req, res){
             hmoProvider,
         } = req.body
 
-        // const therapistQuery = await dbConnection.query(`SELECT * from awp_pthera_tbl where pthera_id=$1`,[apptTherapist])
-        // const therapistResult = therapistQuery.rows[0]
-        // console.log(therapistResult)
         const formattedDate=dayjs(apptDate).format('YYYY-MM-DD');
-        console.log()
-        // return res.json({message:'cut'})
-        const calculatedApptStartTime = dayjs(`${formattedDate}T${apptTime}`); 
-        console.log('Calculated Start', dayjs(calculatedApptStartTime).format('YYYY-MM-DD'))
-        return res.json({message:'cut'})
+        console.log('putangina naman',apptTime)
+        // const formattedTime = dayjs(apptTime, 'h:mm A').format('HH:mm:ss') + '+08';
+        const calculatedApptStartTime = (dayjs(`${formattedDate} ${apptTime}`)).format(); 
+
         const calculatedApptEndTime = (dayjs(calculatedApptStartTime).add(30, 'minute')).format();
-        
-        const result = await dbConnection.query(`UPDATE awp_appt_tbl SET appt_date=$1, appt_start=$2, appt_end=$3, appt_status=$4, mode_of_payment=$5 WHERE appt_id=$6 ;`,[ apptDate, calculatedApptStartTime, calculatedApptEndTime, 'reschedule',mop, req.body.apptId.apptId])
+        const result = await dbConnection.query(`UPDATE awp_appt_tbl SET appt_date=$1, appt_start=$2, appt_end=$3, appt_status=$4, mode_of_payment=$5 WHERE appt_id=$6 ;`,[ formattedDate, calculatedApptStartTime, calculatedApptEndTime, 'reschedule',mop, req.body.apptId.apptID])
+
             console.log('Query Status:', result.rowCount)
         }
     
@@ -475,5 +476,32 @@ async function patchRescheduleMyAppt (req, res){
 
 }
 
+async function patchPatientReschedule (req, res){
+    console.log('patient rechedule patch')
+    console.log(req.body)
+    try{
+        // console.log("Appointment Booking data: "+JSON.stringify(req.body));
+        const userId = req.session.user.id
+        const patientUserId = req.body.patientID;
 
-export {patchRescheduleMyAppt, getBookedDates, bookAppointment, getApptOverview, getAllApptData, updateApptStatus, getPatientsList, getApptDetails, patientUpdateApptStatus, getTherapistAppointments};
+        const therapistId= req.body.therapistID;
+        
+        const {           
+            apptStatus,
+            apptId,
+            apptTherapist,
+            service,
+        } = req.body
+
+        const result = await dbConnection.query(`UPDATE awp_appt_tbl SET appt_status=$1, therapist_id=$2, service_id=$3 WHERE appt_id=$4 ;`,['approved', apptTherapist, service, req.body.apptId])
+            console.log('Query Status:', result.rowCount)
+        }
+    
+    catch(err){
+        console.log(err);
+        res.send(err);
+    }
+
+}
+
+export {patchPatientReschedule, patchRescheduleMyAppt, getBookedDates, bookAppointment, getApptOverview, getAllApptData, updateApptStatus, getPatientsList, getApptDetails, patientUpdateApptStatus, getTherapistAppointments};

@@ -87,7 +87,7 @@ passport.use(new GoogleStrategy({
             const photo = profile.photos[0].value;
             
             let user = await dbConnection.query(`SELECT * from awp_users_tbl WHERE google_id = $1`, [googleId]);
-
+            // You need to perform a check for users signing in with a google account that already has a local awp acc
             // console.log(user)
             // console.log(user.rows)
             // console.log(profile)

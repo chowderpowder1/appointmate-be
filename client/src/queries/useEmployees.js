@@ -196,7 +196,7 @@ export const useGetPatientEval = (userId) => {
                     withCredentials: true
             })
             return res.data;
-        }
+        }, enabled:!!userId
     })
 }
 
@@ -254,5 +254,36 @@ export const useGetApptDocuments = (id) => {
             return res.data;
         },
         enabled: !!id
+    })
+}
+
+export const usePatchReschedule = () => {
+
+    return useMutation({
+        mutationFn: async (appData) => {
+            const res = await axios.patch('http://localhost:8080/appt/patchPatientReschedule', appData, {withCredentials: true})
+
+        return res.data;
+        }, 
+        onSuccess: () => {
+            
+            console.log('Appointment Booked Successfully')
+
+        },
+        onError: () => {
+            console.log('Failed to book appointment', err)
+        }
+    })
+}
+
+export const useGetPatientDocumentSignedUrl = () => {
+    return useMutation({
+        mutationFn: async (documentId) => {
+            const res= await axios.get('http://localhost:8080/clinic/getPatientDocumentSignedUrl', {
+                params: {documentId},
+                withCredentials: true
+            })
+            return res.data;
+        }
     })
 }

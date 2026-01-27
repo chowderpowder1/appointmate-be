@@ -50,16 +50,17 @@ export const useGetMyAppointments = () => {
     })
 }
 
-export const UseGetAnAppointmentsDetails = ({apptID}) => {
+export const UseGetAnAppointmentsDetails = (apptID) => {
     return useQuery({
-        queryKey:['getAnAppointmentsDetails'],
+        queryKey:['getAnAppointmentsDetails', apptID],
         queryFn: async () => {
             const res = await axios.get('http://localhost:8080/appt/getApptDetails', {
                 params: {apptID},
                 withCredentials: true
             })
+            
             return res.data;
-        }
+        }, 
     })
 }
 

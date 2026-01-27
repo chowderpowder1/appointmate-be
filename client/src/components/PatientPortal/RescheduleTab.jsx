@@ -186,7 +186,7 @@ if (errors.length > 0) {
       mop:apptData.mop,
     })
   }
-//     console.log(patientsPendingAppt)
+    console.log(appointmentForm.apptDate)
 console.log(bookedApptData)
   return (
     <div className={AddStyles.mainContainer}>
@@ -206,20 +206,20 @@ console.log(bookedApptData)
 
 
                   <div className={AddStyles.apptDetailsItem}>
-                    <p>Session ID:</p>
-                    <p>#21AB8</p>
+                    <p className={AddStyles.apptDetailsItemTitle}>Session ID:</p>
+                    <p className={AddStyles.apptDetailsItemData}>#21AB8</p>
                   </div>
                   <div className={AddStyles.apptDetailsItem}>
-                    <p>Date & Time:</p>
-                    <p>{apptData.appt_date} - {apptData.appt_start}</p>
+                    <p className={AddStyles.apptDetailsItemTitle}>Date & Time:</p>
+                    <p className={AddStyles.apptDetailsItemData}>{apptData.appt_date} - {apptData.appt_start}</p>
                   </div>
                   <div className={AddStyles.apptDetailsItem}>
-                    <p>Therapist:</p>
-                    <p>PT {apptData.assignedTherapist.charAt(0).toUpperCase() + apptData.assignedTherapist.slice(1)}</p>
+                    <p className={AddStyles.apptDetailsItemTitle}>Therapist:</p>
+                    <p className={AddStyles.apptDetailsItemData}>PT {apptData.assignedTherapist.charAt(0).toUpperCase() + apptData.assignedTherapist.slice(1)}</p>
                   </div>
                   <div className={AddStyles.apptDetailsItem}>
-                    <p>Payment Method:</p>
-                    <p>{apptData.mop}</p>
+                    <p className={AddStyles.apptDetailsItemTitle}>Payment Method:</p>
+                    <p className={AddStyles.apptDetailsItemData}>{apptData.mop}</p>
                   </div>
                   <div className={AddStyles.rescheduleReasonContainer}>
                 <TextField
@@ -295,7 +295,7 @@ console.log(bookedApptData)
                         }}
                     //   value={dayjs(appointmentForm?.apptDate)}
                       name="apptDate"
-                      value={dayjs('2026-02-15')}
+                      value={dayjs(appointmentForm.apptDate)}
                       slotProps={{
                         textField: {
                           fullWidth: true,

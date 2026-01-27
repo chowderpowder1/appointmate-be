@@ -334,10 +334,10 @@ async function getMyRecords(req, res){
             const painTypeQuery = await dbConnection.query(`SELECT * from awp_ptnpaintype_tbl where pain_type_id=$1`,[pain_type_id])
             const painType = painTypeQuery?.rows[0]
 
-            const oIQuery = await dbConnection.query(`SELECT * from awp_ptnobvimp_tbl where appt_id=$1`,[activeAppt])
+            const oIQuery = await dbConnection.query(`SELECT * from awp_ptnobvimp_tbl where patient_id=$1`,[patientId])
             const oIData = oIQuery?.rows[0]
 
-            const apptServiceIdQuery = await dbConnection.query(`SELECT service_id from awp_appt_tbl where appt_id=$1`,[activeAppt])
+            const apptServiceIdQuery = await dbConnection.query(`SELECT service_id from awp_appt_tbl where patient_id=$1`,[patientId])
             const apptServiceIdData = apptServiceIdQuery?.rows[0]?.service_id
             
             const appServiceQuery = await dbConnection.query(`SELECT service_name FROM awp_apptservice_tbl where service_id=$1`, [apptServiceIdData])

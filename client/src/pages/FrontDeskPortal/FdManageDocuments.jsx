@@ -8,9 +8,10 @@ import ClinicPhoto from '../../assets/AwZabarte.jpg'
 import ViewDocument from '../../components/FrontDesk/ViewDocument'
 import blankPx from '../../assets/blank-px.jpg'
 
-import { useGetPatientDocumentList } from '../../queries/useEmployees'
+import { useGetPatientDocumentList} from '../../queries/useEmployees'
 
 const FdManageDocuments = () => {
+  const [search, setSearch] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState(false);
 

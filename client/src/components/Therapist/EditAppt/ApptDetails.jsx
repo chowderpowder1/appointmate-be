@@ -3,48 +3,57 @@ import DetailStyles from './ApptDetails.module.css'
 import { IoPersonCircle } from "react-icons/io5";
 import { FaCalendarPlus } from "react-icons/fa6";
 import { MdOutlineModeEdit } from "react-icons/md";
-
+import Button from '@mui/material/Button';
 import MockPxPhoto from '../../../assets/aw_mock-px.png'
 import DatePicker from '../../../components/PatientPortal/DatePicker'
 import {UseGetAnAppointmentsDetails} from '../../../queries/apptData.js'
+import { IoMailSharp } from "react-icons/io5";
 
+import {useGetPatientEval} from '../../../queries/useEmployees.js'
+import {timeSlots} from '../../../features/timeSlots.js'
 
-const ApptDetails = (apptID) => {
-      const { data: apptDetails, isLoading: apptDetailsLoading, error: apptDetailsError} = UseGetAnAppointmentsDetails(apptID);
-        if (apptDetailsLoading) return <div>Loading...</div>;
-        if (apptDetailsError) return <div>Error: {apptDetailsError.error}</div>;
-      console.log(apptDetails)
+const ApptDetails = ({apptID, userData}) => {
+    console.log(timeSlots)
+    const { data: apptDetails, isLoading: apptDetailsLoading, error: apptDetailsError} = UseGetAnAppointmentsDetails(apptID);
 
-     const timeSlots = [
-      { id: 1, time: '08:00', display: '9:00 AM', available: true },
-      { id: 2, time: '08:30', display: '9:30 AM', available: true },
-      { id: 3, time: '9:00', display: '10:00 AM', available: false },
-      { id: 4, time: '9:30', display: '10:30 AM', available: true },
-      { id: 5, time: '10:00', display: '11:00 AM', available: true },
-      { id: 6, time: '10:30', display: '11:30 AM', available: false },
-      { id: 7, time: '11:00', display: '2:00 PM', available: true },
-      { id: 8, time: '11:30', display: '2:30 PM', available: true },
-      { id: 9, time: '12:00', display: '3:00 PM', available: true },
-      { id: 10, time: '12:30', display: '3:30 PM', available: false },
-      { id: 10, time: '12:30', display: '3:30 PM', available: false },
-      { id: 10, time: '12:30', display: '3:30 PM', available: false },
-      { id: 10, time: '12:30', display: '3:30 PM', available: false },
-      { id: 10, time: '12:30', display: '3:30 PM', available: false },
-      { id: 10, time: '12:30', display: '3:30 PM', available: false },
-      { id: 10, time: '12:30', display: '3:30 PM', available: false }
-    ];
+    const { data: evalData, isLoading: evalDataIsLoading, error: evalDataError} = useGetPatientEval(apptDetails?.patientUserID);
 
-
+    if (apptDetailsLoading ||evalDataIsLoading ) return <div>Loading...</div>;
+    if (apptDetailsError || evalDataError ) return <div>Error: {apptDetailsError.error}</div>;
+console.log(apptDetails)
+    //  const timeSlots = [
+    //   { id: 1, time: '08:00', display: '9:00 AM', available: true },
+    //   { id: 2, time: '08:30', display: '9:30 AM', available: true },
+    //   { id: 3, time: '9:00', display: '10:00 AM', available: false },
+    //   { id: 4, time: '9:30', display: '10:30 AM', available: true },
+    //   { id: 5, time: '10:00', display: '11:00 AM', available: true },
+    //   { id: 6, time: '10:30', display: '11:30 AM', available: false },
+    //   { id: 7, time: '11:00', display: '2:00 PM', available: true },
+    //   { id: 8, time: '11:30', display: '2:30 PM', available: true },
+    //   { id: 9, time: '12:00', display: '3:00 PM', available: true },
+    //   { id: 10, time: '12:30', display: '3:30 PM', available: false },
+    //   { id: 10, time: '12:30', display: '3:30 PM', available: false },
+    //   { id: 10, time: '12:30', display: '3:30 PM', available: false },
+    //   { id: 10, time: '12:30', display: '3:30 PM', available: false },
+    //   { id: 10, time: '12:30', display: '3:30 PM', available: false },
+    //   { id: 10, time: '12:30', display: '3:30 PM', available: false },
+    //   { id: 10, time: '12:30', display: '3:30 PM', available: false }
+    // ];
+    console.log(userData)
   return (
     <div className={DetailStyles.container}>
         <div className={DetailStyles.assignedPtHeader}>
             <IoPersonCircle className={DetailStyles.icon}/>
             <p>Appointment Details</p>
+            <div className={DetailStyles.pxIdContainer}>
+                <div style={{display:'flex', flexFlow:'row', gap:'1rem'}}>
+                    <p className={DetailStyles.pxDataHeader}>Patient ID: {apptDetails.patientID}</p>
+                    <p className={DetailStyles.pxDataHeader}>Session ID: 023</p>
+                </div>
+            </div>            
         </div>
         <div className={DetailStyles.subContainer}>
-            <div className={DetailStyles.rowOne}>
-                <p>Patient Information</p>
-            </div>
+
             <div className={DetailStyles.rowTwo}>
                 <div className={DetailStyles.rowTwo}>
                     <div className={DetailStyles.pxHeaderContainer}>
@@ -52,56 +61,68 @@ const ApptDetails = (apptID) => {
                             <img src={MockPxPhoto} className={DetailStyles.pxPhoto} alt="" />
                         </div>
                         <div className={DetailStyles.pxDataContainer}>
-                            <p>Patient Name: {apptDetails.patientFName} {apptDetails.patientLName}</p>
-                            <span>Patient Email: {apptDetails.patientEmail}</span>
+                            <p className={DetailStyles.pxName}>{apptDetails.patientFName.charAt(0).toUpperCase() + apptDetails.patientFName.slice(1)} {apptDetails.patientLName}</p>
+                            <span style={{display:'flex',alignItems:'center', gap:'.5rem'}}><IoMailSharp/>{apptDetails.patientEmail}</span>
                         </div>
                     </div>
-                    <div className={DetailStyles.pxIdContainer}>
-                        <div>
-                            <p>Patient ID #{apptDetails.patientID}</p>
-                        </div>
-                       
-                    </div>
-                    <div>
+
+
+
+                    <div className={DetailStyles.complaintContainer}>
                         <p>Chief Complaint:</p>
                         <div className={DetailStyles.complaintData}>
-                            <p>Hi po! I’ve been feeling some mild lower back discomfort lately, baka dahil sa matagal na upo during tapings and shoots. Also po, I had a previous ankle injury na minsan umaalalay pa rin. Hoping to get this checked po, thank you!</p>
+                            <p>{evalData.complaint ? evalData :'No Complaint Provided'}</p>
                         </div>
                     </div>
 
                 </div>
             </div>
-        <button className={DetailStyles.viewPxBtn}>View Patient Record</button>
+            <Button
+              disabled={userData?.userRoleId === 4}
+              sx={{
+                fontWeight: '500',
+                position: 'absolute',
+                right: 0,
+                bottom: 0,
+                backgroundColor: '#1565C0',
+                color: 'white',
+                borderRadius: '10px',
+                padding: '0.2rem 1rem',
+                '&.Mui-disabled': {
+                  backgroundColor: '#ccc',
+                  color: '#666',
+                }
+              }}
+            >
+              View Patient Record
+            </Button>
         </div>
         <div className={DetailStyles.apptDetailsContainer}>
-            <div className={DetailStyles.apptStatusContainer}>
+            { apptDetails.apptStatus=='reschedule' && <div className={DetailStyles.apptStatusContainer}>
                 <FaCalendarPlus className={DetailStyles.apptStatusIcon}/>
                 <div className={DetailStyles.apptStatusSubcontainer}>
-                    <p>Reschedule Requested by Patient</p>
-                    <p>Patient Belle Mariano has requested to reschedule this appointment to 22 MAY 2025, 01:00PM.</p>
-                    <div className={DetailStyles.btnContainer}>
+                    <p style={{fontWeight:'600'}}>Reschedule Requested by Patient</p>
+                    <p>Patient {apptDetails.patientFName.charAt(0).toUpperCase() + apptDetails.patientFName.slice(1)} {apptDetails.patientLName} has requested to reschedule this appointment to <br/> <b>{apptDetails.appt_date} {apptDetails.appt_start} </b></p>
+                    {/* <div className={DetailStyles.btnContainer}>
                         <button className={`${DetailStyles.actionBtn} ${DetailStyles.approveBtn}`}>Approve Request</button>
                         <button className={DetailStyles.actionBtn}>View Request</button>
                         <button className={DetailStyles.actionBtn}>Dismiss</button>
-                    </div>
+                    </div> */}
                 </div>
-            </div>
+            </div>}
 
-            <div>
-                <p>Appointment Date & Time</p>
+            <div className={DetailStyles.rescheduleContainer}>
+                <p className={DetailStyles.rescheduleHeader}>Appointment Date & Time</p>
                 <div className={DetailStyles.apptDataContainer}>
                     <span>
-                        <p>Date:</p>
-                        <p>22 May 2025</p>
+                        <p className={DetailStyles.apptDataHeader}>Date:</p>
+                        <p>{apptDetails.appt_date}</p>
                     </span>
                     <span>
-                        <p>Time:</p>
-                        <p>9:30AM - 10:00AM</p>
+                        <p className={DetailStyles.apptDataHeader}>Time:</p>
+                        <p>{apptDetails.appt_start} to {apptDetails.appt_end}</p>
                     </span>
-                    <span>
-                        <p>Branch:</p>
-                        <p>Accelerated Wellness Zabarte Road QC</p>
-                    </span>
+                    
                 </div>
             </div>
             <div className={DetailStyles.columnTwo}>
@@ -111,7 +132,7 @@ const ApptDetails = (apptID) => {
                             <h3 className={DetailStyles.headerText}>SELECT DATE AND TIME</h3>
                             <div className={DetailStyles.timeSlotContainer}>
                                 {timeSlots.map((slide, index)=>(
-                                <span>{slide.display}</span>
+                                <span style={{backgroundColor: slide.label == apptDetails.appt_start ? '#FFFDDC' : ''}}>{slide.label}</span>
                                 ))}
                             </div>
                             <div className={DetailStyles.apptIndicator}>
@@ -131,10 +152,10 @@ const ApptDetails = (apptID) => {
                                     <div className={DetailStyles.requestedIndicator}></div>
                                     <p>Requested Time</p>
                                 </span>
-                                <button className={`blue-btn ${DetailStyles.editBtn}`}>
+                                {/* <button className={`blue-btn ${DetailStyles.editBtn}`}>
                                     <MdOutlineModeEdit className='btn-icon'/>
                                     <p>Edit</p>
-                                </button>
+                                </button> */}
                             </div>
                         </div>
                     

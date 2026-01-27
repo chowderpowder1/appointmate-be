@@ -40,7 +40,7 @@ const FdSideBar = () => {
         </NavLink>
 
         <NavLink to='manage-documents' className={ActiveSideBar}>
-          <FaBookMedical /> <span className={expandedText()}>MANAGE DOCUMENTS</span>
+          <FaBookMedical /> <span className={expandedText()}>DOCUMENTS</span>
         </NavLink>
 
         <div onClick={expandSideBar} className={SideBarStyles.expandContainer}>

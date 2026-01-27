@@ -10,18 +10,20 @@ import { IoCalendarClear } from "react-icons/io5";
 import { IoIosArrowForward } from "react-icons/io";
 
 import { useParams } from "react-router";
-import { useGetApptDetailsOverview, useGetApptDocuments } from '../../queries/useEmployees'
-
+import { useGetApptDetailsOverview, useGetApptDocuments,  } from '../../queries/useEmployees'
+import {useUsers} from '../../queries/users'
 const EditAppt = () => {
   const { id } = useParams();
   const { data: apptDetailsData, isLoading: apptDetailsDataIsLoading, error: apptDetailsDataError} = useGetApptDetailsOverview(id);
+  
+  const { data: myData, isLoading: myDataIsLoading, error: myDataError} = useUsers();
   
   const { data: apptDocuments, isLoading: apptDocumentsDataIsLoading, error: apptDocumentsDataError} = useGetApptDocuments(apptDetailsData?.patientID);
 
   if (apptDetailsDataIsLoading || apptDocumentsDataIsLoading) return <div>Loading...</div>;
   if (apptDetailsDataError || apptDocumentsDataError) return <div>⚠ Error: {apptDetailsDataError.message}</div>;
+  
 
-  console.log(apptDocuments)
   return (
     <div className={EditStyles.mainContainer}>
       <div className={EditStyles.directoryContainer}> <IoCalendarClear/> <p>Appointments</p> <IoIosArrowForward/> <p>Edit Appointments</p></div>
@@ -39,15 +41,15 @@ const EditAppt = () => {
         <AssignedPt apptData={apptDetailsData} apptID={id}/>
 
         <div className={EditStyles.apptDetailsContainer}>
-          <ApptDetails apptID={id}/>
+          <ApptDetails apptID={id} userData={myData}/>
           <PaymentMethod apptData={apptDetailsData}/>
           <PxAttachment apptDocuments={apptDocuments}/>
         </div>
 
-        <button className={EditStyles.applyBtn}> Apply Changes</button>
+        {/* <button className={EditStyles.applyBtn}> Apply Changes</button> */}
       </div>
       <div className={EditStyles.rowTwo}>
-        <UpdateApptStatus/>
+        <UpdateApptStatus apptData={apptDetailsData} userData={myData}/>
       </div>
 
     </div>

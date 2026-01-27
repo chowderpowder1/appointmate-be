@@ -1,6 +1,7 @@
 import e from 'express';
 import dbConnection from '../db.js';
 import dayjs from 'dayjs';
+import { v2 as cloudinary} from 'cloudinary';
 
 import utc from 'dayjs/plugin/utc.js';
 import timezone from 'dayjs/plugin/timezone.js'
@@ -31,12 +32,13 @@ async function getServices(req, res){
 async function getTherapists(req, res){
     try{
         // if(req.session.user.id){
-            const therapistIDs = await dbConnection.query(`SELECT  user_id from awp_pthera_tbl`)
+            const therapistIDs = await dbConnection.query(`SELECT user_id, pthera_id from awp_pthera_tbl`)
             // const ids = therapistIDs.rows.map(id => id.pthera_id)
             const therapistList = await Promise.all(therapistIDs.rows.map(async (r) => {
                 const therapist = await dbConnection.query(`SELECT user_fname, user_lname from awp_users_tbl WHERE user_id = $1`,[r.user_id])
             
                 return{
+                    therapistEmployeeId: r.pthera_id,
                     therapistId: r.user_id,
                     therapistName: `${therapist.rows[0].user_fname} ${therapist.rows[0].user_lname}`
                 }
@@ -170,22 +172,22 @@ async function getPatientEval(req, res){
                 const activeApptQuery = await dbConnection.query(`SELECT appt_id from awp_appt_tbl where patient_id=$1 ORDER BY CREATED_AT desc limit 1;`,[patientId])
                 const activeAppt = activeApptQuery.rows[0].appt_id
 
-                const evalQuery = await dbConnection.query(`SELECT * from awp_ptneval_tbl where appt_id=$1`,[activeAppt])
+                const evalQuery = await dbConnection.query(`SELECT * from awp_ptneval_tbl where patient_id=$1 ORDER BY CREATED_AT desc limit 1`,[patientId])
                 const evalData = evalQuery.rows[0]
 
-                const medHistoryQuery = await dbConnection.query(`SELECT * from awp_ptnmedhistory_tbl where appt_id=$1`,[activeAppt])
+                const medHistoryQuery = await dbConnection.query(`SELECT * from awp_ptnmedhistory_tbl where patient_id=$1 ORDER BY CREATED_AT desc limit 1`,[patientId])
                 const medhistoryData = medHistoryQuery.rows[0]
 
-                const palpationQuery = await dbConnection.query(`SELECT * from awp_ptnpalpation_tbl where appt_id=$1`,[activeAppt])
+                const palpationQuery = await dbConnection.query(`SELECT * from awp_ptnpalpation_tbl where patient_id=$1 ORDER BY CREATED_AT desc limit 1`,[patientId])
                 const palpationData = palpationQuery.rows[0]
-
+                console.log('Frieren',palpationData)
                 // const painQuery = await dbConnection.query(`SELECT * from awp_ptnpaintype_tbl where appt_id=$1`,[activeAppt])
                 // const painData = painQuery.rows[0]
                 
-                const painQuery = await dbConnection.query(`SELECT * from awp_ptnpain_tbl where appt_id=$1`,[activeAppt])
+                const painQuery = await dbConnection.query(`SELECT * from awp_ptnpain_tbl where patient_id=$1 ORDER BY CREATED_AT desc limit 1`,[patientId])
                 const painData = painQuery.rows[0]
 
-                console.log('Pain data', painData)
+                console.log('Med history data', medhistoryData)
 
 const {
     eval_diagnosis = '',
@@ -234,10 +236,10 @@ const {
     ptn_elicitedby = ''
 } = painData || {};
 
-                const painTypeQuery = await dbConnection.query(`SELECT * from awp_ptnpaintype_tbl where pain_type_id=$1`,[pain_type_id])
+                const painTypeQuery = await dbConnection.query(`SELECT * from awp_ptnpaintype_tbl where pain_type_id=$1 ORDER BY CREATED_AT desc limit 1`,[pain_type_id])
                 const painType = painTypeQuery.rows[0]
 
-                const oIQuery = await dbConnection.query(`SELECT * from awp_ptnobvimp_tbl where appt_id=$1`,[activeAppt])
+                const oIQuery = await dbConnection.query(`SELECT * from awp_ptnobvimp_tbl where patient_id=$1 ORDER BY CREATED_AT desc limit 1`,[patientId])
                 const oIData = oIQuery.rows[0]
 
                 const apptServiceQuery = await dbConnection.query(`SELECT service_id from awp_appt_tbl where appt_id=$1`,[activeAppt])
@@ -451,7 +453,7 @@ async function patchInitialEval(req, res){
         ...payload,
             pain_type_id: String(painTypeId)
     };
-
+    console.log('Edema Boolean', req.body.edemaOn)
     const patientId = await dbConnection.query(`SELECT patient_id from awp_patient_tbl WHERE user_id=$1`,[id])
     const activeAppt = await dbConnection.query(`SELECT appt_id from awp_appt_tbl where patient_id=$1 ORDER BY CREATED_AT desc limit 1;`,[patientId.rows[0].patient_id])
     console.log('patientId', patientId.rows[0])
@@ -488,18 +490,18 @@ async function patchInitialEval(req, res){
       const query = `
         UPDATE ${table}
         SET ${setClause}
-        WHERE appt_id = $${fields.length + 1}
+        WHERE patient_id = $${fields.length + 1}
         RETURNING *;
       `;
 
-      const recordExists = await dbConnection.query(`SELECT * FROM ${table} WHERE appt_id=$1;`,[activeAppt.rows[0].appt_id])
+      const recordExists = await dbConnection.query(`SELECT * FROM ${table} WHERE patient_id=$1;`,[patientId.rows[0].patient_id])
 
         // Check if there is a pre-existing record for the assocaited appt id and creates one otherwise
         if (recordExists.rows == 0){
         console.log('Patient Record does not exist, Creating record')
-        const createRecord = await dbConnection.query(`INSERT INTO ${table}(patient_id, appt_id) values ($1,$2)`,[patientId.rows[0].patient_id,activeAppt.rows[0].appt_id])
+        const createRecord = await dbConnection.query(`INSERT INTO ${table}(patient_id) values ($1)`,[patientId.rows[0].patient_id])
       }
-      const { rows } = await dbConnection.query(query, [...values, activeAppt.rows[0].appt_id]);
+      const { rows } = await dbConnection.query(query, [...values, patientId.rows[0].patient_id]);
       updatedRows[table] = rows[0];
     }
 
@@ -530,6 +532,7 @@ async function getPatientDocumentsList(req,res){
                         documentId:p.ptn_doc_id,
                         patientAvatar:patientAvatar.rows[0].image_url,
                         patientName: `${patientName.rows[0].user_fname} ${patientName.rows[0].user_lname}`,
+                        patientId:patientUserId,
                         file_name: p.file_name,
                         file_type: p.file_type, 
                         upload_date: p.upload_date,
@@ -790,9 +793,7 @@ async function getApptDocuments(req,res){
                 const patientId = req.params.id
 
                 const allDocQuery = await dbConnection.query(`SELECT ptn_doc_id, patient_id, file_name, file_type, upload_date, doc_status FROM awp_ptndocs_tbl WHERE patient_id=$1 ORDER BY created_at DESC, doc_status DESC`, [patientId])
-                    console.log(allDocQuery.rows)
                   const patientDocumentList = await Promise.all(allDocQuery.rows.map(async (p) => {
-                        console.log(p)
                         const patientUserIdQuery = await dbConnection.query(`SELECT user_id from awp_patient_tbl WHERE patient_id=$1`,[p.patient_id])
                         const patientUserId = patientUserIdQuery.rows[0].user_id;
 
@@ -826,4 +827,45 @@ async function getApptDocuments(req,res){
     }
 };
 
-export { getApptDocuments, getApptDetailsOverview,getAllUpcomingAppts, patchRescheduleAppt, getPatientsPendingAppointments, bookAppointmentForPatient, updateDocumentStatus, getPatientDocumentsList, patchInitialEval, getPatientEval, getServices, getTherapists, getPatients, getPatientData, getUserPersonalData}
+async function getPatientDocumentSignedUrl(req,res){
+    console.log('get Document Signed Url Endoint')
+    console.log(req.session.user)
+    try{
+        if (req?.session?.user || req?.user) {
+            const isAuthorized = await dbConnection.query(`SELECT user_role from awp_users_tbl WHERE user_id=$1`, [req.session.user.id])
+            if( isAuthorized.rows[0].user_role < 5){
+                
+                const userId = req.session.user.id
+                const documentId = req.query.documentId
+
+                console.log('User is authorized, Document ID:', documentId)
+                const docPublicIdQuery = await dbConnection.query(`SELECT public_id FROM awp_ptndocs_tbl WHERE ptn_doc_id=$1` ,[documentId])
+                const docPublicId = docPublicIdQuery.rows[0].public_id
+                console.log(docPublicId)
+
+                const signedUrl = cloudinary.url(docPublicId, {
+                    type: 'authenticated',
+                    sign_url: true,
+
+                    expires_at: Math.floor(Date.now() / 1000) + 300, // 5 minutes
+                });
+                console.log('Signed Url: ',signedUrl)
+                res.json({ url: signedUrl });
+
+        }else{
+            res.json({message:'User not authorized'})
+            console.log('User is not authorized')
+        }
+
+        }else{
+            res.json({message:'User not Logged in'})
+            console.log('User is not Logged in')
+        }
+    }catch(err){
+        console.log(err)
+        res.status(500).json({error: 'Signed Url Fetch Failed'});
+    }
+};
+
+
+export { getPatientDocumentSignedUrl, getApptDocuments, getApptDetailsOverview,getAllUpcomingAppts, patchRescheduleAppt, getPatientsPendingAppointments, bookAppointmentForPatient, updateDocumentStatus, getPatientDocumentsList, patchInitialEval, getPatientEval, getServices, getTherapists, getPatients, getPatientData, getUserPersonalData}

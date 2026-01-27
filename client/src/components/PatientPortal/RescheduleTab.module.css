@@ -24,6 +24,12 @@
     border-radius:15px;
     border-left:8px solid var(--primary-color);
 }
+.apptDetailsItemTitle{
+    font-size:.8rem;
+}
+.apptDetailsItemData{
+    font-weight:600;
+}
 .apptDetailsSubContainer{
     display:flex;
     

@@ -3,15 +3,25 @@ import DocumentStyles from './ViewDocument.module.css'
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-
+import {Link} from 'react-router'
 import { FaFilePdf } from "react-icons/fa6";
 
-import { useUpdateDocumentStatus } from '../../queries/useEmployees'
+import { useUpdateDocumentStatus, useGetPatientDocumentSignedUrl } from '../../queries/useEmployees'
 
 const ViewDocument = (user) => {    
-
+  const {mutateAsync : getSignedUrl, isPending} = useGetPatientDocumentSignedUrl();
    const { mutate: updateDocumentStatus} = useUpdateDocumentStatus();
 //    const { documentStatus, setDocumentStatus }= useState(null);
+    const handleDownload = async (documentId) => {
+      console.log(documentId)
+        try{
+          const data = await getSignedUrl(documentId);
+          console.log(data.url)
+          window.open(data.url, '_blank');
+        }catch(err){
+          console.error('Download Failed:', err)
+        }
+    }
     const userData = user.user;
 console.log(userData.documentId)
   return (
@@ -23,7 +33,7 @@ console.log(userData.documentId)
         <div className={DocumentStyles.subContainer}>
             <div className={DocumentStyles.downloadContainer}>
                 <FaFilePdf className={DocumentStyles.dlIcon}/>
-                <p className={DocumentStyles.dlText}>Click to download file</p>
+                <p onClick={() => handleDownload(userData.documentId)} className={DocumentStyles.dlText}>Click to download file</p>
             </div>
             <div className={DocumentStyles.documentTextcontainer}>
                 <p>Patient Name: {userData.patientName}</p>

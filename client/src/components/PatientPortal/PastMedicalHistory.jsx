@@ -81,7 +81,7 @@ const PastMedicalHistory = () => {
         console.log(myRecords.message)
   return (
     <>
-    { myRecords.message === "No session yet" && (<div className={HistoryStyles.historyContainer}>
+    { myRecords.message === undefined && (<div className={HistoryStyles.historyContainer}>
         <div className={HistoryStyles.historyTitleContainer}>
           <p className={HistoryStyles.historyTitle}>Past Medical History</p>
         </div>
@@ -246,7 +246,7 @@ const PastMedicalHistory = () => {
 
         </div>
     </div>)}
-    { !(myRecords.message === "No session yet") && (
+    { (myRecords.message === "No session yet") && (
       <div className={HistoryStyles.historyContainer}>
         <h1 style={{color:'#1976D5'}}>No Evalation has been made yet. Please Book an appointment.</h1>
         </div>

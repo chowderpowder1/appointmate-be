@@ -19,10 +19,11 @@ import { UseGetAnAppointmentsDetails, useUpdateMyAppointment } from '../../queri
 import { useGetMyRecords } from '../../queries/users.js'
 
 const AppointmentDetails = (apptID) => {
+  console.log(apptID)
     const { data: evalData, isLoading: evalDataisLoading, error: evalDataError} = useGetMyRecords();
 
     const [complaint, setComplaint] = useState('')
-    const { data: apptDetails, isLoading: apptDetailIsLoading, error: apptDetailsError} = UseGetAnAppointmentsDetails(apptID);
+    const { data: apptDetails, isLoading: apptDetailIsLoading, error: apptDetailsError} = UseGetAnAppointmentsDetails(apptID.apptID);
     const [isCancelOpen, setIsCancelOpen] = useState(false);
     const [isRescheduleOpen, setIsRescheduleOpen] = useState(false);
 

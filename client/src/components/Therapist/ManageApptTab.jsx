@@ -94,7 +94,7 @@ const ManageAppt = () => {
                             {/* <span className={ManageStyles.viewBtn}>
                               <FaEye className={ManageStyles.icon}/>
                             </span> */}
-                            <Button disabled={ data.appt_status === 'completed' || data.appt_status === 'scheduled' } onClick={()=> apptStatusHandler(data.appt_id)}
+                            <Button disabled={ data.appt_status === 'completed' || data.appt_status === 'scheduled' || data.appt_status === 'approved' || data.appt_status === 'cancelled' } onClick={()=> apptStatusHandler(data.appt_id)}
                             variant='contained' > Approve
                             </Button>
 

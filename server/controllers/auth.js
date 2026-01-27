@@ -121,14 +121,16 @@ async function session (req, res) {
             return res.json({
                 loggedIn:true,
                 firstName: employeeUserData.rows[0].user_fname,
-                userRole: 'Front-Desk'
+                userRole: 'Front-Desk',
+                userRoleId:4
             })
         }
         if(currentUserRole.rows[0].user_role === 3){
             return res.json({
                 loggedIn:true,
                 firstName: employeeUserData.rows[0].user_fname,
-                userRole: 'Therapist'
+                userRole: 'Therapist',
+                userRoleId:3
             })
         }
 

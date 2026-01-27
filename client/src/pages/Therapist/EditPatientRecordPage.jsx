@@ -141,8 +141,9 @@ const EditPatientRecordPage = () => {
     }));
   };
   
-console.log(updatePatientEval.therapyService)
+console.log(updatePatientEval.edemaOn)
   useEffect(() => {
+    console.log(patientEvalData)
     if (patientEvalData) {
       setUpdatePatientEval({
         diagnosis: patientEvalData.diagnosis || "",
@@ -201,14 +202,14 @@ console.log(updatePatientEval.therapyService)
         heavy: patientEvalData.heavy,
 
         //  Oi
-        ambulatory: patientEvalData.ptn_ambulatory,
-        deformity: patientEvalData.ptn_deformity,
-        erythemaOn: patientEvalData.ptn_erythemaon,
-        erythemaNotes:patientEvalData.ptn_erythemanotes,
-        swellingOn: patientEvalData.ptn_swellingon,
-        swellingNotes:patientEvalData.ptn_swellingnotes,
-        atrophy: patientEvalData.ptn_atrophy,
-        posturalDeviation: patientEvalData.ptn_posturaldev,
+        ambulatory: patientEvalData.ambulatory,
+        deformity: patientEvalData.deformity,
+        erythemaOn: patientEvalData.erythemaon,
+        erythemaNotes:patientEvalData.erythemaNotes,
+        swellingOn: patientEvalData.swellingOn,
+        swellingNotes:patientEvalData.swellingNotes,
+        atrophy: patientEvalData.atrophy,
+        posturalDeviation: patientEvalData.posturalDev,
         othersOi: patientEvalData.ptn_othernotes,
 
         therapyService: patientEvalData.appt_service,
@@ -737,7 +738,7 @@ console.log(updatePatientEval.therapyService)
                            <FormGroup>
                             <FormControlLabel control={<Checkbox/>} label="Edema on:" 
                             name='edemaOn'       
-                            checked={!!updatePatientEval.edemaOn}
+                            checked={Boolean(updatePatientEval.edemaOn)}
                                                  
                             onChange={(e) =>
                               setUpdatePatientEval((prev) => ({
@@ -870,6 +871,7 @@ console.log(updatePatientEval.therapyService)
           
            onClick={()=>{
               updatePatientEvalMutation({id, payload:updatePatientEval},{
+                          
                           onSuccess: (data) => {
                               console.log('success')
                               toast('All data updated successfully')

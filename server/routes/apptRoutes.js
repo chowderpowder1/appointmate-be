@@ -1,5 +1,5 @@
 import express from 'express';
-import { getBookedDates, bookAppointment, getApptOverview, getAllApptData, updateApptStatus, getPatientsList, getApptDetails, patientUpdateApptStatus, getTherapistAppointments,patchRescheduleMyAppt } from '../controllers/apptController.js'
+import { patchPatientReschedule, getBookedDates, bookAppointment, getApptOverview, getAllApptData, updateApptStatus, getPatientsList, getApptDetails, patientUpdateApptStatus, getTherapistAppointments,patchRescheduleMyAppt } from '../controllers/apptController.js'
 
 const router = express.Router();
 
@@ -22,5 +22,7 @@ router.get('/getTherapistAppointments', getTherapistAppointments)
 router.patch('/patientUpdateApptStatus', patientUpdateApptStatus)
 
 router.patch('/patchRescheduleMyAppt', patchRescheduleMyAppt)
+
+router.patch('/patchPatientReschedule', patchPatientReschedule)
 
 export default router;
