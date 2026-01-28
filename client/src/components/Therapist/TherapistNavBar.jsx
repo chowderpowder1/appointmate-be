@@ -13,7 +13,7 @@ import { useUsers } from '../../queries/users'
 const TherapistNavBar = () => {
   const { data: userData, isLoading: userDataIsLoading, error: userDataError} = useUsers();
       const redirect = useNavigate();
-  
+    
       const handleLogout = async (e) => {
         try{
             localStorage.clear();

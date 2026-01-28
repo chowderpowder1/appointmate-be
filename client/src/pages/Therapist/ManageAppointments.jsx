@@ -25,9 +25,9 @@ const ManageAppointments = () => {
               Manage Appointments
             </div>
 
-            <div onClick={ ()=> toggleTab(1)} className={`${ManageStyles.tabItem} ${activeTab === 1 ? ManageStyles.tabActive:''}`}>
+            {/* <div onClick={ ()=> toggleTab(1)} className={`${ManageStyles.tabItem} ${activeTab === 1 ? ManageStyles.tabActive:''}`}>
               Schedule Appointments
-            </div>
+            </div> */}
 {/*             
             <div onClick={ ()=> toggleTab(2)} className={`${ManageStyles.tabItem} ${activeTab === 2 ? ManageStyles.tabActive:''}`}>
               Reschedule Appointments
@@ -44,9 +44,9 @@ const ManageAppointments = () => {
             <ManageTab/>
           </div>
 
-          <div className={` ${ activeTab === 1 ? `${ManageStyles.branchSlideActive}` : `${ManageStyles.branchSlide}`}`}>
+          {/* <div className={` ${ activeTab === 1 ? `${ManageStyles.branchSlideActive}` : `${ManageStyles.branchSlide}`}`}>
             <AddApptTab/>
-          </div>
+          </div> */}
 
           <div className={`${ManageStyles.branchSlide} ${ activeTab === 2 ? `${ManageStyles.branchSlideActive}` : ''}`}>
           </div>

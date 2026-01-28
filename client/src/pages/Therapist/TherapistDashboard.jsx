@@ -15,7 +15,7 @@ const TherapistDashboard = () => {
       <h1 className={DashboardStyles.header}>Dashboard</h1>
       <div className={DashboardStyles.row}>
         <TherapistGreet/>
-        <SchedulePxNotification/>
+        {/* <SchedulePxNotification/> */}
       </div>
       <div className={DashboardStyles.row}>
         <NotificationBelt/>

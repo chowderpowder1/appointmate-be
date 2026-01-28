@@ -7,6 +7,7 @@ import Modal from '../../components/Ui/Modal'
 import ClinicPhoto from '../../assets/AwZabarte.jpg'
 import ViewDocument from '../../components/FrontDesk/ViewDocument'
 import blankPx from '../../assets/blank-px.jpg'
+import MockTherapist from '../../assets/aw_mock-px.png'
 
 import { useGetPatientDocumentList} from '../../queries/useEmployees'
 
@@ -78,7 +79,7 @@ const FdManageDocuments = () => {
                   <td className={DocumentStyles.tblData}>
                     <div className={DocumentStyles.pxContainer}>
                       <div className={DocumentStyles.blankPxContainer}>
-                        <img className={DocumentStyles.pxPhoto} src={data.patientAvatar} alt="" />
+                        <img className={DocumentStyles.pxPhoto} src={data.patientAvatar || MockTherapist} alt="" />
                       </div>
                       <div style={{alignItems:'center', display:'flex'}}>
                         <p>{data.patientName}</p>

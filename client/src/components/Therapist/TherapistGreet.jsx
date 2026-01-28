@@ -1,7 +1,7 @@
 import React from 'react'
 import GreetStyles from './TherapistGreet.module.css'
 import Notebook from '../../assets/therapist-notebook.png'
-import MockTherapist from '../../assets/mock-therapist.jpg'
+import MockTherapist from '../../assets/aw_mock-px.png'
 import { IoTime } from "react-icons/io5";
 import { FaCalendar } from "react-icons/fa";
 

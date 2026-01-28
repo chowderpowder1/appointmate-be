@@ -354,7 +354,7 @@ async function getApptDetails(req,res){
                 patientHmo: patientDataRows.ptn_hmoprov,
                 therapistID: therapistID,
                 therapistEmail: therapistDetails.rows[0].user_logemail,
-                therapistContactNumber: therapistContact.rows[0].contact_value,
+                therapistContactNumber: therapistContact?.rows[0]?.contact_value,
                 assignedTherapist: assignedTherapist ? `${assignedTherapist.user_fname} ${assignedTherapist.user_lname}`: null,
                 therapistSpecialization: therapistSpecialization.rows[0].pthera_special,
                 apptStatus : apptRows.appt_status,

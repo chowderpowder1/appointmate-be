@@ -520,17 +520,17 @@ async function getPatientDocumentsList(req,res){
                 const userId = req.session.user.id
                 const allDocQuery = await dbConnection.query(`SELECT ptn_doc_id, patient_id, file_name, file_type, upload_date, doc_status FROM awp_ptndocs_tbl ORDER BY created_at DESC, doc_status DESC`)
                     console.log(allDocQuery.rows)
-                  const patientDocumentList = await Promise.all(allDocQuery.rows.map(async (p) => {
+                  const patientDocumentList = await Promise.all(allDocQuery?.rows?.map(async (p) => {
                         console.log(p)
                         const patientUserIdQuery = await dbConnection.query(`SELECT user_id from awp_patient_tbl WHERE patient_id=$1`,[p.patient_id])
                         const patientUserId = patientUserIdQuery.rows[0].user_id;
 
                         const patientName = await dbConnection.query(`SELECT user_fname, user_lname FROM awp_users_tbl WHERE user_id=$1`,[patientUserId])
                         const patientAvatar = await dbConnection.query(`SELECT image_url FROM user_avatars WHERE user_id=$1`,[patientUserId])
-                        console.log(patientAvatar.rows[0].image_url)
+                        console.log(patientAvatar?.rows[0]?.image_url)
                     return {
                         documentId:p.ptn_doc_id,
-                        patientAvatar:patientAvatar.rows[0].image_url,
+                        patientAvatar:patientAvatar?.rows[0]?.image_url || '',
                         patientName: `${patientName.rows[0].user_fname} ${patientName.rows[0].user_lname}`,
                         patientId:patientUserId,
                         file_name: p.file_name,
