@@ -46,7 +46,6 @@ import { useSubmitLogin, useSubmitOtp } from '../../queries/auth.js'
 const LoginPage = () => {
     const [isOpen, setIsOpen] = useState(false);
     const { mutate: submitLoginMutation} = useSubmitLogin();
-    const {mutate:generateOtpMutation} = useGenerateOtp();
     const {mutate:submitOtp} = useSubmitOtp();
     const [isOtpOpen, setIsOtpOpen] = useState(false);
     const redirect = useNavigate();
@@ -65,6 +64,7 @@ const LoginPage = () => {
     const [otpPayLoad, setOtpPayLoad] = useState({
         otp: '',
         email:'',
+        password:"",
     });
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     const [signUpForm, setsignUpForm] = useState({
@@ -77,16 +77,17 @@ const LoginPage = () => {
     })
 
     const [loginForm, setLoginForm] = useState({
+        otp: '',
         email:"",
         password:"",
     })
 
     const otpHandler = (e) => {
+        console.log(otpPayLoad)
         setOtpPayLoad((prev) => ({
             ...prev,
             [e.target.name]: e.target.value
         }))
-        console.log(otpPayLoad)
     }
 
     const isValidPassword= (password) => /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(password)
@@ -209,8 +210,8 @@ z
                 console.error('Error:', error);
             }
     }
-
     const handleLoginChange = (e) => {
+        console.log(loginForm)
       setLoginForm({
         ...loginForm,
         [e.target.name]: e.target.value,
@@ -223,44 +224,48 @@ z
     };
 
     const handleLoginSubmit = async (e) =>{
+        console.log(loginForm)
         e.preventDefault();
         submitLoginMutation(loginForm, {
             onSuccess: (data) => {
                 console.log('success', data.requireOtp)
                 setIsVerified(data.requireOtp)
                 if(data.gmailAccount){
-                    toast('Gmail Account: Please Sign in with Google')
-                }   
+                    toast('Gmail Account: Please Sign in with Google')  
+                }
+                 if (data.redirectTo) {
+        window.location.href = data.redirectTo; // ✅ correct client redirect
+      }   
             }
         })
-            try{
-                const res = await axios.post(
-                    'http://localhost:8080/auth/login', 
-                    loginForm,
-                    { withCredentials: true }
-                )
-                .then(res => {
-                    if (res.status===200 && res.data.redirectTo){
-                        toast('Account Successfully registered. Redirecting to login page')
-                        setTimeout(()=>{
-                            window.location.href = res.data.redirectTo;
-                        }, '1000')
-                    }
-                })
+            // try{
+            //     const res = await axios.post(
+            //         'http://localhost:8080/auth/login', 
+            //         loginForm,
+            //         { withCredentials: true }
+            //     )
+            //     .then(res => {
+            //         if (res.status===200 && res.data.redirectTo){
+            //             toast('Login Successful. Redirecting to login page')
+            //             setTimeout(()=>{
+            //                 window.location.href = res.data.redirectTo;
+            //             }, '1000')
+            //         }
+            //     })
                     
-                //     redirect("/");
-            } catch (error) 
-            {
+            //         redirect("/");
+            // } catch (error) 
+            
                 
-                console.error('Error:', error);
+                // console.error('Error:', error);
     
-                notify((error.response.data).toString())
+                // notify((error.response.data).toString())
 
-            }
-            setLoginForm({
-                        email:'',
-                        password:'',
-                    })
+            
+            // setLoginForm({
+            //             email:'',
+            //             password:'',
+            //         })
     }
 
     const notify = (message) => toast(message);
@@ -292,10 +297,10 @@ z
             <h2>Enter verification code</h2>
             <p className={LoginStyles.otpDesc}>Please enter the code sent to your email or phone.</p>
              <form 
-             onSubmit={handleOtpSubmit}
+             onSubmit={handleLoginSubmit}
              >
                  <TextField
-                 onChange={otpHandler} 
+                 onChange={handleLoginChange} 
                               name='otp' 
                               required
                               

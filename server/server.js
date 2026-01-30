@@ -104,14 +104,12 @@ passport.use(new GoogleStrategy({
 
 passport.serializeUser((user, done) => {
     // console.log('Serialize user block one' + user)
-    console.log('Block Three');
     console.log(user.rows[0].user_id)
     done(null, user.rows[0].user_id)
 })
 passport.deserializeUser( async (id, done) => {
     console.log('deserializing')
     const result = await dbConnection.query("SELECT * FROM awp_users_tbl WHERE user_id = $1", [id]);
-    console.log(result.rows[0]);
     const row = result.rows[0]
     const user = {
         loggedIn:true,

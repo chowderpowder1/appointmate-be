@@ -1,6 +1,6 @@
 import express from 'express';
 import cors from 'cors'; // Cross origin resource sharing
-import {signup, login, session, logout, otp, receiveOtp} from '../controllers/auth.js'
+import {signup, login, session, logout, createOtp, receiveOtp} from '../controllers/auth.js'
 
 const router = express.Router();
 
@@ -12,7 +12,7 @@ router.post('/logout', logout)
 
 router.get('/session', session)
 
-router.post('/otp', otp)
+router.post('/otp', createOtp)
 
 router.post('/receiveOtp', receiveOtp)
 export default router;

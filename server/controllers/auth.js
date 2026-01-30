@@ -3,9 +3,10 @@ import bcrypt from 'bcrypt'; // Hashing library
 import nodemailer from 'nodemailer';
 import otpGenerator from 'otp-generator'
 async function login(req, res){
+    console.log('Otp is part of payload confirmation:', req.body.otp)
     try{
         
-        const { email, password } = req.body;
+        const { email, password, otp } = req.body;
         // const patientIdLookup = await dbConnection.query(`SELECT patient_id from awp_patient_tbl WHERE user_id=$1;`,[user.rows[0].user_id,])
         // const patientId= patientIdLookup.rows[0].patient_id
         // const userContact = await dbConnection.query('SELECT contact_value FROM awp_ucontacts_tbl WHERE user_id = $1',[user.rows[0].user_id]);
@@ -22,15 +23,29 @@ async function login(req, res){
 
         const isVerified = await dbConnection.query(`SELECT is_verified FROM awp_users_tbl WHERE user_logemail=$1`,[email])
         console.log(isVerified.rows[0])
+        console.log('This is the otp payload', otp )
+        console.log('Assigned otp as per table', user.rows[0].otp )
+        if(otp == user.rows[0].otp){
+            console.log('Login Handler Verified Confirmation')
+            await dbConnection.query(`UPDATE awp_users_tbl SET is_verified=true WHERE user_logemail = $1`,[email])
+            // return res.json({
+            //     'success': true,
+            //     'requireOtp': false,
+            //     'message': 'Email has been verified'
+            // })
+        }
+
         if (!isVerified.rows[0].is_verified) {
             console.log('User is not verified')
-            otp(req,res);
+            createOtp(req,res);
             return res.json({
                 'success': false,
                 'requireOtp': true,
                 'message': 'Please verify your email to continue'
             })
         }
+        console.log('user is verified')
+        
 
         const dbUser = user.rows[0];
         if(dbUser.password_hash == null){
@@ -188,7 +203,7 @@ async function logout (req, res) {
 }
 
 //  This is a quick workaround - currently the same column is used for login and signup otp. Revise and create a separate table
-async function otp (req, res) {
+async function createOtp (req, res) {
     try{
 
         // const currentUserID = req?.session?.user?.id || req?.user?.id || null;
@@ -241,6 +256,7 @@ async function otp (req, res) {
 
 async function receiveOtp (req, res) {
     const { email, otp } = req.body
+
     try{
         const emailExists = await dbConnection.query(`SELECT * from awp_users_tbl WHERE user_logemail = $1`,[email])
         const emailExistsRow = emailExists.rows[0];
@@ -260,4 +276,4 @@ async function receiveOtp (req, res) {
             console.log(err)
         }
 }
-export { signup, login, session, logout, otp, receiveOtp };
+export { signup, login, session, logout, createOtp, receiveOtp };

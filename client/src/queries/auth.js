@@ -11,14 +11,6 @@ export const useSubmitLogin = () => {
                     loginForm,
                     { withCredentials: true })
                     return res.data
-            //     .then(res => {
-            //         if (res.status===200 && res.data.redirectTo){
-            //             window.location.href = res.data.redirectTo;
-            //         }
-            //     }
-            // )
-                    
-                    // redirect("/");
 
         }, 
             onSuccess: (data) => {
