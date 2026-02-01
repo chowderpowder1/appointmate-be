@@ -22,18 +22,26 @@ import {useRegion} from '../../queries/region.js'
 
 const StepTwo = () => {
   const {formData, setFormData} = useAppContext();
-
+ const relOptions =[
+      { relationship: "Parent" },
+      { relationship: "Spouse" },
+      { relationship: "Child" },
+      { relationship: "Sibling" },
+      { relationship: "Grandparent" },
+      { relationship: "Guardian" },
+      { relationship: "Relative" },
+      { relationship: "Friend" },
+      { relationship: "Colleague" },
+      { relationship: "Other" }
+    ]
   const [regionCode, setRegionCode] = useState(formData.contactInfo.regionCode || '');
 const [cityCode, setCityCode] = useState(formData.contactInfo.cityCode || '');
 
-// Fetch regions and countries first (no dependencies)
 const { data: regionData, isLoading: regionDataIsLoading, error: regionDataError } = useRegion();  
 const { data: countryData, isLoading: countryIsLoading, error: countryError } = useCountries();  
 
-// ✅ Pass regionCode here
 const { data: phCitydata, isLoading: phCityIsLoading, error: phCityError } = usephCities(regionCode);  
 
-// ✅ Pass cityCode here
 const { data: barangayData, isLoading: barangayIsLoading, error: barangayError } = useBarangays(cityCode);
 
   // Loading state
@@ -113,16 +121,14 @@ const { data: barangayData, isLoading: barangayIsLoading, error: barangayError }
     }));
   }
 
-  console.log('Region Data:', regionData);
-  console.log('Mapped Regions:', mappedRegions);
-
   return (
-    <div>   
       <div className={TwoStyles.formContainer}>
         <p className={TwoStyles.header}>Contact Information</p>
-        
-        <Box display='flex' sx={{ gap: '1rem' }}>
-          <TextField 
+      <Grid container spacing={2} sx={{ width:'100%' }}>
+
+        {/* <Box display='flex' sx={{ gap: '1rem' }}> */}
+          <Grid size={4}>   
+            <TextField fullWidth
             onChange={handleInputChange('contactInfo')} 
             value={formData.contactInfo.unit || ''} 
             id="unit-field" 
@@ -130,7 +136,9 @@ const { data: barangayData, isLoading: barangayIsLoading, error: barangayError }
             name='unit' 
             variant="outlined" 
           />
-          <TextField 
+          </Grid>
+          <Grid size={4}>    
+            <TextField fullWidth
             onChange={handleInputChange('contactInfo')} 
             name='street' 
             value={formData.contactInfo.street || ''} 
@@ -138,33 +146,44 @@ const { data: barangayData, isLoading: barangayIsLoading, error: barangayError }
             label="Street" 
             variant="outlined" 
           />
-        </Box>
+          </Grid>
 
-        <Grid container spacing={2} sx={{ mt: 2 }}>
-  {/* Region Select */}
-  <Grid item xs={12} sm={6} md={4}>
-    <FormControl fullWidth>
-      <InputLabel id="region-label">Region</InputLabel>
-      <Select
-        labelId="region-label"
-        id="region-select"
-        value={formData.contactInfo.region || ''}
-        name='region'
-        label="Region"
-        onChange={handleRegionChange}
-      >
-        {mappedRegions.map((region) => (
-          <MenuItem key={region.code} value={region.name}>
-            {region.name}
-          </MenuItem>
-        ))}
-      </Select>
-    </FormControl>
-  </Grid>
-
+          {/* Zipcode */}
+          <Grid item size={4}>
+            <TextField 
+              name='zipcode' 
+              value={formData.contactInfo.zipcode || ''} 
+              onChange={handleInputChange('contactInfo')} 
+              required 
+              id="zipcode-field" 
+              label="Zipcode" 
+              fullWidth
+            />
+          </Grid>
+        <Grid container spacing={2} sx={{ width:'100%' }}>
+          {/* Region Select */}
+          <Grid size={4}>   
+            <FormControl fullWidth>
+                <InputLabel id="region-label">Region</InputLabel>
+                <Select
+                  labelId="region-label"
+                  id="region-select"
+                  value={formData.contactInfo.region || ''}
+                  name='region'
+                  label="Region"
+                  onChange={handleRegionChange}
+                >
+                  {mappedRegions.map((region) => (
+                    <MenuItem key={region.code} value={region.name}>
+                      {region.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
   {/* City Select - Disabled until region is selected */}
-  <Grid item xs={12} sm={6} md={4}>
-    <FormControl fullWidth disabled={!regionCode}>
+<Grid size={4}>   
+      <FormControl fullWidth disabled={!regionCode}>
       <InputLabel id="city-label">City</InputLabel>
       <Select
         labelId="city-label"
@@ -188,7 +207,7 @@ const { data: barangayData, isLoading: barangayIsLoading, error: barangayError }
   </Grid>
 
   {/* Barangay Select - Disabled until city is selected */}
-  <Grid item xs={12} sm={6} md={4}>
+  <Grid item size={4}>
     <FormControl fullWidth disabled={!cityCode}>
       <InputLabel id="barangay-label">Barangay</InputLabel>
       <Select
@@ -212,23 +231,41 @@ const { data: barangayData, isLoading: barangayIsLoading, error: barangayError }
     </FormControl>
   </Grid>
 
-  {/* Zipcode */}
-  <Grid item xs={12} sm={6} md={4}>
-    <TextField 
-      name='zipcode' 
-      value={formData.contactInfo.zipcode || ''} 
-      onChange={handleInputChange('contactInfo')} 
-      required 
-      id="zipcode-field" 
-      label="Zipcode" 
-      fullWidth
-    />
-  </Grid>
+          </Grid>
 
-  
 </Grid>
+
+<p className={TwoStyles.header}>Emergency Contact Information</p>
+        <Grid container fullWidth rowSpacing={2} columnSpacing={2}>
+            <Grid size={6}>
+                <TextField fullWidth name='contactPerson' value={formData.emergencyInfo.contactPerson} onChange={handleInputChange('emergencyInfo')} id="outlined-basic" label="Contact Person" variant="outlined" />
+            </Grid>
+
+        <Grid size={6}>
+            <FormControl fullWidth> 
+                <InputLabel id="demo-simple-select-label">Relationship</InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={formData.emergencyInfo.relationship}
+                  name='relationship'
+                  label="Relationship"
+                  onChange={handleInputChange('emergencyInfo')}
+                >
+                  {relOptions.map((e)=>(
+                    <MenuItem value={e.relationship}>{(e.relationship).toUpperCase()}</MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+        </Grid>
+            <Grid size={6}>
+                <TextField fullWidth id="outlined-basic" label="Contact Number" variant="outlined" name='contactNumber' value={formData.emergencyInfo.contactNumber} onChange={handleInputChange('emergencyInfo')}  />
+            </Grid>
+            <Grid size={6}>
+                <TextField fullWidth id="outlined-basic" label="Alternate Number" variant="outlined" name='altNumber' value={formData.emergencyInfo.altNumber} onChange={handleInputChange('emergencyInfo')}/>
+            </Grid>
+        </Grid>
       </div>
-    </div>
   )
 }
 

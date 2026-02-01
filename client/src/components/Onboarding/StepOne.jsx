@@ -16,6 +16,11 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 
+//MUI
+import InputLabel from '@mui/material/InputLabel';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+
 import {useAppContext} from './AppContext.jsx'
 
 // axios
@@ -98,24 +103,28 @@ const StepOne = () => {
                     maxDate={dayjs()} // prevents selecting future dates
                   />
                 </LocalizationProvider>
+                <TextField name='religion' value={formData.contactInfo.religion} onChange={handleInputChange('contactInfo')} required id="outlined-required" label="Religion" fullWidth/>
+
+               
             </Box>
 
             <h1 className={OneStyles.header}>Company Information</h1>
             <TextField onChange={handleInputChange('contactInfo')} id="outlined-basic" value={formData.contactInfo.employer} label="Enter your Company" variant="outlined" name="employer" />
 
-            <h1 className={OneStyles.header}>Religion</h1> 
-             <TextField name='religion' value={formData.contactInfo.religion} onChange={handleInputChange('contactInfo')} required id="outlined-required" label="Religion" fullWidth/>
+            {/* <h1 className={OneStyles.header}>Religion</h1> 
+             <TextField name='religion' value={formData.contactInfo.religion} onChange={handleInputChange('contactInfo')} required id="outlined-required" label="Religion" fullWidth/> */}
         </div>
 
         <div className={OneStyles.rightContainer}>
-            {/* <div className={OneStyles.uploadPhotoContainer}>
-                    <FaCamera onClick={handleClick} className={OneStyles.icon}/>
-                    <label className={OneStyles.upload} htmlFor="">
-                        <input  ref={fileInputRef} type="file" id="avatar" name="avatar" accept="image/png, image/jpeg" />
-                    </label>
-                    
-            </div>
-            <p>Add Photo</p> */}
+              <div className={OneStyles.uploadPhotoContainer}>
+                      <FaCamera onClick={handleClick} className={OneStyles.icon}/>
+                      <label className={OneStyles.upload} htmlFor="">
+                          <input  ref={fileInputRef} type="file" id="avatar" name="avatar" accept="image/png, image/jpeg" />
+                      </label>
+              
+              </div>
+              <p>Add Photo</p>
+
                 <FormControl
                   sx={{ 
                       alignSelf: 'flex-end',

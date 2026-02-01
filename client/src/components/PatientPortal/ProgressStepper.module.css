@@ -27,7 +27,7 @@
     width:fit-content;
     border-radius:10px;
     flex-shrink:0;
-    /* background: rgba(0,0,0,.10); */
+    background: rgba(0,0,0,.10);
 }
 .tabActive{
     width:fit-content;
@@ -52,7 +52,7 @@
     width:200px;
     display:flex;
     justify-content: center;
-    padding:.5rem 1rem;
+    padding:.5rem .7rem;
     cursor:pointer;
 }
 .stepperSection{

@@ -70,6 +70,7 @@ const LoginPage = () => {
     const [signUpForm, setsignUpForm] = useState({
         first_name:"",
         last_name:"",
+        middle_name:"",
         contact_number:"",
         email:"",
         password:"",
@@ -542,6 +543,15 @@ z
                         padding:0
                      }}
                      >
+                    
+                     <TextField onChange={handleSignUpChange} 
+                     fullWidth
+                     id="outlined-basic" 
+                     name="first_name" 
+                     label="First Name" 
+                     variant="outlined" 
+                     required/>
+                                            
                     <Box sx={{
                         display:'flex',
                         justifyContent:'space-between',
@@ -549,16 +559,21 @@ z
                         width:'100%',
                         padding:0
                      }}>
+
+
                              <TextField onChange={handleSignUpChange} 
                              fullWidth
                              id="outlined-basic" 
-                             name="first_name" 
-                             label="First Name" 
+                             name="middle_name" 
+                             label="M.I." 
                              variant="outlined" 
+                             slotProps={{ 
+                                htmlInput:{maxLength: 1}
+                            }}
                              required/>
+
                              <TextField 
                              onChange={handleSignUpChange}
-
                              fullWidth 
                              name="last_name" 
                              id="outlined-basic" 

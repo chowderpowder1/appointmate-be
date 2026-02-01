@@ -28,6 +28,26 @@ const ViewPatientRecordPage = () => {
           <div className={ViewStyles.pxPersonalInfoContainer}>
             <PersonalInfoTab/>
           </div>
+          <div className={ViewStyles.sessionSelectionContainer}>
+            <h4 className={ViewStyles.sessionTitle}>Select Patient Session</h4>
+            <div className={ViewStyles.sessionTable}>
+              <div className={ViewStyles.sessionItem}>
+                <p>Session ID: A14021</p>
+                <p>Status: Ongoing</p>
+                <p>Date Start: 01/09/2026</p>
+                <p>Treatment: Physical Therapy</p>
+              </div>
+              <div className={ViewStyles.sessionItem}>
+                <p>Session ID: A14021</p>
+              </div>
+              <div className={ViewStyles.sessionItem}>
+                <p>Session ID: A14021</p>
+              </div>
+              <div className={ViewStyles.sessionItem}>
+                <p>Session ID: A14021</p>
+              </div>
+            </div>
+          </div>
           <div className={ViewStyles.pxInitialEvalContainer}>
              { toggleState == 1 &&(
                 <> 

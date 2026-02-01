@@ -25,6 +25,7 @@ const StepComplete = () => {
   street: formData.contactInfo.street,
   city: formData.contactInfo.city,
   religion: formData.contactInfo.religion,
+  region: formData.contactInfo.region,
   unit: formData.contactInfo.unit,
   barangay: formData.contactInfo.barangay,
   zipcode: formData.contactInfo.zipcode,

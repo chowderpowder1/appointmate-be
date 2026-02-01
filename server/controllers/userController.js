@@ -14,6 +14,7 @@ async function submitUserData(req, res){
     employer,
     street,
     city,
+    region,
     religion,
     unit,
     barangay,
@@ -29,9 +30,9 @@ async function submitUserData(req, res){
         altNumber,
     },
     } = req.body;
-    console.log('THIS IS THE FUCKING ID: ', id)
+    console.log("Patient Information PayloaD:", req.body)
     try{
-        await dbConnection.query('INSERT INTO awp_patient_tbl (user_id, ptn_dob, ptn_employer, ptn_addrst, ptn_addrcity, religion, ptn_addrunit, ptn_addrbrgy, zipcode, ptn_validtype, ptn_validnum, ptn_hmoprov, ptn_hmoidnum, ptn_econtactname, ptn_econtactrelation, ptn_econtactnum, ptn_econtactaltnum, ptn_sex) values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18) ', [id, dob, employer, street, city, religion, unit, barangay, zipcode, idType, idNumber, hmoName, hmoNumber, contactPerson, relationship, emergencyContactNumber, altNumber, gender ])
+        await dbConnection.query('INSERT INTO awp_patient_tbl (user_id, ptn_dob, ptn_employer, ptn_addrst, ptn_addrcity, religion, ptn_addrunit, ptn_addrbrgy, zipcode, ptn_validtype, ptn_validnum, ptn_hmoprov, ptn_hmoidnum, ptn_econtactname, ptn_econtactrelation, ptn_econtactnum, ptn_econtactaltnum, ptn_sex, ptn_addrregion) values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, 19) ', [id, dob, employer, street, city, religion, unit, barangay, zipcode, idType, idNumber, hmoName, hmoNumber, contactPerson, relationship, emergencyContactNumber, altNumber, gender, region ])
 
         await dbConnection.query('UPDATE awp_users_tbl SET user_mname=$1, is_profile_complete=$2 WHERE user_id=$3', [middleName, profileCompleted, id])
 

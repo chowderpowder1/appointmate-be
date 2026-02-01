@@ -21,20 +21,25 @@ async function login(req, res){
             return res.status(422).send("Email is not registered");
         }
 
-        const isVerified = await dbConnection.query(`SELECT is_verified FROM awp_users_tbl WHERE user_logemail=$1`,[email])
+        let isVerified = await dbConnection.query(`SELECT is_verified FROM awp_users_tbl WHERE user_logemail=$1`,[email])
+
         console.log(isVerified.rows[0])
         console.log('This is the otp payload', otp )
         console.log('Assigned otp as per table', user.rows[0].otp )
+
+        // let updateVerification = null;
+
         if(otp == user.rows[0].otp){
             console.log('Login Handler Verified Confirmation')
-            await dbConnection.query(`UPDATE awp_users_tbl SET is_verified=true WHERE user_logemail = $1`,[email])
+            isVerified = await dbConnection.query(`UPDATE awp_users_tbl SET is_verified=true WHERE user_logemail = $1 RETURNING is_verified`,[email])
+
             // return res.json({
             //     'success': true,
             //     'requireOtp': false,
             //     'message': 'Email has been verified'
             // })
         }
-
+        console.log(isVerified.rows[0])
         if (!isVerified.rows[0].is_verified) {
             console.log('User is not verified')
             createOtp(req,res);
@@ -92,17 +97,29 @@ async function login(req, res){
 
 async function signup(req, res){
     try{
-        const { email, password, cpassword, contact_number, first_name, last_name} = req.body;
+        const { 
+            email, 
+            password, 
+            cpassword, 
+            contact_number, 
+            first_name, 
+            middle_name,
+            last_name} 
+        = req.body;
+
         const user_role=5;
         const user = await dbConnection.query('SELECT * FROM awp_users_tbl WHERE user_logemail = $1', [email])
         if(password != cpassword){
             console.log(`password not match`)
             return res.json({message:'Submitted Password does not match'})
         }
+
         if(user.rows.length === 0){
+            console.log('creating account')
             const salt = await bcrypt.genSalt();
             const hashedPassword = await bcrypt.hash(password, salt);
-            const userIdResult = await dbConnection.query('INSERT INTO awp_users_tbl ( user_role, user_fname, user_lname, user_logemail, password_hash)values( $1, $2, $3, $4, $5) RETURNING user_id', [user_role, first_name, last_name, email, hashedPassword])
+            const userIdResult = await dbConnection.query('INSERT INTO awp_users_tbl ( user_role, user_fname, user_mname, user_lname, user_logemail, password_hash)values( $1, $2, $3, $4, $5, $6) RETURNING user_id', [user_role, first_name, middle_name, last_name, email, hashedPassword])
+            
             const userId= userIdResult.rows[0].user_id;
             const defaultContactType= 1;
             await dbConnection.query('INSERT INTO awp_ucontacts_tbl (user_id, contact_value, contact_type_id) values ($1, $2, $3)',[userId, contact_number, defaultContactType])
@@ -157,7 +174,7 @@ async function session (req, res) {
         
         const userId= userData.rows[0].user_id
 
-        const isComplete = await dbConnection.query(`SELECT a.user_logemail AS email, a.user_id AS id, b.patient_id AS pxId, a.user_fname AS firstName, a.user_lname AS lastName, c.contact_value AS contact_number, a.is_profile_complete FROM awp_users_tbl AS a LEFT JOIN awp_patient_tbl AS b ON a.user_id = b.user_id LEFT JOIN awp_ucontacts_tbl AS c ON a.user_id = c.user_id WHERE a.user_id=$1;`, [userId])
+        const isComplete = await dbConnection.query(`SELECT a.user_logemail AS email, a.user_id AS id, b.patient_id AS pxId, a.user_fname AS firstName, a.user_lname AS middleName, a.user_lname AS lastName, c.contact_value AS contact_number, a.is_profile_complete FROM awp_users_tbl AS a LEFT JOIN awp_patient_tbl AS b ON a.user_id = b.user_id LEFT JOIN awp_ucontacts_tbl AS c ON a.user_id = c.user_id WHERE a.user_id=$1;`, [userId])
         const rows = isComplete.rows[0]
         if (!rows) {
             console.log('User Record Incomplete')
@@ -175,6 +192,7 @@ async function session (req, res) {
         id: rows.id,
         pxId: rows.pxid,
         firstName: rows.firstname,
+        middleName: rows.middleName || 'N/A',
         lastName: rows.lastname,
         contact_number: rows.contact_number,
         is_profile_complete: rows.is_profile_complete

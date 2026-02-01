@@ -18,9 +18,9 @@ const OnboardingContainer = () => {
 
     const {formData, setFormData} = useAppContext();
 
-    const pages = [StepOne, StepTwo, StepThree, StepFour, StepComplete]
+    const pages = [StepOne, StepTwo, StepThree, StepComplete]
     const [currentStep, setCurrentStep] = useState(0);
-    const numberOfSteps = 4;
+    const numberOfSteps = 3;
     const stepDescription = ['Personal Information', 'Contact Information', 'Coverage & Identification', ' Emergency Information']
     const nextBtn = () => setCurrentStep(current => current === numberOfSteps ?  currentStep: currentStep + 1);
     const prevBtn = () => setCurrentStep(current => current === 0 ?  currentStep : currentStep - 1);
@@ -67,8 +67,6 @@ const checkNestedEmpty = (obj) => {
     // </StepperContext>
   )
 }
-// export const useStepperContext = () => {
-//   return useContext(StepperContext);
-// };
+
 
 export default OnboardingContainer

@@ -5,6 +5,8 @@ import MockUser from '../../assets/aw_mock-px.png'
 import { FaPencilAlt } from "react-icons/fa";
 import { Link } from 'react-router'
 
+import dayjs from "dayjs";
+
 // icon
 import { TbPhotoEdit } from "react-icons/tb";
 
@@ -74,6 +76,10 @@ const PatientProfile = () => {
         uploadAvatar(formData)
 
     }
+
+    const capitalizeFirstLetter = (str) => {
+        return str.charAt(0).toUpperCase() + str.slice(1);
+    }
     console.log(userAvatar)
   return (
     <div className={ProfileStyles.profileContainer}>
@@ -100,7 +106,7 @@ const PatientProfile = () => {
 
             </div>
             <div className={ProfileStyles.userInfo}>
-                <p className={ProfileStyles.userName}>{userData.firstName} {userData.lastName}</p>
+                <p className={ProfileStyles.userName}>{userData.firstName.slice(0,1).toUpperCase() + userData.firstName.slice(1)} {capitalizeFirstLetter(userData.lastName)}</p>
                 <p className={ProfileStyles.patientId}>Patient ID #A2023141814</p>
                 
                 
@@ -114,47 +120,50 @@ const PatientProfile = () => {
 
         <div className={ProfileStyles.infoContainer}>
 
-            <div className={ProfileStyles.infoColumnOne}>
-                <div className={ProfileStyles.coverageContainer}>
+            {/* <div className={ProfileStyles.infoColumnOne}> */}
+            {/* Coverage Container */}
+              <div className={ProfileStyles.coverageContainer}>
                     <div>
-                        <p className='data'>Coverage & Identification</p>
+                        <p className='data' style={{marginBottom:'1rem'}}>Coverage & Identification</p>
                         <div className='divider'></div>
                     </div>
 
                     <div>
                         <p className='dataTitle'>HMO Card Represented</p>
-                        <p className='data'>{patientData.hmoCardPresented}</p>
+                        <p className='data'>{patientData?.hmoCardPresented.toUpperCase()}</p>
                     </div>
                     <div>
                         <p className='dataTitle'>HMO ID Number</p>
-                        <p className='data'>{patientData.hmoNumber}</p>
+                        <p className='data'>{patientData?.hmoNumber}</p>
                     </div>
                     <div>
                         <p className='dataTitle'>Valid ID Presented</p>
-                        <p className='data'>{patientData.id}</p>
+                        <p className='data'>{patientData?.id.toUpperCase()}</p>
                     </div>
                     <div>
                         <p className='dataTitle'>Valid ID Number</p>
-                        <p className='data'>{patientData.idNumber}</p>
+                        <p className='data'>{patientData?.idNumber}</p>
                     </div>
                 </div>
-                <div className={ProfileStyles.personalInfoContainer}>
+
+                {/* Personal Info */}
+             <div className={ProfileStyles.personalInfoContainer}>
                     <div>
-                        <p className='data'>Personal Information</p>
+                        <p className='data' style={{marginBottom:'1rem'}}>Personal Information</p>
                         <div className='divider'></div>
                     </div>
                     <div className={ProfileStyles.infoGrid}>
                         <div>
                             <p className='dataTitle'>Last Name</p>
-                            <p className='data'>{userData.lastName}</p>
+                            <p className='data'>{capitalizeFirstLetter(userData.lastName)}</p>
                         </div>
                         <div>
                             <p className='dataTitle'>First Name</p>
-                            <p className='data'>{userData.firstName}</p>
+                            <p className='data'>{capitalizeFirstLetter(userData.firstName)}</p>
                         </div>
                         <div>
                             <p className='dataTitle'>Middle Initial</p>
-                            <p className='data'>{userData.firstName}</p>
+                            <p className='data'>{userData.middleName}</p>
                         </div>
                         <div>
                             <p className='dataTitle'>Age</p>
@@ -162,7 +171,7 @@ const PatientProfile = () => {
                         </div>
                         <div>
                             <p className='dataTitle'>Birthdate</p>
-                            <p className='data'>{patientData.dob}</p>
+                            <p className='data'>{dayjs(patientData.dob).format('MMMM DD, YYYY')}</p>
                         </div>
                         <div>
                             <p className='dataTitle'>Company</p>
@@ -171,14 +180,11 @@ const PatientProfile = () => {
                     </div>
 
                 </div>  
-                
-            </div>
 
-            <div className={ProfileStyles.infoColumnTwo}>
-                
-                <div className={ProfileStyles.emergencyInfoContainer}>
+                {/* Emergency Info */}
+                 <div className={ProfileStyles.emergencyInfoContainer}>
                     <div>
-                        <p className='data'>Emergency Info</p>
+                        <p className='data' style={{marginBottom:'1rem'}}>Emergency Info</p>
                         <div className='divider'></div>
                     </div>
 
@@ -188,14 +194,20 @@ const PatientProfile = () => {
                     </div>
 
                      <div>
+                        <p className='dataTitle'>Relationship</p>
+                        <p className='data'>Fetch data</p>
+                    </div>
+
+                     <div>
                         <p className='dataTitle'>Emergency Contact Number</p>
                         <p className='data'>{patientData.enumber}</p>
                     </div>
                 </div>
 
+                {/* Contact Info */}
                 <div className={ProfileStyles.contactInfoContainer}>
                     <div>
-                        <p className='data'>Contact & Address</p>
+                        <p className='data' style={{marginBottom:'1rem'}}>Contact & Address</p>
                         <div className='divider'></div>
                     </div>
                     <div className={ProfileStyles.contactInfoGrid}>
@@ -204,14 +216,30 @@ const PatientProfile = () => {
                             <p className='dataTitle'>Home Address</p>
                             <p className='data'>{patientData.unit} {patientData.street} {patientData.city} {patientData.barangay}</p>
                         </div>
+
                         <div>
-                            <p className='dataTitle'>Phone Number</p>
+                            <p className='dataTitle'>Barangay</p>
+                            <p className='data'>{patientData.barangay}</p>
+                        </div>
+                        <div>
+                            <p className='dataTitle'>ZipCode</p>
+                            <p className='data'>{patientData.zipcode}</p>
+                        </div>
+                        <div>
+                            <p className='dataTitle'>Contact Number</p>
                             <p className='data'>{userData.contact_number}</p>
                         </div>
+
                         <div>
                             <p className='dataTitle'>City</p>
                             <p className='data'>{patientData.city}</p>
                         </div>
+                        <div>
+                            <p className='dataTitle'>Region</p>
+                            <p className='data'>{patientData.region}</p>
+                        </div>
+
+
                         <div>
                             <p className='dataTitle'>Personal Email</p>
                             <p className='data'>{userData.email}</p>
@@ -219,8 +247,16 @@ const PatientProfile = () => {
 
                     </div>
                 </div>  
+
+              
                 
-            </div>
+               
+            {/* </div> */}
+
+            {/* <div className={ProfileStyles.infoColumnTwo}> */}
+               
+                
+            {/* </div> */}
 
         </div>
     </div>

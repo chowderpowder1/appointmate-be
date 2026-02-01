@@ -1,7 +1,7 @@
 .container{
     display:flex;
     flex-flow:row;
-    gap:2rem;
+    gap:4rem;
 }
 .leftContainer{
     display:flex;
@@ -10,8 +10,11 @@
 }
 .rightContainer{
     width:fit-content;
+    height:fit-content;
     display:flex;
     flex-flow:column;
+    justify-content: center;
+    margin-top:2rem;
     align-items: center;
     gap:1rem;
 }
