@@ -174,7 +174,7 @@ async function session (req, res) {
         
         const userId= userData.rows[0].user_id
 
-        const isComplete = await dbConnection.query(`SELECT a.user_logemail AS email, a.user_id AS id, b.patient_id AS pxId, a.user_fname AS firstName, a.user_lname AS middleName, a.user_lname AS lastName, c.contact_value AS contact_number, a.is_profile_complete FROM awp_users_tbl AS a LEFT JOIN awp_patient_tbl AS b ON a.user_id = b.user_id LEFT JOIN awp_ucontacts_tbl AS c ON a.user_id = c.user_id WHERE a.user_id=$1;`, [userId])
+        const isComplete = await dbConnection.query(`SELECT a.user_logemail AS email, a.user_id AS id, b.patient_id AS pxId, a.user_fname AS firstName, a.user_mname AS middleName, a.user_lname AS lastName, c.contact_value AS contact_number, a.is_profile_complete FROM awp_users_tbl AS a LEFT JOIN awp_patient_tbl AS b ON a.user_id = b.user_id LEFT JOIN awp_ucontacts_tbl AS c ON a.user_id = c.user_id WHERE a.user_id=$1;`, [userId])
         const rows = isComplete.rows[0]
         if (!rows) {
             console.log('User Record Incomplete')
@@ -185,14 +185,14 @@ async function session (req, res) {
             id: rows.id,
             }
         }
-
+        console.log('nie;', rows)
     return res.json({
         loggedIn: true,
         email: rows.email,
         id: rows.id,
         pxId: rows.pxid,
         firstName: rows.firstname,
-        middleName: rows.middleName || 'N/A',
+        middleName: rows.middlename || 'N/A',
         lastName: rows.lastname,
         contact_number: rows.contact_number,
         is_profile_complete: rows.is_profile_complete
@@ -264,8 +264,6 @@ async function createOtp (req, res) {
             Thank you,  
             The AppointMate Team`,
         })
-
-        console.log("Message sent:", info.messageId);
     
     }catch(err){
         console.log(err)

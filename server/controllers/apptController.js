@@ -10,6 +10,8 @@ dayjs.extend(timezone);
 dayjs.extend(customParseFormat);
 dayjs.extend(duration)
 
+import { notificationQueue } from '../Services/queue.js';
+
 async function getBookedDates (req, res) {
     // Fetches all booked dates from the current day onwards
     // console.log('this is the query:'+req.query)
@@ -261,9 +263,11 @@ async function getApptOverview(req, res) {
 
 async function updateApptStatus(req, res){
     try{
+        // Front Desk endpoint for appt approval
         if(req.session.user.id){
             console.log('Update Endpoint reached')
             const isAuthorized = await dbConnection.query(`SELECT user_role from awp_users_tbl WHERE user_id=$1`, [req.session.user.id])
+            console.log('update app endpoint hellooo')
             if( isAuthorized.rows[0].user_role === 4){
                 // console.log('Update Payload: ',req.body)
                 const {
@@ -272,10 +276,26 @@ async function updateApptStatus(req, res){
                 } = req.body
                 const updateResult = await dbConnection.query(`UPDATE awp_appt_tbl SET appt_status='scheduled' WHERE appt_id=$1 RETURNING appt_id`, [appt_id])
                 console.log(updateResult.rows[0].appt_id)
-                const createSession = await dbConnection.query(`INSERT INTO awp_apptsession_tbl(appt_id)values($1)`,[updateResult.rows[0].appt_id])
+                // const createSession = await dbConnection.query(`INSERT INTO awp_apptsession_tbl(appt_id)values($1) RETURNING appt_id`,[updateResult.rows[0].appt_id])
+                const appointmentId = updateResult.rows[0].appt_id;
+
                 if( updateResult.rowCount === 0){
-                    return res.status(404).json({sucess: false, message: 'Appointment Not found'})
+                    console.log('Failed Request triggered')
+                    return res.status(404).json({success: false, message: 'Appointment Not found'})
                 }
+                    const bull = await notificationQueue.getWaiting()
+                    console.log('Bull job', bull)
+                    await notificationQueue.add('sendReminder', 
+                        {appointmentId},
+                        {
+                            // delay,
+                            attempts: 3,
+                            // backoff: { type: 'exponential', delay: 5000},
+                            removeOnComplete: true,
+                            removeOnFail: false,
+                        }
+                    )
+
                     console.log('Session', createSession)
                 return res.status(200).json({ success:true, message: "Updated"})
             }
