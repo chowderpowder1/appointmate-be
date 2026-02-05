@@ -799,10 +799,9 @@ async function getApptDocuments(req,res){
 
                         const patientName = await dbConnection.query(`SELECT user_fname, user_lname FROM awp_users_tbl WHERE user_id=$1`,[patientUserId])
                         const patientAvatar = await dbConnection.query(`SELECT image_url FROM user_avatars WHERE user_id=$1`,[patientUserId])
-                        console.log(patientAvatar.rows[0].image_url)
                     return {
                         documentId:p.ptn_doc_id,
-                        patientAvatar:patientAvatar.rows[0].image_url,
+                        patientAvatar:patientAvatar?.rows[0]?.image_url || '',
                         patientName: `${patientName.rows[0].user_fname} ${patientName.rows[0].user_lname}`,
                         file_name: p.file_name,
                         file_type: p.file_type, 

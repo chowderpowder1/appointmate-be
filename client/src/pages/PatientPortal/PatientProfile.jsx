@@ -80,7 +80,7 @@ const PatientProfile = () => {
     const capitalizeFirstLetter = (str) => {
         return str.charAt(0).toUpperCase() + str.slice(1);
     }
-    console.log(userAvatar)
+    console.log(userData.middleName)
   return (
     <div className={ProfileStyles.profileContainer}>
       <div className={ProfileStyles.profileBanner}>

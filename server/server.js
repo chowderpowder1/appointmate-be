@@ -9,20 +9,19 @@ import userRoutes from './routes/userRoutes.js'
 import adminRoutes from './routes/adminRoutes.js'
 import clinicRoutes from './routes/clinicRoutes.js'
 // import pxData from './routes/pxData.js'
-import path from 'path';
+import path from 'path';``
 import cors from 'cors'; // Cross origin resource sharing
 import session from 'express-session'; //Cookie Session
 import connectPgSimple from 'connect-pg-simple' // Used by session to configure session store
 
 import apptRoutes from './routes/apptRoutes.js'
 import nodemailer from 'nodemailer';
-
 // google auth dependencies
 import passport from 'passport'
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import multer from 'multer';
 import { v2 as cloudinary} from 'cloudinary';
-
+// import './workers/appointmentWorker.js'
 dotenv.config();
 
 

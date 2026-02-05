@@ -77,7 +77,7 @@ const StepOne = () => {
             </Box>
 
             <Box display='flex' sx={{gap:'1rem'}}>
-                <TextField onChange={handleInputChange('personalInfo')} value={formData.personalInfo.middleName} id="outlined-basic" name="middleName" label="Middle Initial" variant="outlined" 
+                <TextField disabled value={userData.middleName} id="outlined-basic" name="middleName" label="Middle Initial" variant="outlined" 
                   slotProps={{
                   input: {
                     inputProps: {

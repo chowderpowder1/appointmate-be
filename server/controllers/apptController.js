@@ -10,7 +10,7 @@ dayjs.extend(timezone);
 dayjs.extend(customParseFormat);
 dayjs.extend(duration)
 
-import { notificationQueue } from '../Services/queue.js';
+import {notificationQueue} from '../Queues/appointmentQueue.js'
 
 async function getBookedDates (req, res) {
     // Fetches all booked dates from the current day onwards
@@ -274,29 +274,21 @@ async function updateApptStatus(req, res){
                     appt_id,
                     appt_status
                 } = req.body
-                const updateResult = await dbConnection.query(`UPDATE awp_appt_tbl SET appt_status='scheduled' WHERE appt_id=$1 RETURNING appt_id`, [appt_id])
-                console.log(updateResult.rows[0].appt_id)
+                const updateResult = await dbConnection.query(`UPDATE awp_appt_tbl SET appt_status='scheduled' WHERE appt_id=$1 RETURNING *`, [appt_id])
                 // const createSession = await dbConnection.query(`INSERT INTO awp_apptsession_tbl(appt_id)values($1) RETURNING appt_id`,[updateResult.rows[0].appt_id])
+                const apptData =  updateResult.rows[0]
                 const appointmentId = updateResult.rows[0].appt_id;
+                const patientId = updateResult.rows[0].patient_id;
 
                 if( updateResult.rowCount === 0){
                     console.log('Failed Request triggered')
                     return res.status(404).json({success: false, message: 'Appointment Not found'})
                 }
-                    const bull = await notificationQueue.getWaiting()
-                    console.log('Bull job', bull)
-                    await notificationQueue.add('sendReminder', 
-                        {appointmentId},
-                        {
-                            // delay,
-                            attempts: 3,
-                            // backoff: { type: 'exponential', delay: 5000},
-                            removeOnComplete: true,
-                            removeOnFail: false,
-                        }
+                    console.log('Creating Reminder for appt id:', appointmentId)
+                    await notificationQueue.add('send-reminder', 
+                        {apptData}   
                     )
-
-                    console.log('Session', createSession)
+                    console.log('Nofication made done')
                 return res.status(200).json({ success:true, message: "Updated"})
             }
         } 

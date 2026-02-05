@@ -100,6 +100,7 @@
     color:#428CD8;
     text-transform:uppercase;
     font-weight:600;
+    margin-bottom:1rem;  
 }
 .sessionTable{
     display:flex;
@@ -107,13 +108,30 @@
     gap:1rem;
 }
 .sessionItem{
-    border: 1px solid var(--border-color);
-    border-radius:15px;
-    padding:1rem;
-    cursor:pointer;
-    background-color:#428CD8;
-    color:white;
+
+    color:var(--aw-offblack );
     display:flex;
     gap:.5rem;
     flex-flow:column;
+    position:relative;
+    z-index:2;
+}
+.sessionFlag{
+    position:absolute;
+    top:-25px;
+    left:0;
+    background-color:orange;
+    height:40px;
+    z-index:-2;
+    color:White;
+    padding:.3rem .5rem;
+    border-radius:5px 5px 5px 0;
+}
+.sessionText{
+    background-color:white;
+        border: 1px solid var(--border-color);
+    border-radius:15px;
+    padding:1rem;
+    cursor:pointer;
+    background-color:white;
 }

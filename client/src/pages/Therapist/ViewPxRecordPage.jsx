@@ -32,10 +32,13 @@ const ViewPatientRecordPage = () => {
             <h4 className={ViewStyles.sessionTitle}>Select Patient Session</h4>
             <div className={ViewStyles.sessionTable}>
               <div className={ViewStyles.sessionItem}>
-                <p>Session ID: A14021</p>
-                <p>Status: Ongoing</p>
-                <p>Date Start: 01/09/2026</p>
-                <p>Treatment: Physical Therapy</p>
+                <div className={ViewStyles.sessionText}>
+                  <p>Session ID: A14021</p>        
+                  <p>Treatment: Physical Therapy</p>
+                </div>                              
+                <div className={ViewStyles.sessionFlag}>
+                  <p>Ongoing</p>
+                </div>
               </div>
               <div className={ViewStyles.sessionItem}>
                 <p>Session ID: A14021</p>
