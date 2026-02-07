@@ -41,11 +41,12 @@ import { styled } from '@mui/material'
 import dayjs from "dayjs";
 
 import { useGenerateOtp } from '../../queries/users.js'
-import { useSubmitLogin, useSubmitOtp } from '../../queries/auth.js'
+import { useSubmitLogin, useSubmitOtp, useSubmitResetEmail } from '../../queries/auth.js'
 
 const LoginPage = () => {
     const [isOpen, setIsOpen] = useState(false);
     const { mutate: submitLoginMutation} = useSubmitLogin();
+    const { mutate: submitResetEmailMutation} = useSubmitResetEmail();
     const {mutate:submitOtp} = useSubmitOtp();
     const [isOtpOpen, setIsOtpOpen] = useState(false);
     const redirect = useNavigate();
@@ -66,6 +67,20 @@ const LoginPage = () => {
         email:'',
         password:"",
     });
+
+    const [isResetEmail, setResetEmail] = useState({
+        email:'',
+    });
+
+    const handleResetEmailSubmit = (e) =>{
+        e.preventDefault()
+        submitResetEmailMutation(isResetEmail)
+        setResetEmail({
+            ...isResetEmail,
+            email:'',
+        })
+    }
+
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     const [signUpForm, setsignUpForm] = useState({
         first_name:"",
@@ -84,7 +99,6 @@ const LoginPage = () => {
     })
 
     const otpHandler = (e) => {
-        console.log(otpPayLoad)
         setOtpPayLoad((prev) => ({
             ...prev,
             [e.target.name]: e.target.value
@@ -128,7 +142,6 @@ const LoginPage = () => {
         }
     }
     const handleOtpSubmit = (e) => {
-        console.log(otpPayLoad)
         e.preventDefault()
         submitOtp(otpPayLoad, {
             onSuccess: (data) => {
@@ -417,19 +430,29 @@ z
                          label="Password" 
                          variant="outlined" 
                          type="password"/>
-    
-                        <div className={LoginStyles.loginQol}>
-
-                        {/* <Link>Forgot Password?</Link> */}
-                     </div>
-
-                        <Button type='submit' sx={{
+                           <Button type='submit' sx={{
                             backgroundColor:'var(-primary-contrast)',
-                            height:'50px'
+                            height:'50px',
+                            padding:'.5rem 4rem',
+                            borderRadius:'10px',
                         }}
                         
-                        variant="contained"><Link to='' style={{color:'white', fontWeight:'400', fontSize:'1.1rem', textTransform:'none'}}>Login</Link></Button>
-                    
+                        variant="contained"><Link to='' 
+                        style={{color:'white', 
+                            fontWeight:'400', 
+                            fontSize:'1.1rem', 
+                            textTransform:'none',
+                            
+                        }}
+                        >Login</Link></Button>
+                        <div className={LoginStyles.loginQol}>
+                        <p style={{cursor:'pointer', marginLeft:'auto', color:'blue'}} onClick={()=>toggleTab(4)}>Forgot Password?</p>          
+                        
+                                                                  
+                     </div>
+
+ 
+                  
                      </Box>
 
                      <div className={LoginStyles.alternativeLoginTxtContainer}>
@@ -525,7 +548,9 @@ z
               </div>
     
               <div className={ toggleState === 3 ? `${LoginStyles.containerFour} ${LoginStyles.activeContainer}`: `${LoginStyles.containerFour}`}>
+
                  <button className={LoginStyles.loginBackBtn} onClick={()=>toggleTab(1)}><IoIosArrowBack className={LoginStyles.backIcon}/></button>
+
                 <div className={LoginStyles.loginLogoContainer}>
                     <img className={LoginStyles.loginLogo} src={AwLogo} alt="" />
                 </div>
@@ -673,9 +698,7 @@ z
                               }
                             />
                           </FormGroup>
-                          {/* {hasError && (
-                            <FormHelperText>You must accept the Terms and Conditions</FormHelperText>
-                          )} */}
+
                         </FormControl>
                         
                             <Button sx={{
@@ -693,10 +716,55 @@ z
                     <p style={{marginTop:'1rem', color:'var(--off-black)'}}>Already have an account? <p className={LoginStyles.noAccRegLinkText} onClick={()=>toggleTab(2)}>Sign in here.</p></p>
     
               </div>
+            
+            <div className={ toggleState === 4 ? `${LoginStyles.containerFive} ${LoginStyles.activeContainer}`: `${LoginStyles.containerFive}`}>
+                <button className={LoginStyles.loginBackBtn} onClick={()=>toggleTab(1)}><IoIosArrowBack className={LoginStyles.backIcon}/></button>
+
+
+                <div className={LoginStyles.resetPwdContainer}>
+                    <Link to='/admin' className={LoginStyles.loginLogoContainer}>
+                        <img className={LoginStyles.loginLogo} src={AwLogo} alt="" />
+                    </Link>
+                    <h1
+                    className={LoginStyles.header}>Forgot your password?</h1>
+                    <p style={{textAlign:'left'}}>Enter the email address associated with your account and we’ll send you a link to reset your password.</p>
+                    <form className={LoginStyles.resetFormContainer} onSubmit={handleResetEmailSubmit}>
+    
+                        <TextField
+                        fullWidth
+                          label="Email"
+                          variant="outlined"
+                          error={emailError}
+                          helperText={emailHelperText}
+                          sx={{
+                            
+                          }}
+                          value={isResetEmail.email}
+                          onChange={(e)=> {
+                            handleEmailChange(e)
+                            setResetEmail({
+                                ...isResetEmail,
+                                email: e.target.value})}}
+                        />
+                        <Button sx={{
+                            width:'fit-content',
+                            height:'50px',
+                            // margin:'auto',
+                            borderRadius:'10px',
+                            fontWeight:500,
+                            fontSize:'1.1rem',
+                            marginLeft:'auto',
+                            textTransform:'none'
+                        }} variant="contained" type="submit"
+                        // disabled={!isChecked || cpasswordError}
+                        >Send Reset Link</Button>
+                    </form>
+                </div>                
+            </div>
 </div>
             <Modal open={isOpen}  onClose={() => setIsOpen(false)}>
              
-            <div className={LoginStyles.tosContainer}>
+<div className={LoginStyles.tosContainer}>
   <h1>Terms and Conditions</h1>
     <p>Effective Date: {dayjs().format('dddd MMM YYYY')}</p>
   <p><strong>Welcome to AppointMate!</strong> By registering, accessing, or using our platform, you agree to comply with these Terms and Conditions. Please read them carefully.</p>
@@ -749,11 +817,7 @@ z
       <Button variant="contained" onClick={()=>{
         setIsOpen(false)
       }} > I understand </Button>
-      {/* <Button variant="contained" onClick={()=>{
-        setIsOpen(false)}}
-        sx={{
-        backgroundColor:'red'
-      }}> Decline </Button> */}
+
   </div>
 </div>
             

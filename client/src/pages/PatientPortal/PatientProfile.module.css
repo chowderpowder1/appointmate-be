@@ -142,6 +142,7 @@
     padding: 1rem 2rem;
     display:flex;
     flex-flow:Column;
+    
     /* flex-grow:4; */
 }
 .contactInfoGrid{

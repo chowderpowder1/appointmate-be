@@ -1,6 +1,6 @@
 import nodemailer from 'nodemailer';
 
-export async function sendNotification(email, message){
+export async function sendNotification(email, message, subject){
     const transporter = nodemailer.createTransport({
         service: "gmail", 
         // smtp.gmail.com
@@ -12,11 +12,11 @@ export async function sendNotification(email, message){
             rejectedUnauthorized: false,
         }
     })
-
+    console.log('This is the subject:', subject)
     const info = await transporter.sendMail({
         from: '"Accelerated Wellness & Pain Clinic" <jessee.dan.catli@gmail.com>',
         to: `${email}, ${email}`,
-        subject:"Appointment Confirmation with Accelerated Wellness & Pain Clinic on {{appointment_date}}",
+        subject:`${subject}`,
         text: `${message}`,
             })
 }

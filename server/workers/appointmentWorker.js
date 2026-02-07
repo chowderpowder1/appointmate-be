@@ -12,32 +12,41 @@ dayjs.extend(timezone);
   console.log('worker heartbeat');
 }, 5000);  
 
-const test = await dbConnection.query(`SELECT * from awp_appt_tbl`)
 
 notificationQueue.process('send-reminder', async(job)=> {
     // const { appointmentId, userId, appointmentTime } = job.data;
   // console.log('Processing bull job:', job.data);  
-    // console.log('before format:', job.data.pot.appt_start)
-    // console.log('frieren', dayjs.utc(job.data.pot.appt_start).tz('Asia/Manila').format('MMMM D, YYYY h:mm A'));
+    // console.log('before format:', job.data.apptData.appt_start)
+    // console.log('frieren', dayjs.utc(job.data.apptData.appt_start).tz('Asia/Manila').format('MMMM D, YYYY h:mm A'));
+    console.log(job.data.type)
 
-  const patientQuery = await dbConnection.query(`SELECT a.* FROM awp_users_tbl AS a INNER JOIN awp_patient_tbl as B ON a.user_id = b.user_id WHERE B.patient_id=$1;`,[ job.data.pot.patient_id])
+
+  try {
+
+      const patientQuery = await dbConnection.query(`SELECT a.* FROM awp_users_tbl AS a INNER JOIN awp_patient_tbl as B ON a.user_id = b.user_id WHERE B.patient_id=$1;`,[ job.data.apptData.patient_id])
 
   // const patientIdQuery = await dbConnection.query(`SELECT patient_id FROM awp_patients_tbl WHERE `)
-
+  const therapistId = job.data.apptData.therapist_id
+  const therapistName = await dbConnection.query(`SELECT b.* FROM awp_pthera_tbl AS a INNER JOIN awp_users_tbl AS b ON a.user_id = b.user_id WHERE a.pthera_id=$1;`, [therapistId])
   const name = patientQuery.rows[0].user_fname.slice(0,1).toUpperCase()+patientQuery.rows[0].user_fname.slice(1);
-  const date =  dayjs.utc(job.data.pot.appt_start).tz('Asia/Manila').format('MMMM D, YYYY')
-  const time =  dayjs.utc(job.data.pot.appt_start).tz('Asia/Manila').format('h:mm A')
-  const message = `Hi ${name},
+  const email = patientQuery.rows[0].user_logemail;
+  const date =  dayjs.utc(job.data.apptData.appt_start).tz('Asia/Manila').format('MMMM D, YYYY')
+  const time =  dayjs.utc(job.data.apptData.appt_start).tz('Asia/Manila').format('h:mm A')
 
-        Your appointment has been successfully scheduled. Here are the details:
+  if(job.data.type='confirmation'){
+      console.log('If block form confirmation triggered')
+      const subject = `Appointment Confirmation with Accelerated Wellness & Pain Clinic on ${date}`
 
-        Service: {{service_name}}
+    const message = `Hi ${name},
+
+        Your appointment has been approved. Here are the details:
+
         Date: ${date}
         Time: ${time}
         Location: JDC Building Blk 5 Lot 9 Zabarte Road, Hobart Village, Brgy Kaligayahan, Novaliches, Quezon City , Quezon City        
-        Staff/Provider: {{provider_name}}
+        Staff/Provider: ${therapistName.rows[0].user_fname.slice(0,1).toUpperCase()+ therapistName.rows[0].user_fname.slice(1)} ${therapistName.rows[0].user_lname}
 
-        If you need to reschedule or cancel, please let us know at least {{cancellation_policy_hours}} hours in advance by replying to this email or contacting us at 0981 263 3658.
+        If you need to reschedule or cancel, please let us know at least in advance by updating the status of your appointment or by replying to this email.
 
         We look forward to seeing you!
 
@@ -45,10 +54,29 @@ notificationQueue.process('send-reminder', async(job)=> {
         Accelerated Wellness & Pain Clinic
         0981 263 3658 | Appointmate.com`;
 
-  // sendNotification('hello world')
-        console.log('fuck you', message)  
-  try {
-    
+      sendNotification(email, message, subject)
+
+  } else if(job.data.type='reminder'){
+     const subject = `Friendly Reminder: Your Upcoming Appointment with Accelerated Wellness & Pain Clinic on ${date}`
+
+    const message = 
+
+        `Hi ${name},
+
+        This is a reminder that you have an appointment scheduled on ${date} at [${time}.
+
+        If you need to reschedule or cancel, please let us know at your earliest convenience.
+
+        We look forward to seeing you!
+
+        Best regards,
+        Accelerated Wellness & Pain Clinic
+        0981 263 3658 | Appointmate.com`;
+
+      sendNotification(email, message, subject)
+  }
+
+
     console.log('Successfull Bull job')    
     return { success: true };
     
@@ -56,7 +84,10 @@ notificationQueue.process('send-reminder', async(job)=> {
     console.error('❌ Job failed:', error);
   }
 });
-const pot = test.rows[0]
-await notificationQueue.add('send-reminder',{
-  pot
-})
+
+// const test = await dbConnection.query('SELECT appt_start, appt_date from awp_appt_tbl');
+// const testDate = dayjs('02-14-2026')
+
+// console.log(test.rows[0].appt_date)
+// console.log(dayjs(testDate).subtract(1, 'day').format('YYYY DD MM'));
+// console.log((dayjs(testDate).subtract(1, 'day')).valueOf() - Date.now());

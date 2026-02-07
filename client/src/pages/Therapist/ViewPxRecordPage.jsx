@@ -6,7 +6,7 @@ import InitialEvalTab from '../../components/Therapist/ViewPxRecord/InitialEvalT
 import PxMedicalHistoryTab from '../../components/Therapist/ViewPxRecord/PxMedicalHistory'
 import PxAttendanceTab from '../../components/Therapist/ViewPxRecord/PxAttendanceTab'
 import { useParams } from 'react-router';
-import { IoIosArrowForward } from "react-icons/io";
+import { IoIosArrowForward   } from "react-icons/io";
 
 const ViewPatientRecordPage = () => {
   const [toggleState, setToggleState] = useState(1);
@@ -28,29 +28,7 @@ const ViewPatientRecordPage = () => {
           <div className={ViewStyles.pxPersonalInfoContainer}>
             <PersonalInfoTab/>
           </div>
-          <div className={ViewStyles.sessionSelectionContainer}>
-            <h4 className={ViewStyles.sessionTitle}>Select Patient Session</h4>
-            <div className={ViewStyles.sessionTable}>
-              <div className={ViewStyles.sessionItem}>
-                <div className={ViewStyles.sessionText}>
-                  <p>Session ID: A14021</p>        
-                  <p>Treatment: Physical Therapy</p>
-                </div>                              
-                <div className={ViewStyles.sessionFlag}>
-                  <p>Ongoing</p>
-                </div>
-              </div>
-              <div className={ViewStyles.sessionItem}>
-                <p>Session ID: A14021</p>
-              </div>
-              <div className={ViewStyles.sessionItem}>
-                <p>Session ID: A14021</p>
-              </div>
-              <div className={ViewStyles.sessionItem}>
-                <p>Session ID: A14021</p>
-              </div>
-            </div>
-          </div>
+        
           <div className={ViewStyles.pxInitialEvalContainer}>
              { toggleState == 1 &&(
                 <> 
@@ -92,6 +70,66 @@ const ViewPatientRecordPage = () => {
                         <div className={ toggleState === 2 ? `${ViewStyles.circle} ${ViewStyles.active}` : `${ViewStyles.circle}` }></div>
                         <div className={ toggleState === 3 ? `${ViewStyles.circle} ${ViewStyles.active}` : `${ViewStyles.circle}` }></div>
                     </div>      
+          </div>
+            <div className={ViewStyles.sessionSelectionContainer}>
+            <h4 className={ViewStyles.sessionTitle}>Service Plans</h4>
+            <div className={ViewStyles.sessionTable}>
+              <div className={ViewStyles.sessionItem}>
+                <div className={ViewStyles.sessionText}>
+                  <p>Manual Therapy</p>        
+                  <p>Sessions: 6</p>
+                  <p>Remaining: 5</p>
+                  <div className={ViewStyles.arrowBtn}>
+                    <IoIosArrowForward/>
+                  </div>
+                               
+                </div>                                        
+              </div>
+              <div className={ViewStyles.sessionItem}>
+                <div className={ViewStyles.sessionText}>
+                  <p>Manual Therapy</p>        
+                  <p>Sessions: 6</p>
+                  <p>Remaining: 5</p>
+                </div>                         
+              </div>
+              <div className={ViewStyles.sessionItem}>
+                <div className={ViewStyles.sessionText}>
+                  <p>Manual Therapy</p>        
+                  <p>Sessions: 6</p>
+                  <p>Remaining: 5</p>
+                </div>                                        
+              </div>
+            </div>
+          </div>
+            <div className={ViewStyles.sessionSelectionContainer}>
+            <h4 className={ViewStyles.sessionTitle}>Service Plans</h4>
+            <div className={ViewStyles.sessionTable}>
+              <div className={ViewStyles.sessionItem}>
+                <div className={ViewStyles.sessionText}>
+                  <p>Manual Therapy</p>        
+                  <p>Sessions: 6</p>
+                  <p>Remaining: 5</p>
+                  <div className={ViewStyles.arrowBtn}>
+                    <IoIosArrowForward/>
+                  </div>
+                               
+                </div>                                        
+              </div>
+              <div className={ViewStyles.sessionItem}>
+                <div className={ViewStyles.sessionText}>
+                  <p>Manual Therapy</p>        
+                  <p>Sessions: 6</p>
+                  <p>Remaining: 5</p>
+                </div>                         
+              </div>
+              <div className={ViewStyles.sessionItem}>
+                <div className={ViewStyles.sessionText}>
+                  <p>Manual Therapy</p>        
+                  <p>Sessions: 6</p>
+                  <p>Remaining: 5</p>
+                </div>                                        
+              </div>
+            </div>
           </div>
         </div>
 

@@ -284,11 +284,17 @@ async function updateApptStatus(req, res){
                     console.log('Failed Request triggered')
                     return res.status(404).json({success: false, message: 'Appointment Not found'})
                 }
-                    console.log('Creating Reminder for appt id:', appointmentId)
                     await notificationQueue.add('send-reminder', 
-                        {apptData}   
+                        {type:'confirmation', apptData} 
                     )
-                    console.log('Nofication made done')
+
+                    await notificationQueue.add('send-reminder', 
+                        {type:'reminder',apptData},{
+                            delay: (dayjs(apptData.rows[0].appt_date).subtract(1, 'day')).valueOf() - Date.now()
+                        }   
+                    )
+                    
+                    console.log('Nofication made')
                 return res.status(200).json({ success:true, message: "Updated"})
             }
         } 

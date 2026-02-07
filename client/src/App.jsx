@@ -6,6 +6,7 @@ import AboutPage from './pages/ClinicWebsite/Aboutpage'
 import HmoPage from './pages/ClinicWebsite/HmoPage'
 import AppointmentPage from './pages/ClinicWebsite/AppointmentPage'
 import WelcomePage from './pages/PatientPortal/WelcomePage'
+import PasswordResetPage from './pages/ClinicWebsite/PasswordResetPage'
 import PatientDashboardLayout from './layouts/PatientDashboardLayout'
 import PatientDashboard from './pages/PatientPortal/PatientDashboard'
 import PatientProfile from './pages/PatientPortal/PatientProfile'
@@ -36,6 +37,9 @@ import FdManageDocuments from './pages/FrontDeskPortal/FdManageDocuments'
 
 import AdminLayout from './layouts/AdminLayout'
 import RBAC from './pages/AdminPortal/RbacPage'
+import InvalidToken from './pages/InvalidToken'
+
+import NotFound from './pages/NotFound'
 
 import {
   useQuery,
@@ -58,6 +62,7 @@ function App() {
       <Route path='/FAQs' element=''/>
       <Route path='/Contact-Us' element=''/>
       <Route path='/Appointment' element={<AppointmentPage/>}/>
+      <Route path='/reset-password/' element={<PasswordResetPage/>}/>
     </Route>
 
     <Route path='/patient' element={<PatientDashboardLayout/>}>
@@ -99,8 +104,11 @@ function App() {
     </Route>
 
     <Route path='/login' element={<WelcomePage/>}/>
-    <Route path='/test' element={<TesTest/>}/>
 
+    <Route path='/' element={<MainLayout/>}>
+      <Route path='/expired-link' element={<InvalidToken/>}/>
+      <Route path='*' element={<NotFound/>}/>
+    </Route>
   </>
   ))
   

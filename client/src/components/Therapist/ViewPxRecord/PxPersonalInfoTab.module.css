@@ -8,7 +8,7 @@
     flex-flow:column;
     gap:1rem;
     min-width:fit-content;
-    width:300px;
+    width:100%;
 }
 .personalTitle{
     color:var(--primary-contrast);

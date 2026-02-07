@@ -2,6 +2,9 @@ import dbConnection from '../db.js';
 import bcrypt from 'bcrypt'; // Hashing library
 import nodemailer from 'nodemailer';
 import otpGenerator from 'otp-generator'
+import {generateResetToken, verifyResetToken} from '../Services/passwordReset.js'
+import {sendNotification} from '../Services/sendNotification.js'
+
 async function login(req, res){
     console.log('Otp is part of payload confirmation:', req.body.otp)
     try{
@@ -292,4 +295,83 @@ async function receiveOtp (req, res) {
             console.log(err)
         }
 }
-export { signup, login, session, logout, createOtp, receiveOtp };
+
+async function forgotPassword(req,res){
+    console.log('Password Reset Endpoint')
+    try{
+        const { email } = req.body;
+        console.log(email)
+        if(!email){
+            return res.status(400).json({error:'Email is required'});
+        }
+
+        const result = await generateResetToken(email);
+
+        if (result.emailSent){
+
+            const userQuery = await dbConnection.query(`SELECT user_fname FROM awp_users_tbl WHERE user_logemail=$1`,[email])
+            const name = userQuery.rows[0].user_fname;
+
+            const subject = `AppointMate - Reset Your Password`
+            const message =
+`Hello, ${name}
+
+We received a request to reset the password for your account.
+
+To create a new password, please click the link below:
+
+http://localhost:5173/reset-password?token=${result.token}
+
+If you did not request a password reset, you can safely ignore this email. Your account will remain secure.
+
+This link will expire in 5 minutes for your protection.
+
+If you need further assistance, please contact our support team.
+
+Best regards,
+Support Team
+AppointMate`
+
+            sendNotification(email, message, subject)
+        }
+        return res.json({result})
+
+    }catch(err){
+
+    }
+}
+
+async function resetPassword(req, res){
+    console.log('reset password endpoint:', req.body.token)
+    const isValidToken= await verifyResetToken(req.body.token)
+    if(!isValidToken.valid){
+        throw new Error(isValidToken.error)
+    }
+    console.log('Token Payload:', isValidToken)
+    console.log('Performing Update Logic')
+    const password = req.body.password
+    const salt = await bcrypt.genSalt();
+    const hashedPassword = await bcrypt.hash(password, salt);
+    
+    const updatePassword =  await dbConnection.query(`UPDATE awp_users_tbl set password_hash=$1 WHERE user_id=$2`,[hashedPassword, isValidToken.user])
+    console.log(updatePassword.rows.length)
+    return res.json({success:true, message: 'Password reset succesful!'})
+}
+
+async function checkToken(req,res){
+    try{
+        console.log('Check Token Endpoint', req.body)
+        if(req.params.token){
+            const isValidToken = await verifyResetToken(req.params.token)
+            return res.send({isValid : isValidToken.valid})
+        }else{
+            return res.send({isValid: false, message: 'Please refresh the page, or request a new link'})
+        }
+
+    }catch(err){
+        console.log(err)
+    }
+}
+
+
+export { signup, login, session, logout, createOtp, receiveOtp, forgotPassword, resetPassword, checkToken};
