@@ -1,15 +1,15 @@
 import {React, useState, useEffect} from 'react'
 import { Link } from 'react-router'
-import ManageStyles from './ManageApptTab.module.css'
+import ManageStyles from './ManageServicePlans.module.css'
 import MockPxPhoto from '../../assets/aw_mock-px.png'
 import { FaEye } from "react-icons/fa";
 import { MdEditDocument } from "react-icons/md";
 import { Button } from '@mui/material';
-import { useGetAllAppt, useUpdateApptStatus } from '../../queries/useEmployees' 
+import { useGetAllAppt, useUpdateApptStatus } from '../../queries/useEmployees.js' 
 import Pagination from '../../features/Pagination.jsx'
 
 import {useGetAvatar} from '../../queries/users.js'
-const ManageAppt = () => {
+const ManageServicePlans = () => {
   const {mutate: updateApptStatus } = useUpdateApptStatus();
   const { data: allApptData, isLoading: allAptDataIsLoading, error: allAptDataError} = useGetAllAppt();
   
@@ -65,10 +65,10 @@ const ManageAppt = () => {
             <div className={ManageStyles.apptListContainer}>
                 <div className={ManageStyles.apptDataHeader}>
                     <span><p>Patient Name</p></span>
-                    <span>Date</span>
-                    <span>Time</span>
-                    <span>Therapist</span>
-                    <span>Payment</span>
+                    <span>Service</span>
+                    <span>Number of Sessions</span>
+                    <span>Remaining Sessions</span>
+                    <span>Booked Sessions</span>
                     <span>Status</span>
                     <span>Action</span>
                 </div>
@@ -132,4 +132,4 @@ const ManageAppt = () => {
   )
 }
 
-export default ManageAppt
+export default ManageServicePlans

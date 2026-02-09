@@ -17,11 +17,17 @@ import Select from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
 
 import dayjs from "dayjs";
-
+import {useGetAvatar} from '../../../queries/users.js'
+ 
 import {UseGetAnAppointmentsDetails} from '../../../queries/apptData.js'
 const AssignedTherapist = (apptData, apptID) => {
     const data = apptData.apptData
-    console.log(data)
+
+    const { data: avatar, isLoading: avatarIsLoading, error: avatarError} = useGetAvatar(data.therapistID);
+
+    if(avatarIsLoading) return <p>...Loading</p>
+    if(avatarError) return <p>Error</p>
+
   return (
     <div>
       <h4 className={AssignedStyles.header}>Main Appointment Details</h4>
@@ -34,10 +40,11 @@ const AssignedTherapist = (apptData, apptID) => {
 
         <div className={AssignedStyles.assignedPtSubcontainer}>
             <div className={AssignedStyles.PtPhotoContainer}>
-                <img className={AssignedStyles.PtPhoto} src={MockTherapist} alt="" />
+                {avatar ? <img className={AssignedStyles.PtPhoto} src={avatar} alt="" /> : <div className={AssignedStyles.generatedAvatar}>{data.assignedTherapist.charAt(0).toUpperCase()}</div>}
+
             </div>
             <div className={AssignedStyles.ptDataContainer}>
-                <p className={AssignedStyles.ptName}>PT {data.assignedTherapist}</p>
+                <p className={AssignedStyles.ptName}>PT {data.assignedTherapist.toUpperCase().slice(0,1) + data.assignedTherapist.slice(1)}</p>
                 <p className={AssignedStyles.ptSpecialization}>Physical Therapy - {data.therapistSpecialization}</p>
                 <p className={AssignedStyles.ptId}>PT-{data.therapistID}</p>
                 <div className={AssignedStyles.ptContactContainer}>

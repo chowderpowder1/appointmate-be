@@ -44,9 +44,9 @@ const ManageAppointments = () => {
             <ManageTab/>
           </div>
 
-          {/* <div className={` ${ activeTab === 1 ? `${ManageStyles.branchSlideActive}` : `${ManageStyles.branchSlide}`}`}>
+          <div className={` ${ activeTab === 1 ? `${ManageStyles.branchSlideActive}` : `${ManageStyles.branchSlide}`}`}>
             <AddApptTab/>
-          </div> */}
+          </div>
 
           <div className={`${ManageStyles.branchSlide} ${ activeTab === 2 ? `${ManageStyles.branchSlideActive}` : ''}`}>
           </div>

@@ -1,13 +1,26 @@
 import React from 'react'
 import AttachmentStyles from './PatientAttachments.module.css'
 import { FaNoteSticky } from "react-icons/fa6";
-import { IoCalendarClear } from "react-icons/io5";
+import { IoCalendarClear, IoDocumentAttach } from "react-icons/io5";
 import { GiResize } from "react-icons/gi";
-import { useGetPatientDocumentList,  } from '../../../queries/useEmployees'
+import { useGetPatientDocumentList, useGetPatientDocumentSignedUrl } from '../../../queries/useEmployees'
+import { MdOutlineFileDownload } from "react-icons/md";
+
+import dayjs from 'dayjs'
 
 const PatientAttachments = (apptDocuments) => {
-
+    const {mutateAsync : getSignedUrl, isPending} = useGetPatientDocumentSignedUrl();
     const {data:documentList, isLoading: documentListIsLoading, error: documentListError}=useGetPatientDocumentList()
+
+    const handleDownload = async (documentId) => {
+    try{
+    const data = await getSignedUrl(documentId);
+    console.log(data.url)
+    window.open(data.url, '_blank');
+    }catch(err){
+    console.error('Download Failed:', err)
+    }
+    }
 
     if (documentListIsLoading) return <div>Loading...</div>;
     if (documentListError ) return <div>⚠ Error: {apptDetailsDataError.message}</div>;
@@ -28,10 +41,12 @@ const PatientAttachments = (apptDocuments) => {
 
             {documentList.map((d)=>(
             <div className={AttachmentStyles.attachmentRow}>
-                <span> {d.file_name.slice(0,20)}...</span>
+                <span className={AttachmentStyles.fileNameContainer}> <IoDocumentAttach className={AttachmentStyles.fileNameIcon}/>
+                <p>{d.file_name.slice(0,20)}...</p>
+                </span>
                 <span> {d.file_type.toUpperCase()}</span>
-                <span>{d.upload_date.split('T')[0]}</span>
-                <span>Action</span>
+                <span>{dayjs(d.upload_date.split('T')[0]).format('MMM DD, YYYY')}</span>
+                <span onClick={() => handleDownload(d455.documentId)} className={AttachmentStyles.downloadContainer}><MdOutlineFileDownload/></span>
             </div>
 
             ))}

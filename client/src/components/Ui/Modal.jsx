@@ -1,25 +1,46 @@
-import { React, useState } from 'react'
-import ModalStyles from './Modal.module.css'
+import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { IoIosCloseCircle } from "react-icons/io";
+import { IoIosCloseCircle } from 'react-icons/io';
+import ModalStyles from './Modal.module.css';
 
-const Modal = ({open,children, onClose}) => {
+function Modal({ open, onClose, children }) {
+  const [shouldRender, setShouldRender] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
 
-    if (!open){
-        return null;
-    } 
+  useEffect(() => {
+    if (open) {
+      setShouldRender(true);
 
-    return createPortal(
-        <div className={ModalStyles.modalContainer}>
-            <div onClick={onClose} className={ModalStyles.overlay}></div>
-            <div className={ModalStyles.modalContent}>            
-            <IoIosCloseCircle className={ModalStyles.closeBtn} onClick={onClose}/>
-                {children}
-            </div>
-        </div>,document.body
-  )
+      setTimeout(() => {
+        setIsAnimating(true);
+      }, 20); // Small delay to ensure CSS transition triggers
+    } else {
+      setIsAnimating(false);
+    }
+  }, [open]);
+
+  const handleTransitionEnd = () => {
+    if (!open) {
+      setShouldRender(false);
+    }
+  };
+
+  if (!shouldRender) return null;
+
+  return createPortal(
+    <div className={ModalStyles.modalContainer}>
+      <div 
+        onClick={onClose} 
+        className={`${ModalStyles.overlay} ${isAnimating ? ModalStyles.open : ''}`}
+        onTransitionEnd={handleTransitionEnd}
+      />
+      <div className={`${ModalStyles.modalContent} ${isAnimating ? ModalStyles.open : ''}`}>            
+        <IoIosCloseCircle className={ModalStyles.closeBtn} onClick={onClose}/>
+        {children}
+      </div>
+    </div>,
+    document.body
+  );
 }
 
-export default Modal
-
-
+export default Modal;

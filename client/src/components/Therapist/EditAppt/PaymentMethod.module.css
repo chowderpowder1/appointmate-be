@@ -11,6 +11,7 @@
 }
 .header{
     font-weight:600;
+    color:#454545;
     margin-bottom:1rem;
 }
 .dataContainer{
@@ -21,6 +22,7 @@
 }
 .paymentTypeContainer{
     border:1px solid var(--border-color);
+    color:#454545;
     width:100%;
     border-radius:5px;
     padding: .5rem 1rem;

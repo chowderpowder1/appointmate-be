@@ -301,3 +301,32 @@ export const useGetPatientDocumentSignedUrl = () => {
         }
     })
 }
+
+export const useGetNoServicePlan = (servicePlanPatientID) => {
+    return useQuery ({
+        queryKey:['getNoServicePlan', servicePlanPatientID],
+        queryFn: async () => {
+            const res = await axios.get(`http://localhost:8080/clinic/getNoServicePlan/${servicePlanPatientID}`, { withCredentials: true})
+            return res.data
+        }
+    })
+}
+
+export const useGetApptServicePlan = (apptId) => {
+    return useQuery ({
+        queryKey:['getApptServicePlan', apptId],
+        queryFn: async () => {
+            const res = await axios.get(`http://localhost:8080/clinic/getApptServicePlan/${apptId}`, { withCredentials: true})
+            return res.data
+        }, enabled:Boolean(apptId),
+    })
+}
+
+export const usePostServicePlan = () => {
+    return useMutation({
+        mutationFn: async(serviceData) => {
+            const res = await axios.post(`http://localhost:8080/clinic/createServicePlan`, serviceData, {withCredentials:true})
+            return res.data
+        }
+    })
+}

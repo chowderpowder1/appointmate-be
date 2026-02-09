@@ -72,62 +72,72 @@ const ViewPatientRecordPage = () => {
                     </div>      
           </div>
             <div className={ViewStyles.sessionSelectionContainer}>
-            <h4 className={ViewStyles.sessionTitle}>Service Plans</h4>
-            <div className={ViewStyles.sessionTable}>
-              <div className={ViewStyles.sessionItem}>
-                <div className={ViewStyles.sessionText}>
-                  <p>Manual Therapy</p>        
-                  <p>Sessions: 6</p>
-                  <p>Remaining: 5</p>
-                  <div className={ViewStyles.arrowBtn}>
-                    <IoIosArrowForward/>
+            
+            <div className={ViewStyles.servicePlanContainer}>
+              <h4 className={ViewStyles.servicePlanTitle}>Service Plans</h4>
+              <div className={ViewStyles.servicePlanTable}>
+                <div className={ViewStyles.servicePlanItem}>
+                  <div className={ViewStyles.servicePlanText}>
+                    <p>Manual Therapy</p>
+                    <p>Sessions: 6</p>
+                    <p>Remaining: 5</p>
+                    <div className={ViewStyles.arrowBtn}>
+                      <IoIosArrowForward/>
+                    </div>
+              
                   </div>
-                               
-                </div>                                        
-              </div>
-              <div className={ViewStyles.sessionItem}>
-                <div className={ViewStyles.sessionText}>
-                  <p>Manual Therapy</p>        
-                  <p>Sessions: 6</p>
-                  <p>Remaining: 5</p>
-                </div>                         
-              </div>
-              <div className={ViewStyles.sessionItem}>
-                <div className={ViewStyles.sessionText}>
-                  <p>Manual Therapy</p>        
-                  <p>Sessions: 6</p>
-                  <p>Remaining: 5</p>
-                </div>                                        
+                </div>
+                <div className={ViewStyles.servicePlanItem}>
+                  <div className={ViewStyles.servicePlanText}>
+                    <p>Manual Therapy</p>
+                    <p>Sessions: 6</p>
+                    <p>Remaining: 5</p>
+                    <div className={ViewStyles.arrowBtn}>
+                      <IoIosArrowForward/>
+                    </div>
+                  </div>
+                </div>
+                <div className={ViewStyles.servicePlanItem}>
+                  <div className={ViewStyles.servicePlanText}>
+                    <p>Manual Therapy</p>
+                    <p>Sessions: 6</p>
+                    <p>Remaining: 5</p>
+                    <div className={ViewStyles.arrowBtn}>
+                      <IoIosArrowForward/>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-            <div className={ViewStyles.sessionSelectionContainer}>
-            <h4 className={ViewStyles.sessionTitle}>Service Plans</h4>
-            <div className={ViewStyles.sessionTable}>
-              <div className={ViewStyles.sessionItem}>
-                <div className={ViewStyles.sessionText}>
-                  <p>Manual Therapy</p>        
-                  <p>Sessions: 6</p>
-                  <p>Remaining: 5</p>
-                  <div className={ViewStyles.arrowBtn}>
-                    <IoIosArrowForward/>
+
+            <div className={ViewStyles.appointmentsContainer}>
+                <div className={ViewStyles.servicePlanTable}>
+                <h4 className={ViewStyles.servicePlanTitle}>Appointments</h4>
+                <div className={ViewStyles.servicePlanItem}>
+                  <div className={ViewStyles.servicePlanText}>
+                    <p>Manual Therapy</p>
+                    <p>Sessions: 6</p>
+                    <p>Remaining: 5</p>
+                    <div className={ViewStyles.arrowBtn}>
+                      <IoIosArrowForward/>
+                    </div>
+              
                   </div>
-                               
-                </div>                                        
-              </div>
-              <div className={ViewStyles.sessionItem}>
-                <div className={ViewStyles.sessionText}>
-                  <p>Manual Therapy</p>        
-                  <p>Sessions: 6</p>
-                  <p>Remaining: 5</p>
-                </div>                         
-              </div>
-              <div className={ViewStyles.sessionItem}>
-                <div className={ViewStyles.sessionText}>
-                  <p>Manual Therapy</p>        
-                  <p>Sessions: 6</p>
-                  <p>Remaining: 5</p>
-                </div>                                        
+                </div>
+                <div className={ViewStyles.servicePlanItem}>
+                  <div className={ViewStyles.servicePlanText}>
+                    <p>Manual Therapy</p>
+                    <p>Sessions: 6</p>
+                    <p>Remaining: 5</p>
+                  </div>
+                </div>
+                <div className={ViewStyles.servicePlanItem}>
+                  <div className={ViewStyles.servicePlanText}>
+                    <p>Manual Therapy</p>
+                    <p>Sessions: 6</p>
+                    <p>Remaining: 5</p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

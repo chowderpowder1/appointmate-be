@@ -180,14 +180,12 @@ async function getPatientEval(req, res){
 
                 const palpationQuery = await dbConnection.query(`SELECT * from awp_ptnpalpation_tbl where patient_id=$1 ORDER BY CREATED_AT desc limit 1`,[patientId])
                 const palpationData = palpationQuery.rows[0]
-                console.log('Frieren',palpationData)
                 // const painQuery = await dbConnection.query(`SELECT * from awp_ptnpaintype_tbl where appt_id=$1`,[activeAppt])
                 // const painData = painQuery.rows[0]
                 
                 const painQuery = await dbConnection.query(`SELECT * from awp_ptnpain_tbl where patient_id=$1 ORDER BY CREATED_AT desc limit 1`,[patientId])
                 const painData = painQuery.rows[0]
 
-                console.log('Med history data', medhistoryData)
 
 const {
     eval_diagnosis = '',
@@ -323,7 +321,6 @@ var payload = {
     // Service
     apptService: appt_service || ''
 };
-                console.log('Payload:', payload)
                 for (const pain in pain_type){
                     var temp = pain_type[pain]
                     payload = {
@@ -946,4 +943,76 @@ async function getTherapistAssignedDocuments(req,res){
     }
 }
 
-export { getTherapistAssignedDocuments, getPatientDocumentSignedUrl, getApptDocuments, getApptDetailsOverview,getAllUpcomingAppts, patchRescheduleAppt, getPatientsPendingAppointments, bookAppointmentForPatient, updateDocumentStatus, getPatientDocumentsList, patchInitialEval, getPatientEval, getServices, getTherapists, getPatients, getPatientData, getUserPersonalData}
+// Employee side endpoint for retrieving appointments with no sessions
+async function getNoServicePlan (req, res){
+    console.log('GET NO SERVICE PLAN ENDPOINT')
+    try{
+        if (req?.session?.user || req?.user) {
+            
+            const isAuthorized = await dbConnection.query(`SELECT user_role from awp_users_tbl WHERE user_id=$1`, [req.session.user.id])
+            
+            if(isAuthorized.rows[0].user_role < 5){
+                console.log('PATIENT ID FOR SERVICE:', req.params.patientId)
+
+                const apptQuery = await dbConnection.query(`SELECT * from awp_appt_tbl WHERE session_id IS NULL AND patient_id=$1`,[req.params.patientId]) 
+                const apptResult = apptQuery.rows[0]
+                console.log(apptResult)
+                return res.json({apptResult})
+            }else{
+                return res.json({success:false, message:'User is not authorized'})
+            }
+        }
+    }catch(err){
+        console.log(err)
+    }
+}
+
+async function createServicePlan (req,res){
+    console.log('Upload service plan')
+    try{
+        const {
+            patient_id,
+            appointment_id,
+            treatment_plan,
+            session_number,
+        } = req.body
+        console.log(req.body)
+        const createService = await dbConnection.query(`INSERT INTO awp_apptsession_tbl (appt_id, session_num, service_id, patient_id) values($1, $2, $3, $4) RETURNING *`, [appointment_id,session_number,treatment_plan, patient_id])
+        console.log(createService.code)
+        if( createService.rowCount === 1) {
+            console.log('Service plan successfully created')
+            return res.json({success:true, message: 'Service plan created'})
+        } else{
+            return res.json({success:false, message: 'There was a problem with your request. Please try again.'})
+        }
+    }catch(err){
+        if(err.code == 23505)
+        {
+            console.log('Appointment already is assigned to a Service Plan')
+            return res.json({success:false, message:'This appointment is already assigned to a session. If you wish to change it, reassign the appointment.'})
+        }
+        console.log(err)
+    }
+}
+
+async function getApptServicePlan (req,res){
+    console.log('Get service plan')
+    try{
+        const appointmentId = req.params.apptId
+        console.log('upload service plan appt id:', appointmentId)
+        const sessionQuery = await dbConnection.query(`SELECT * from awp_apptsession_tbl WHERE appt_id=$1`,[appointmentId])
+        if(sessionQuery.rowCount === 0){
+            return res.json({success:true, message:'This appointment is not assigned to a service plan.'})
+        }
+        const sessionResult = sessionQuery.rows[0].session_id
+        return res.json({success: true, sessionId: sessionResult})
+    }catch(err){
+        if(err.code == 23505)
+        {
+            console.log('Appointment already is assigned to a Service Plan')
+            return res.json({success:false, message:'This appointment is already assigned to a session. If you wish to change it, reassign the appointment.'})
+        }
+        console.log(err)
+    }
+}
+export { getTherapistAssignedDocuments, getPatientDocumentSignedUrl, getApptDocuments, getApptDetailsOverview,getAllUpcomingAppts, patchRescheduleAppt, getPatientsPendingAppointments, bookAppointmentForPatient, updateDocumentStatus, getPatientDocumentsList, patchInitialEval, getPatientEval, getServices, getTherapists, getPatients, getPatientData, getUserPersonalData, getNoServicePlan, createServicePlan, getApptServicePlan}

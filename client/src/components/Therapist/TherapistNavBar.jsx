@@ -28,7 +28,7 @@ const TherapistNavBar = () => {
   if (userDataError) return <div>⚠ Error: {userDataError.message}</div>;
   return (
     <div className={NavStyles.main}>
-      <h1>Appointment and Patient Record Management System</h1>
+      <h1>Accelerated Wellness & Pain Clinic</h1>
       <div>
         <ul className={NavStyles.navItems}>
 

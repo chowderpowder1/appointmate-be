@@ -78,14 +78,19 @@ async function getAllApptData(req, res) {
     
     const allActiveAppt = await Promise.all(dbActiveAppt.rows.map(async (r) => {
         const assignedPatientResults = await dbConnection.query(
-            `SELECT a.user_fname, a.user_lname 
+            `SELECT a.user_id, a.user_fname, a.user_lname, b.ptn_econtactnum 
              FROM awp_users_tbl AS a 
              LEFT JOIN awp_patient_tbl AS b ON a.user_id = b.user_id 
              WHERE b.patient_id=$1`,
             [r.patient_id]
-        ); 
         
+        ); 
+        const avatarQuery = await dbConnection.query(`SELECT image_url FROM user_avatars where user_id=$1 ORDER BY created_at desc LIMIT 1`, [assignedPatientResults.rows[0].user_id])
+        const avatarResult = avatarQuery?.rows[0]?.image_url || ''
+
         return {
+            userAvatar: avatarResult,
+            contactNumber: assignedPatientResults.rows[0].ptn_econtactnum,
             appt_id: r.appt_id,
             patient_id: r.patient_id,
             patient_name: assignedPatientResults.rows[0] 
@@ -360,11 +365,13 @@ async function getApptDetails(req,res){
             const assignedTherapist = assignedTherapistResult.rows[0];
             const userID = await dbConnection.query(`SELECT user_id,ptn_hmoprov from awp_patient_tbl where patient_id=$1`,[apptRows.patient_id])
             // const patientHmo = await dbConnection.query(`SELECT ptn_hmoprov FROM awp_patient_tbl where patient_id=$1`)
+
+            const patientContactNumber = await dbConnection.query(`SELECT contact_value from awp_ucontacts_tbl WHERE user_id=$1`,[userID.rows[0].user_id])
             const patientData = await dbConnection.query(`SELECT * from awp_users_tbl where user_id=$1`,[userID.rows[0].user_id])
             const patientDataRows = patientData.rows[0]
-                console.log(`APPT DETAILS ENDPOINT: `,patientData.rows[0])
             return res.json({
                 patientUserID: userID.rows[0].user_id,
+                patientContactNumber: patientContactNumber.rows[0].contact_value || 'N/A',
                 patientID: apptRows.patient_id,
                 patientFName: patientDataRows.user_fname,
                 patientLName: patientDataRows.user_lname,

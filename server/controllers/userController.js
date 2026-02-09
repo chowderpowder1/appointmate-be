@@ -498,8 +498,7 @@ async function uploadAvatar(req,res){
 async function getAvatar(req,res){
     try{
         if (req?.session?.user || req?.user) {
-        const userId = req.session.user.id
-        console.log('User ID requesting Avatar: ',userId)
+        const userId = req.params.userId
         const avatarQuery = await dbConnection.query(`SELECT image_url FROM user_avatars where user_id=$1 ORDER BY created_at desc`, [userId])
         const avatarResult = avatarQuery?.rows[0]?.image_url || ''
         return res.json(avatarResult);}
@@ -585,7 +584,7 @@ async function getDocumentSignedUrl(req,res){
         if (req?.session?.user || req?.user) {
         const userId = req.session.user.id
         const documentId = req.query.documentId
-
+            console.log('Entry:', documentId)
         const patientIdQuery = await dbConnection.query(`SELECT patient_id from awp_patient_tbl WHERE user_id=$1`,[userId])
         const patientId = patientIdQuery.rows[0].patient_id;
 
@@ -604,7 +603,6 @@ async function getDocumentSignedUrl(req,res){
 
                 expires_at: Math.floor(Date.now() / 1000) + 300, // 5 minutes
             });
-            console.log('Signed Url: ',signedUrl)
             res.json({ url: signedUrl });
 
         } else{

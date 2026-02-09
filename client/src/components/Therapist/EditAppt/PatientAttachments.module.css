@@ -1,6 +1,7 @@
 .header{
     font-weight:600;
     margin-bottom:1rem;
+    color:#454545;
 }
 .attachmentContainer{
     width:100%;
@@ -9,6 +10,7 @@
     padding:.5rem 1rem;
     position:relative;
     overflow: hidden;
+    text-align: center;
     /* display:grid;
     grid-template-columns: repeat(4, 1fr); */
 
@@ -32,13 +34,14 @@
     background-color: var(--primary-contrast);
     position:absolute;
 }
-.attachmentRow{
-    width:100%;
-    display:grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr;
-    padding-bottom:1rem;
-}
-.attachmentRow:not(:last-child){
+.attachmentRow {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  padding-bottom: 1rem;
+  justify-items: center; /* horizontal */
+  align-items: center;   /* vertical */
+}chmentRow:not(:last-child){
     border-bottom:1px solid var(--border-color);
     margin-bottom:1rem;
 }
@@ -50,4 +53,23 @@
 .icon{
     color:var(--primary-contrast);
     font-size:1.1rem;
+}
+.downloadContainer{
+    display:flex;
+    justify-content: center;
+    width:30px;
+    color:white;
+    border-radius:10px;
+    height:30px;
+    font-size:1.5rem;
+    cursor: pointer;
+    background-color:#1976D5;
+}
+.attachmentRow .fileNameContainer{
+    display:flex;
+    gap:.5rem;
+}
+.fileNameIcon{
+    font-size:1.3rem;
+    color:#1976D5;
 }

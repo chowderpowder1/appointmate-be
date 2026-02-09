@@ -1,5 +1,5 @@
 import express from 'express';
-import { getTherapistAssignedDocuments, getPatientDocumentSignedUrl, getApptDocuments, getApptDetailsOverview, getAllUpcomingAppts, bookAppointmentForPatient, updateDocumentStatus, getServices, getTherapists, getPatients,getPatientData, getUserPersonalData, patchInitialEval, getPatientEval, getPatientDocumentsList, getPatientsPendingAppointments, patchRescheduleAppt } from '../controllers/clinicController.js'
+import {getNoServicePlan, getTherapistAssignedDocuments, getPatientDocumentSignedUrl, getApptDocuments, getApptDetailsOverview, getAllUpcomingAppts, bookAppointmentForPatient, updateDocumentStatus, getServices, getTherapists, getPatients,getPatientData, getUserPersonalData, patchInitialEval, getPatientEval, getPatientDocumentsList, getPatientsPendingAppointments, patchRescheduleAppt, createServicePlan, getApptServicePlan } from '../controllers/clinicController.js'
 
 const router = express.Router();
 
@@ -37,4 +37,9 @@ router.patch(`/updateDocumentStatus/:id`, updateDocumentStatus)
 
 router.patch(`/patchRescheduleAppt/`, patchRescheduleAppt)
 
+router.get(`/getNoServicePlan/:patientId`, getNoServicePlan)
+
+router.get(`/getApptServicePlan/:apptId`, getApptServicePlan)
+    
+router.post(`/createServicePlan`, createServicePlan)
 export default router;

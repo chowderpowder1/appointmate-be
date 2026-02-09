@@ -7,7 +7,7 @@
     gap:3rem;
     margin-top:1rem;
     position: relative;
-    padding-bottom:3rem;
+    padding-bottom:2rem;
 }
 .assignedPtHeader{
     display:flex;
@@ -27,6 +27,7 @@
     height:50px;
     border-radius: 50%;
     overflow: hidden;
+    border:1px solid #1565C0;
 }
 .pxPhoto{
     height:auto;
@@ -36,6 +37,7 @@
     display:flex;
     gap:1rem;
     align-items: center;
+    color:#454545;
 }
 .pxDataContainer{
     
@@ -44,12 +46,12 @@
     height:20px;
     display:flex;
     align-items: center;
-    background-color:#D9D9D9;
+    background-color:#F4F4F4;
     color:var(--off-black);
-    padding:.3rem .7rem;
-    border-radius:15px;
+    padding:.7rem .7rem;
+    border-radius:5px;
     font-size:.9rem;
-    font-weight:600;
+    font-weight:400;
 }
 .rowOne{
     /* display:inline-block; */
@@ -74,6 +76,8 @@
     border-radius: 10px;
     padding:1rem;
     width:100%;
+    height:100px;
+    background-color: #F4F4F4;
 }
 .viewPxBtn{
     position: absolute;
@@ -90,7 +94,7 @@
     margin-top:1rem;
     position: relative;
     padding-bottom:1rem;
-    border-top:1px solid var(--border-color);
+    /* border-top:1px solid var(--border-color); */
     padding-top:1rem;
     height:fit-content;
     flex-direction: column;
@@ -106,7 +110,7 @@
     gap:1rem;
 }
 .apptStatusSubcontainer p{
-    color:#222222;
+    color:#454545;
 }
 .apptStatusSubcontainer{
     display:flex;
@@ -182,7 +186,7 @@
     right:0;
 }
 .headerText{
-    color: var(--primary-color);
+    color: #454545;
     font-weight:500;
     font-size:1rem;
     margin-bottom:.5rem;
@@ -241,13 +245,55 @@
     font-size:1.5rem;
 }
 .complaintContainer{
+    display:flex;
+    flex-flow:column;
+    gap:.5rem;
     width:100%;
 }
 .rescheduleHeader{
     font-size:1.5rem;
     font-weight:600;
+    color:#454545;
+}
+.rescheduleContainer{
+    color:#454545;
+    /* background-color: #F4F4F4; */
+    border: .5px solid var(--border-color);
+    border-radius:15px;
+    padding:1rem;
+    display:flex;
+    align-items: center;
+    gap:1rem;
+    justify-content: space-between;
+    padding-right:1rem;
 }
 .apptDataHeader{
     font-size:1rem;
     font-weight:600;
+    
+}
+.apptDataContainer span {
+    /* background-color: #1565C0; */
+    display:flex;
+    flex-flow:column;
+    /* align-items: center; */
+    justify-content: center;
+    color:#454545;
+    padding: 0 1rem;
+    /* border-left:2px solid #1565C0; */
+    height: fit-content;
+}
+.generatedAvatar{
+    background-color: #829AA6;
+    width:50px;
+    height:50px;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    color:White;
+    font-size:1.4rem;
+}
+.pxContactContainer{
+    display:flex;
+    gap:1rem;
 }

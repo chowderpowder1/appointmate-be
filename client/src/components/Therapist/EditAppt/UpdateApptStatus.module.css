@@ -8,3 +8,10 @@
     flex-flow:column;
     gap:1rem;
 }
+.header{
+    color:#1565C0;
+    font-weight:600;
+    font-size:1.2rem;
+    border-bottom:1px solid var(--border-color);
+    padding-bottom:.5rem;
+}

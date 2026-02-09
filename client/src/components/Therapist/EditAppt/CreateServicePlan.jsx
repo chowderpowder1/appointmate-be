@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import UpdateStyles from './UpdateApptStatus.module.css'
+import CreateServiceStyles from './CreateServicePlan.module.css'
 import Box from '@mui/material/Box';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
@@ -9,9 +9,19 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import {useGetServicesList, useGetTherapists, usePatchReschedule } from '../../../queries/useEmployees'
 
-const UpdateApptStatus = ({apptData, userData}) => {
+import CreateServiceModal from './CreateServiceModal';
+import Modal from '../../Ui/Modal'
+
+const CreateServicePlan = ({apptData, userData}) => {
+  
+  // Modal state control :DDDDDD meow meow meow
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(false);
+
   const {mutate} = usePatchReschedule();
   const { data: therapistData, isLoading: therapistDataIsLoading, error: therapistDataError} = useGetTherapists();
+  const { data: servicesData, isLoading: servicesDataIsLoading, error: servicesDataError} = useGetServicesList();
+
   const [apptStatus, setapptStatus] = useState('');
   const [apptForm, setApptForm] = useState(
     {
@@ -22,6 +32,11 @@ const UpdateApptStatus = ({apptData, userData}) => {
     }
   )
   
+  const handleOpenModal = (user) => {
+    setSelectedUser(user);
+    setIsOpen(true);  
+  }
+
   const handleChange = (status) => {
     setapptStatus(status.target.value);
   };
@@ -50,53 +65,22 @@ const UpdateApptStatus = ({apptData, userData}) => {
   
   if (therapistDataIsLoading) return <div>Loading...</div>;
   if (therapistDataError) return <div>Error: {therapistDataError.message}</div>;
-
-  
+  console.log(apptData)
   return (
-    <div className={UpdateStyles.container}>
-        <p className={UpdateStyles.header}>Appointment Status</p>
+    <div className={CreateServiceStyles.container}>
+        <p className={CreateServiceStyles.headerText} style={{color:''}}>New Service Plan</p>
+        <p>No existing service plan?</p>
+          <Button onClick={() => handleOpenModal(true)} sx={{ borderRadius:'10px', boxShadow:'none'}}variant="contained"> Create service plan</Button>
         <Box component="form" onSubmit={handleSubmit} sx={{ minWidth: 120 }}>
          <FormControl sx={{ display: 'flex', gap: '1rem' }} fullWidth>
-<FormControl fullWidth>
-  <InputLabel id="appt-status-label">Appointment Status</InputLabel>
-  <Select
-    labelId="appt-status-label"
-    id="appt-status-select"
-    name='apptStatus'
-    value={apptForm.apptStatus}
-    label="Appointment Status"
-    onChange={inputHandler} 
-  >
-    <MenuItem value={'scheduled'}>Scheduled</MenuItem>
-    <MenuItem value={'approved'}>Approved</MenuItem>
-    <MenuItem value={'pending'}>Pending</MenuItem>
-    <MenuItem value={'cancelled'}>Cancelled</MenuItem>
-    <MenuItem value={'reschedule'}>Request for Reschedule</MenuItem>
-  </Select>
-</FormControl>
-{/* Change Therapist */}
-<FormControl fullWidth>
-  <InputLabel id="therapist-action-label">Assigned Therapist</InputLabel>
-  
-  <Select
-    disabled={userData.userRoleId === 3}
-    labelId="therapist-action-label"
-    id="therapist-action-select"
-    name='apptTherapist'
-    value={apptForm.apptTherapist}
-    label="Change Therapist"
-    onChange={inputHandler}
-  >
- {therapistData.map((t)=>(
-    <MenuItem key={t.therapistEmployeeId} value={t.therapistEmployeeId}>{t.therapistName.slice(0,1).toUpperCase() + t.therapistName.slice(1)}</MenuItem>
-  ))}
-  </Select>
-</FormControl>
 
-            <Button type='submit' sx={{ borderRadius:'10px', boxShadow:'none'}}variant="contained">Update Status</Button>
           </FormControl>
         </Box>
+
+        <Modal  open={isOpen} onClose={() => setIsOpen(false)}>
+          <CreateServiceModal patientData={apptData}/>
+        </Modal>
     </div>
   )
 }
-export default UpdateApptStatus
+export default CreateServicePlan

@@ -95,15 +95,15 @@ export const useUploadAvatar = () => {
     })
 }
 
-export const useGetAvatar = () => {    
+export const useGetAvatar = (avatarUserId) => {    
     return useQuery({
-        queryKey:['myAvatar'],
+        queryKey:['myAvatar', avatarUserId],
         queryFn: async() => {
-            const res = await axios.get('http://localhost:8080/userData/getAvatar', {
+            const res = await axios.get(`http://localhost:8080/userData/${avatarUserId}/getAvatar`, {
                 withCredentials:true
             })
             return res.data;
-        }
+        }, enabled: !!avatarUserId
     })
 }
 

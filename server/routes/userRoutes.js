@@ -58,7 +58,7 @@ router.patch('/uploadAvatar', (req, res, next) => {uploadImage.single('file')(re
         next();
     })}, uploadAvatar)
 
-router.get('/getAvatar', getAvatar)
+router.get('/:userId/getAvatar', getAvatar)
 
 router.get('/getMyDocumentsList', getMyDocumentsList)
 

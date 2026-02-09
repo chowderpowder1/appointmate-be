@@ -13,7 +13,6 @@ const ViewDocument = (user) => {
    const { mutate: updateDocumentStatus} = useUpdateDocumentStatus();
 //    const { documentStatus, setDocumentStatus }= useState(null);
     const handleDownload = async (documentId) => {
-      console.log(documentId)
         try{
           const data = await getSignedUrl(documentId);
           console.log(data.url)
@@ -23,7 +22,6 @@ const ViewDocument = (user) => {
         }
     }
     const userData = user.user;
-console.log(userData.documentId)
   return (
     <div className={DocumentStyles.container}>
         <div className={DocumentStyles.headerContainer}>
