@@ -10,17 +10,19 @@ import dayjs from 'dayjs';
 // Tanstack
 import { useUsers } from '../../queries/users'
 
-const TherapistGreet = ({name}) => {
+const TherapistGreet = ({avatar, name}) => {
 
     const { data: userData, isLoading: userDataIsLoading, error: userDataError} = useUsers();
     
     if (userDataIsLoading) return <div>Loading...</div>;
     if (userDataError) return <div>⚠ Error: {userDataError.message}</div>;
-
+    console.log(userData)
   return (
     <div className={GreetStyles.container}>
     <div className={GreetStyles.therapistProfile}>
-        <img src={MockTherapist} alt="" />
+        {avatar ? <img src={avatar} alt="" /> : 
+        <div className={GreetStyles.generateAvatar}>{userData.firstName.slice(0,1).toUpperCase()}</div> }
+        
     </div>
     <div className={GreetStyles.greetText}>
         <h3 className={GreetStyles.therapistName}>Hello, {userData.firstName}</h3>

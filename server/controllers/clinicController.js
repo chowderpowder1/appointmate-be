@@ -696,7 +696,7 @@ async function getAllUpcomingAppts(req, res) {
             const isAuthorized = await dbConnection.query(`SELECT user_role from awp_users_tbl WHERE user_id=$1`, [req.session.user.id])
            if( isAuthorized.rows[0].user_role < 5){
 
-            const result = await dbConnection.query(`SELECT appt_id, patient_id, appt_status, appt_date, appt_start, appt_end FROM awp_appt_tbl WHERE appt_status=$1 ORDER BY created_at DESC`,['scheduled'])
+            const result = await dbConnection.query(`SELECT appt_id, patient_id, appt_status, appt_date, appt_start, appt_end FROM awp_appt_tbl WHERE appt_status=$1 AND appt_start > NOW() ORDER BY appt_start DESC`,['scheduled'])
 
             const scheduledAppts = await Promise.all(result.rows.map(async (p) => {
 
@@ -704,7 +704,7 @@ async function getAllUpcomingAppts(req, res) {
                 const patientUserId = patientUserIdQuery.rows[0].user_id;
                 const patientName = await dbConnection.query(`SELECT user_fname, user_lname FROM awp_users_tbl WHERE user_id=$1`,[patientUserId]);
                 const patientAvatar = await dbConnection.query(`SELECT image_url FROM user_avatars WHERE user_id=$1`,[patientUserId]);            
-                // console.log(patientName.rows[0])
+                
                 return{
                     patientName: `${patientName.rows[0].user_fname} ${patientName.rows[0].user_lname}`,
                     patientAvatar:patientAvatar?.rows[0]?.image_url || '',

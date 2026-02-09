@@ -53,7 +53,6 @@ const RescheduleTab = ({id, evalData, apptDetails}) => {
         apptId:id,
         complaint:evalData?.complaint,
         patientID:apptData.patientID,
-        apptId:apptID,
         apptDate: apptData.appt_date,
         apptTime:apptData.appt_start,
         apptTherapist: apptData.therapistID,

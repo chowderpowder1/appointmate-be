@@ -157,7 +157,8 @@ async function session (req, res) {
                 loggedIn:true,
                 firstName: employeeUserData.rows[0].user_fname,
                 userRole: 'Front-Desk',
-                userRoleId:4
+                userRoleId:4,
+                userId: currentUserID
             })
         }
         if(currentUserRole.rows[0].user_role === 3){
@@ -165,7 +166,8 @@ async function session (req, res) {
                 loggedIn:true,
                 firstName: employeeUserData.rows[0].user_fname,
                 userRole: 'Therapist',
-                userRoleId:3
+                userRoleId:3,
+                userId: currentUserID
             })
         }
 

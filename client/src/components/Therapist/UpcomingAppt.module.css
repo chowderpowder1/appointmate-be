@@ -35,12 +35,17 @@
     width:50%;
 }
 .pxPhotoContainer{
+    display:flex;
+    align-items: center;
+    justify-content:center;
     width:50px;
     height:50px;
     flex-shrink:0;
     border-radius:50%;
     overflow:hidden;
     position:relative;
+    border:2px solid #1976D2;
+    box-shadow: rgba(0, 0, 0, 0.20) 0px 5px 15px;
 }
 .pxPhoto{
     width:100%;
@@ -90,4 +95,21 @@
 .apptTime{
     border-left:1px solid black;
     padding-left:1rem;
+}
+
+.paginationContainer{
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    margin-top:1rem;
+}
+.generateAvatar{
+    width:100%;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    height:100%;
+    color:#FAF9F6;
+    border-radius:50%;
+    background-color: #829AA6;
 }

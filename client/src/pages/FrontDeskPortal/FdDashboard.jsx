@@ -8,29 +8,32 @@ import DatePicker from '../../components/PatientPortal/DatePicker'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
-
 import dayjs from 'dayjs';
 
 // Tanstack
 import { useUsers } from '../../queries/users'
+import { useUser } from '../../layouts/FrontDeskLayout'
 
 const FdDashboard = () => {
+
+  const avatar = useUser();
   const { data: userData, isLoading: userDataIsLoading, error: userDataError} = useUsers();
   
   if (userDataIsLoading) return <div>Loading...</div>;
   if (userDataError) return <div>⚠ Error: {userDataError.message}</div>;
+
   return (
 <div className={DashboardStyles.container}>
       <h1 className={DashboardStyles.header}>Dashboard</h1>
       <div className={DashboardStyles.row}>
-        <TherapistGreet name={userData.firstName}/>
-        {/* <SchedulePxNotification/> */}
+        <TherapistGreet avatar={avatar} name={userData.firstName}/>
+        <SchedulePxNotification/>
       </div>
       <div className={DashboardStyles.row}>
         <NotificationBelt/>
       </div>
       <div className={DashboardStyles.apptDataContainer}>
-        {/* <div className={DashboardStyles.calendarContainer}>
+        <div className={DashboardStyles.calendarContainer}>
 
              <LocalizationProvider dateAdapter={AdapterDayjs}>
   <DateCalendar
@@ -96,7 +99,7 @@ const FdDashboard = () => {
     }}
   />
 </LocalizationProvider>
-        </div> */}
+        </div>
         <div className={DashboardStyles.upcomingApptContainer}>
           <UpcomingAppt/>
         </div>

@@ -9,11 +9,11 @@ import axios from 'axios';
 
 // Tanstack
 import { useUsers } from '../../queries/users'
-
+import {useUser} from '../../layouts/FrontDeskLayout'
 const TherapistNavBar = () => {
   const { data: userData, isLoading: userDataIsLoading, error: userDataError} = useUsers();
       const redirect = useNavigate();
-    
+      const avatar = useUser()
       const handleLogout = async (e) => {
         try{
             localStorage.clear();
@@ -34,8 +34,8 @@ const TherapistNavBar = () => {
 
  
             <li><IoIosNotifications/></li>
-            <li><CgProfile/></li>
-            <p>{userData.userRole}: {userData.firstName}</p>
+            <li className={NavStyles.userPhotoContainer}>{avatar ? <img src={avatar} alt="" /> : <div className={NavStyles.generateAvatar}>{userData.firstName.slice(0,1).toUpperCase()}</div>}</li>
+            <p style={{color:'#454545'}}><strong>{userData.userRole}</strong>: {userData.firstName}</p>
             <button onClick={handleLogout} className="logout-btn"><IoMdLogOut/></button>
         </ul>
 

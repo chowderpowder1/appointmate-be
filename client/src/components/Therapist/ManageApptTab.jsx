@@ -44,7 +44,6 @@ const ManageAppt = () => {
     if (allApptData?.allActiveAppt) {
     setRowData(allApptData.allActiveAppt)
     }
-    console.log(rowData)
   }),[allApptData]
 
   if (allAptDataIsLoading ) return <div>Loading...</div>;
@@ -55,8 +54,6 @@ const ManageAppt = () => {
   const firstPostIndex = lastPostIndex - postsPerPage;
   const currentPosts = rowData?.slice(firstPostIndex, lastPostIndex);
   
-  console.log(allApptData)
-  console.log(allApptData?.allActiveAppt)
   return (
     <div className={ManageStyles.container}>
 
