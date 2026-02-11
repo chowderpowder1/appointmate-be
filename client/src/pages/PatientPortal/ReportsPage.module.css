@@ -12,6 +12,7 @@
     height:100%;
     display:flex;
     flex-flow:column;
+    justify-content: flex-start;
     gap:2rem;
 }
 .reportDownloadableContainer{
@@ -19,13 +20,19 @@
     background-color: white;
     border:1px solid var(--border-color);
     border-radius:15px;
-    padding:2rem;
-    height:100%;
+    padding:1rem 2rem;
+    height:fit-content;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    gap:1rem;
     color: var(--text-gray);
 }
 .reportTitle{
+    margin-top:1rem;
     font-size:1.5rem;
     color: var(--primary-contrast);
+    white-space:nowrap;
     font-weight:700;
 }
 .reportTable{
@@ -33,6 +40,7 @@
     display:grid;
     gap:2rem;
     width:100%;
+    height:fit-content;
 }
 .reportRow{
     display:grid;

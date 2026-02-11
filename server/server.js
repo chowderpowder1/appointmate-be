@@ -8,6 +8,7 @@ import authRouter from './routes/auth.js'
 import userRoutes from './routes/userRoutes.js'
 import adminRoutes from './routes/adminRoutes.js'
 import clinicRoutes from './routes/clinicRoutes.js'
+import sessionRoutes from './routes/sessionRoutes.js'
 // import pxData from './routes/pxData.js'
 import path from 'path';``
 import cors from 'cors'; // Cross origin resource sharing
@@ -172,10 +173,12 @@ app.use('/auth', authRouter);
 //     })    
 //     console.log(noparamres);
 // })
+app.use('/session', sessionRoutes);
 app.use('/userData', userRoutes);
 app.use('/appt', apptRoutes);
 app.use('/clinic', clinicRoutes);
 app.use('/admin', adminRoutes);
+
 
 // app.use('/login', )
 app.get('/users', (req, res) => {

@@ -161,3 +161,14 @@ export const useRescheduleMyAppt = () => {
     })
 }
 
+export const useGetMySessionIds = () => {
+    return useQuery({
+        queryKey:['allPatients'],
+        queryFn: async() => {
+            const res = await axios.get('http://localhost:8080/session/getPatientSessionsIds', {
+                withCredentials:true
+            })
+            return res.data;
+        }
+    })
+}

@@ -20,7 +20,8 @@ import {useUsers} from '../../queries/users'
 const EditAppt = () => {
   const { id } = useParams();
   const { data: apptDetailsData, isLoading: apptDetailsDataIsLoading, error: apptDetailsDataError} = useGetApptDetailsOverview(id);
-    const { data: apptServiceData, isLoading: apptServiceDataIsLoading, error: apptServiceDataError} = useGetApptServicePlan(apptDetailsData?.apptId);
+
+  const { data: apptServiceData, isLoading: apptServiceDataIsLoading, error: apptServiceDataError} = useGetApptServicePlan(apptDetailsData?.apptId);
 
   const { data: myData, isLoading: myDataIsLoading, error: myDataError} = useUsers();
   
@@ -28,7 +29,7 @@ const EditAppt = () => {
 
   if (apptDetailsDataIsLoading || apptDocumentsDataIsLoading || apptServiceDataIsLoading) return <div>Loading...</div>;
   if (apptDetailsDataError || apptDocumentsDataError || apptServiceDataError) return <div>⚠ Error: {apptDetailsDataError.message}</div>;
-  
+
   return (
     <div className={EditStyles.mainContainer}>
       {/* <div className={EditStyles.directoryContainer}> <IoCalendarClear/> <p>Appointments</p> <IoIosArrowForward/> <p>Edit Appointments</p></div> */}
@@ -40,7 +41,7 @@ const EditAppt = () => {
             <h2>Edit appointment</h2>
           </Link>
           <div className={EditStyles.sessionIdContainer}>
-            <p><b>Session ID:</b> {apptServiceData.sessionId}</p>
+            <p><b>Session ID:</b> {apptServiceData.sessionId || 'No Service Plan assigned'}</p>
           </div>
         </div>
         <AssignedPt apptData={apptDetailsData} apptID={id}/>
@@ -54,7 +55,7 @@ const EditAppt = () => {
         {/* <button className={EditStyles.applyBtn}> Apply Changes</button> */}
       </div>
       <div className={EditStyles.rowTwo}>
-        <OpenPatientSession />
+        <OpenPatientSession apptData={apptDetailsData} serviceData={apptServiceData} />
         <UpdateApptStatus apptData={apptDetailsData} userData={myData}/>
         <UpdateServicePlan apptData={apptDetailsData} userData={myData} serviceData={apptServiceData}/>
         <CreateServicePlan apptData={apptDetailsData} userData={myData}/>

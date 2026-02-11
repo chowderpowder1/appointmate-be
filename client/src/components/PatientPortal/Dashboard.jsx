@@ -24,12 +24,12 @@ const Dashboard = () => {
     const {data : userData, isLoading: userDataIsLoading, error: userDataError} = useUsers();
     const {data : patientData, isLoading: patientDataIsLoading, error: patientDataError} = usePatientData();
     const {data : documentList, isLoading: documentListIsLoading, error: documentListError} = useGetMyDocumentsList();
-  
-    const {data : userAvatar, isLoading: userAvatarIsLoading, error: userAvatarError} = useGetAvatar();
+
+    const {data : userAvatar, isLoading: userAvatarIsLoading, error: userAvatarError} = useGetAvatar(userData.id);
 
     if (patientDataIsLoading || userDataIsLoading || userAvatarIsLoading || documentListIsLoading ) return <div>Loading...</div>;
     if (patientDataError || userDataError || userAvatarError || documentListError) return <div>Error: {patientDataError.message}</div>;
-  console.log(documentList)
+
 return (
     <div className={DashboardStyles.container}>
       <div className={`${DashboardStyles.columnOne} ${DashboardStyles.column}`}>
@@ -37,7 +37,8 @@ return (
 
           <div className={DashboardStyles.profileLeft}>
             <div className={DashboardStyles.patientPhoto}>
-              <img src={userAvatar || MockUser} className={DashboardStyles.userPhoto} alt="" />
+              {userAvatar ?  <img src={userAvatar} className={DashboardStyles.userPhoto} alt="" /> : <div className={DashboardStyles.generateAvatar}>{userData.firstName.slice(0,1)}</div>}
+             
             </div>
 
             <h2 className={DashboardStyles.PatientName}>{userData.firstName} {userData.lastName}</h2>

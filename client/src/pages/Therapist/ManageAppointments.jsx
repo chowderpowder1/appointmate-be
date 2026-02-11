@@ -7,12 +7,12 @@ import ManageServicePlans from '../../components/Therapist/ManageServicePlans'
 
 
 const ManageAppointments = () => {
-    const [ activeTab, setActiveTab ] = useState(0);
-  
+  const [ activeTab, setActiveTab ] = useState(0);
+
     const toggleTab = (index) => {
       setActiveTab(index);
     }
-  
+
   return (
     <div className={ManageStyles.container}>
       <div className={ManageStyles.headerContainer}>

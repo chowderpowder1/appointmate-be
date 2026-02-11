@@ -33,7 +33,7 @@ const PatientProfile = () => {
     const {mutate: uploadAvatar} = useUploadAvatar();
     const {data : userData, isLoading: userDataIsLoading, error: userDataError} = useUsers();
     const {data : patientData, isLoading: patientDataIsLoading, error: patientDataError} = usePatientData();
-    const {data : userAvatar, isLoading: userAvatarIsLoading, error: userAvatarError} = useGetAvatar();
+    const {data : userAvatar, isLoading: userAvatarIsLoading, error: userAvatarError} = useGetAvatar(userData.id);
 
     // Avatar upload state hooks
     const [file, setFile] = useState(null);
@@ -89,7 +89,7 @@ const PatientProfile = () => {
         <div className={ProfileStyles.userContainer}>
 
             <div className={ProfileStyles.imageContainer}>
-                <img src={userAvatar || MockUser} className={ProfileStyles.userPhoto} alt="" />
+                {userAvatar ?  <img src={userAvatar} className={ProfileStyles.userPhoto} alt="" /> : <div className={ProfileStyles.generateAvatar}>{userData.firstName.slice(0,1)}</div>}
                     <input 
                         style={{display:'none'}}
                         type="file"

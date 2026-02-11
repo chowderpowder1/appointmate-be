@@ -344,7 +344,6 @@ async function getApptDetails(req,res){
         if (req.session.user || req.user) {
             // const currentUserID = req?.session?.user?.id || req?.user?.id || null;
             const appointmentID = req.query.apptID;
-            console.log('niello',req.query)
 
             const apptDetails = await dbConnection.query(`SELECT * from awp_appt_tbl WHERE appt_id=$1`,[appointmentID])
             const apptRows = apptDetails.rows[0]
@@ -466,8 +465,7 @@ async function getTherapistAppointments(req,res){
 }
 
 async function patchRescheduleMyAppt (req, res){
-    console.log('patient rechedule patch')
-    console.log(req.body)
+
     try{
         // console.log("Appointment Booking data: "+JSON.stringify(req.body));
         const userId = req.session.user.id
@@ -504,8 +502,7 @@ async function patchRescheduleMyAppt (req, res){
 }
 
 async function patchPatientReschedule (req, res){
-    console.log('patient rechedule patch')
-    console.log(req.body)
+
     try{
         // console.log("Appointment Booking data: "+JSON.stringify(req.body));
         const userId = req.session.user.id

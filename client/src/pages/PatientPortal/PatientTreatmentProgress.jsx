@@ -15,15 +15,21 @@ import RescheduleStatus from '../../components/PatientPortal/RescheduleStatus'
 import { FaCheck } from "react-icons/fa";
 
 // Query imports
+import {useGetMySessionIds} from '../../queries/users.js'
 
 import {useGetMyAppointments} from '../../queries/apptData'
+import {useGetSessionData} from '../../queries/useEmployees'
 
 const PatientAppointment = () => {
 
+  const [selectedSessionId, setSelectedSessionId] = useState('')
+  const { data: sessionData, isLoading: sessionDataIsLoading, error: sessionDataError } = useGetSessionData(selectedSessionId);
+
+    const {data: sessionIds, isLoading: sessionIdsIsLoading, error: sessionIdsError} = useGetMySessionIds();
     const { data: myAppointmentsData, isLoading: myAppointmentsDataIsLoading, error: myAppointmentsDataError } = useGetMyAppointments();
   
   const percentage = 10;
-  
+  console.log(sessionData)
   const [ treatmentLength, setTreatmentLength] = useState(0);
   const changeTreatmentLength = (data) => {
     setTreatmentLength(data);
@@ -67,8 +73,11 @@ const PatientAppointment = () => {
   ]
   if (  myAppointmentsDataIsLoading ) return <div>Loading...</div>;
   if (  myAppointmentsDataError ) return <div>Error: {myAppointmentsDataError.message}</div>;
+  if (sessionDataIsLoading) return <div>Loading...</div>;
+  if (sessionDataError ) return <div>Error: {myAppointmentsDataError.message}</div>;
+
   const apptData = myAppointmentsData.userAppointments[0]
-  console.log(apptData)
+  console.log(sessionIds)
   const nextApptData =myAppointmentsData.userAppointments[0];
   return (
     <div className={TreatmentStyles.container}>
@@ -161,10 +170,10 @@ const PatientAppointment = () => {
         </div>
       </div> */}
       <div className={TreatmentStyles.columnOne}>
-        <ProgressStepper isHome={false}/>
+        <ProgressStepper selectSessionId={setSelectedSessionId} sessionIds={sessionIds} isHome={false}/>
       </div>
       <div className={TreatmentStyles.columnTwo}>
-        <CircularStepper/>
+        <CircularStepper sessionData={sessionData}/>
         <div className={TreatmentStyles.scheduledSessionContainer}>
               <div className={TreatmentStyles.sessionData}>
                 <div className={TreatmentStyles.sessionBackground}>

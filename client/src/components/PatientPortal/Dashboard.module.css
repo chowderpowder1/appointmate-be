@@ -95,11 +95,13 @@
     gap:.5rem;
 }
 .patientPhoto{
+    height:150px;
+    width:150px;
     
 }
 .patientPhoto img{
-    max-width:200px;
-    height:200px;
+    height:150px;
+    width:150px;
     overflow: hidden;
     object-fit: cover;
     border-radius:50%;
@@ -175,4 +177,16 @@
     object-fit:cover;
     /* border: 3px solid #428CD8; */
     box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+}
+.generateAvatar{
+    width:150px;
+    height:150px;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    font-size:4rem;
+    color:#FAF9F6;
+    border-radius:50%;
+    background-color: #829AA6;
+    border:2px solid #1976D2;
 }

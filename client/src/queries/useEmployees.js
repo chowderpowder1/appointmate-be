@@ -330,3 +330,45 @@ export const usePostServicePlan = () => {
         }
     })
 }
+
+export const useUpdateSession = () => {
+    return useMutation({
+        mutationFn: async(sessionData) => {
+            const res = await axios.post(`http://localhost:8080/session/updateSession`, sessionData, {withCredentials:true})
+            return res.data
+        }
+    })
+}
+
+export const useGetSessionData = (sessionId) => {
+    return useQuery ({
+        queryKey:['oneSessionData', sessionId],
+        queryFn: async () => {
+            const res = await axios.get(`http://localhost:8080/session/getSessionData/${sessionId}`, { withCredentials: true})
+            return res.data
+        }, enabled:Boolean(sessionId),
+    })
+}
+
+export const useGetPatientSessions = (patientId) => {
+    return useQuery ({
+        queryKey:['patientSessionIds', patientId],
+        queryFn: async () => {
+            const res = await axios.get(`http://localhost:8080/session/getPatientSessions/${patientId}`, { withCredentials: true})
+            return res.data
+        }, enabled:Boolean(patientId),
+    })
+}
+
+
+export const useAssignApptSession = () => {
+
+    return useMutation({
+        mutationFn: async (sessionId) => {
+            const res = await axios.patch('http://localhost:8080/session/updateApptSession', sessionId, {withCredentials: true})
+
+        return res.data;
+        }, 
+        
+    })
+}

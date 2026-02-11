@@ -14,8 +14,9 @@ import { useScroll } from '../../features/scrollContext'
 import { useGetAvatar } from '../../queries/users.js'
 
 const Navbar = () => {
+    const { data, isLoading, error } = useUsers();
 
-    const {data : userAvatar, isLoading: userAvatarIsLoading, error: userAvatarError} = useGetAvatar();
+    const {data : userAvatar, isLoading: userAvatarIsLoading, error: userAvatarError} = useGetAvatar(data?.id);
 
 
     const [isOpenMenu, setOpenMenu] = useState(false);
@@ -31,8 +32,7 @@ const Navbar = () => {
         }
     }
 
-    const { data, isLoading, error } = useUsers();
-    console.log(data);
+    console.log(userAvatar);
     if (isLoading || userAvatarIsLoading) return <div>Loading...</div>;
     if (error || userAvatarError) return <div>⚠ Error: {error.message}</div>;
 
@@ -66,14 +66,29 @@ const Navbar = () => {
             </div>
             
             <div className="right-nav">
-                <IoSearchSharp className='search-btn'/>
+                {/* <IoSearchSharp className='search-btn'/> */}
                 <Link to='/Appointment' className="nav-book-btn">Book Now</Link>
                     
-                {data.loggedIn && <><Link className="user-icon" to='/patient/dashboard'><img src={userAvatar || MockUser} alt="" className="user-avatar" /></Link>
-                <button onClick={handleLogout} className="logout-btn"><IoMdLogOut/></button> <p>{data.firstName}</p></>} 
+            {data.loggedIn ? (
+  <div className="user-container" style={{
+    display:'flex' }}>
+    <Link className="user-icon" to="/patient/dashboard">
+      {userAvatar ? (
+        <img src={userAvatar} className="user-avatar" alt="User Avatar" />
+      ) : (
+        <div className="generateAvatar">{data.firstName.slice(0, 1)}</div>
+      )}
+    </Link>
 
-                {!data.loggedIn && <Link to='/login' className='nav-book-btn'>Login</Link>} 
-                
+    <button onClick={handleLogout} className="logout-btn">
+      <IoMdLogOut />
+    </button>
+  </div>
+) : (
+  <Link to="/login" className="nav-book-btn">
+    Login
+  </Link>
+)}
                 
             </div>
         </nav>

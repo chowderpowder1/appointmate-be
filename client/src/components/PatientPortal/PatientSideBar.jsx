@@ -41,9 +41,9 @@ const PatientSideBar = () => {
         <NavLink to='documents' className={ActiveSideBar}>
           <RiFolder6Fill /> <span className={expandedText()}>MY DOCUMENTS</span>
         </NavLink>
-        {/* <NavLink to='reports' className={ActiveSideBar}>
+        <NavLink to='reports' className={ActiveSideBar}>
           <TbGraphFilled /> <span className={expandedText()}>REPORTS</span>
-        </NavLink> */}
+        </NavLink>
         <div onClick={expandSideBar} className={SideBarStyles.expandContainer}>
           <RiExpandRightFill className={ expand ? `${SideBarStyles.expandBtn} ${SideBarStyles.expandBtnActive}` : `${SideBarStyles.expandBtn}`} />
           <span className={expandedText()}>Collapse</span>

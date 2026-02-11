@@ -3,7 +3,7 @@ import SessionStyles from './OpenPatientSession.module.css'
 import Button from '@mui/material/Button';
 import Modal from '../../Ui/Modal'
 import SessionModal from './SessionModal';
-const OpenPatientSession = () => {
+const OpenPatientSession = ({apptData, serviceData}) => {
     const [isOpen, setIsOpen] = useState(null);
   
     const handleOpenModal = (user) => {
@@ -16,7 +16,7 @@ const OpenPatientSession = () => {
         <Button onClick={() => handleOpenModal(true)} sx={{ borderRadius:'10px', boxShadow:'none'}}variant="contained"> Open Patient Session</Button>
 
         <Modal open={isOpen} onClose={() => setIsOpen(false)}>
-          <SessionModal></SessionModal>
+          <SessionModal apptData={apptData} serviceData={serviceData}></SessionModal>
         </Modal>
     </div>
   )

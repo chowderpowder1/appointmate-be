@@ -5,19 +5,35 @@ import '../../index.css'
 import { CircularProgressbar, CircularProgressbarWithChildren, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 
-const CircularStepper = () => {
-    const percentage = 3;
+const CircularStepper = ({sessionData}) => {
+    
+    const sessionsUndertaken= sessionData?.numberOfSessions || '0'
+    const percentage = sessionsUndertaken;
+    console.log(sessionData)
     return (
     <>
         <div className={CircularStyles.circularStepperContainer}>
           <div className={CircularStyles.circularStepperTextContainer}>
             <RedHeader title='Your Therapy Progress'></RedHeader>
+            {sessionData ?  
+            <>
             <h1 className={CircularStyles.circularStepperTitle}>
               Every session Counts
             </h1>
             <p className={CircularStyles.circularStepperText}>
               You're getting there. Stay Strong!
+            </p></> :  
+            <>
+            <h1 className={CircularStyles.circularStepperTitle}>
+              Select a session!
+            </h1>
+
+            <p className={CircularStyles.circularStepperText}>
+                You can view your progress here.
             </p>
+            </>
+            }
+           
           </div>
 
           <div className={CircularStyles.circularStepper}>

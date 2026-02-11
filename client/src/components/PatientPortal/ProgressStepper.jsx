@@ -18,13 +18,21 @@ import { TiCancel } from "react-icons/ti";
 
 //  Axios imports YEAAAHHHH
 import {useGetMyAppointments} from '../../queries/apptData'
-
+import {useGetSessionData} from '../../queries/useEmployees'
+import { useState } from 'react';
+import {
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem
+} from '@mui/material';
 import dayjs from "dayjs";
 
-const ProgressStepper = ({isHome}) => {
-
-  const { data: myAppointmentsData, isLoading: myAppointmentsDataIsLoading, error: myAppointmentsDataError } = useGetMyAppointments();
-
+const ProgressStepper = ({sessionIds, isHome, selectSessionId}) => {
+const [selectedSessionId, setSelectedSessionId] = useState('');  
+const { data: myAppointmentsData, isLoading: myAppointmentsDataIsLoading, error: myAppointmentsDataError } = useGetMyAppointments();
+  const { data: sessionData, isLoading: sessionDataIsLoading, error: sessionDataError } = useGetSessionData(selectedSessionId);
+  console.log(sessionIds)
       const treatmentData = [
      {
       treatmentType : 'Neurological Treatment',
@@ -61,12 +69,21 @@ const ProgressStepper = ({isHome}) => {
     ] 
     }
   ]
-
+const handleChange = (event) => {
+  if(event.target.value ==='all'){
+    setSelectedSessionId('');
+    selectSessionId('')
+    return
+  }
+  selectSessionId(event.target.value)
+  setSelectedSessionId(event.target.value);
+};
   // Errur Chiking ba
-  if (  myAppointmentsDataIsLoading ) return <div>Loading...</div>;
-  if (  myAppointmentsDataError ) return <div>Error: {myAppointmentsDataError.message}</div>;
+  if (  myAppointmentsDataIsLoading  || sessionDataIsLoading) return <div>Loading...</div>;
+  if (  myAppointmentsDataError || sessionDataError ) return <div>Error: {myAppointmentsDataError.message}</div>;
 
   const mappedApptData = myAppointmentsData.userAppointments;
+  const mappedSessionData = sessionData?.sessionResult;
   // console.log(mappedApptData.appt_date)
   // console.log(dayjs(mappedApptData[0].appt_date).format('YYYY MM DD'))
   // console.log(mappedApptData[0].appt_status)
@@ -103,7 +120,10 @@ const ProgressStepper = ({isHome}) => {
       return {"--apptStatusColor":'#D32F2F'};
     }
   }
-
+  const sessionApptIdSet = new Set(
+  mappedSessionData?.map(s => s.appt_id)
+);
+console.log(sessionData)
   return (
 
           <div
@@ -114,16 +134,118 @@ const ProgressStepper = ({isHome}) => {
               {/* <h1 style={{color:'#1976D5'}}>Appointments</h1> */}
               <ul>
                 <li className={ProgressStyles.tabActive}>Appointments</li>
-                <li>Sessions</li>
-                <li>Archived</li>
+      
+                {/* <li>Sessions</li>
+                <li>Archived</li> */}
               </ul>
+    {!isHome && <FormControl>
+      <InputLabel labelId="status-label" id="status-label">Select a Session</InputLabel>
+      
+      <Select
+      sx={{
+        width:'250px',
+        '& .MuiOutlinedInput-notchedOutline': {
+        borderRadius: '52px',
+        }
+      }}
+        labelId="status-label"
+        id="status-select"
+        // value={status}
+        label="Select a Session"
+        onChange={handleChange}
+      >
+        <MenuItem value='all'>All appointments</MenuItem>
+{
+  (() => {
+    const seen = new Set();
+    return sessionIds?.sessions
+      .filter(s => {
+        if (seen.has(s.session_id)) return false; // skip duplicate
+        seen.add(s.session_id);
+        return true;
+      })
+      .map(s => (
+        <MenuItem key={s.session_id} value={s.session_id}>
+          Session-{s.session_id.slice(0, 5)}
+        </MenuItem>
+      ));
+  })()
+}
+        
+      </Select>
+    </FormControl>}
             </div>
+            
             <div style={{
             height: isHome ? '80%' : '90%',
           }}
           className={ProgressStyles.stepperSection}>
-                <div className={ProgressStyles.stepperSubSection}>
-                {mappedApptData.map((apptData, index)=>
+            
+    <div className={ProgressStyles.stepperSubSection}>
+    {selectedSessionId && mappedApptData
+    .filter(appt => sessionApptIdSet?.has(appt.appt_id))
+    .map((apptData, index) => (
+      <div key={apptData.appt_id} className={ProgressStyles.row}>
+        {getStatusStyle(apptData?.appt_status)}
+
+        <div
+          className={ProgressStyles.detailsContainer}
+          style={getStatusIndicatorStyles(apptData?.appt_status)}
+        >
+          <span>
+            <p className={ProgressStyles.rowTitle}>
+              {apptData.appt_date}
+            </p>
+            <p className={ProgressStyles.rowSubText}>
+              Appointment Date
+            </p>
+          </span>
+
+          <div className={ProgressStyles.verticalDivider} />
+
+          <span>
+            <p className={ProgressStyles.rowTitle}>
+              {apptData.appt_start} - {apptData.appt_end}
+            </p>
+            <p className={ProgressStyles.rowSubText}>
+              Appointment Time
+            </p>
+          </span>
+
+          <div className={ProgressStyles.verticalDivider} />
+
+          <span>
+            <p className={ProgressStyles.rowTitle}>
+              {apptData.therapist_name}
+            </p>
+            <p className={ProgressStyles.rowSubText}>
+              Assigned Therapist
+            </p>
+          </span>
+
+          <div className={ProgressStyles.verticalDivider} />
+
+          <span>
+            <p className={ProgressStyles.rowTitle}>
+              {apptData.mode_of_payment}
+            </p>
+            <p className={ProgressStyles.rowSubText}>
+              Payment Method
+            </p>
+          </span>
+
+          <div className={ProgressStyles.verticalDivider} />
+
+          <div className={ProgressStyles.appointmentNotesContainer}>
+            <FaNoteSticky />
+            <Link to={`appointment-details/${apptData.appt_id}`}>
+              Notes
+            </Link>
+          </div>
+        </div>
+      </div>
+    ))}
+                {!selectedSessionId && mappedApptData.map((apptData, index)=>
                   (<>
                    
                      <div className={ProgressStyles.row}>

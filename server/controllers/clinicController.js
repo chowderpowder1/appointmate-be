@@ -518,7 +518,6 @@ async function getPatientDocumentsList(req,res){
                 const allDocQuery = await dbConnection.query(`SELECT ptn_doc_id, patient_id, file_name, file_type, upload_date, doc_status FROM awp_ptndocs_tbl ORDER BY created_at DESC, doc_status DESC`)
                     console.log(allDocQuery.rows)
                   const patientDocumentList = await Promise.all(allDocQuery?.rows?.map(async (p) => {
-                        console.log(p)
                         const patientUserIdQuery = await dbConnection.query(`SELECT user_id from awp_patient_tbl WHERE patient_id=$1`,[p.patient_id])
                         const patientUserId = patientUserIdQuery.rows[0].user_id;
 
@@ -845,7 +844,6 @@ async function getPatientDocumentSignedUrl(req,res){
 
                     expires_at: Math.floor(Date.now() / 1000) + 300, // 5 minutes
                 });
-                console.log('Signed Url: ',signedUrl)
                 res.json({ url: signedUrl });
 
         }else{
@@ -976,7 +974,7 @@ async function createServicePlan (req,res){
             treatment_plan,
             session_number,
         } = req.body
-        console.log(req.body)
+        console.log('Treatment Plan', treatment_plan)
         const createService = await dbConnection.query(`INSERT INTO awp_apptsession_tbl (appt_id, session_num, service_id, patient_id) values($1, $2, $3, $4) RETURNING *`, [appointment_id,session_number,treatment_plan, patient_id])
         console.log(createService.code)
         if( createService.rowCount === 1) {
