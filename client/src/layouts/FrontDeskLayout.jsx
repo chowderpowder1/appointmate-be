@@ -7,7 +7,6 @@ import 'react-toastify/dist/ReactToastify.css';
 // Tanstack
 import { useUsers } from '../queries/users'
 import {useGetAvatar} from '../queries/users'
-
 export const UserContext = createContext(null);
 
 export const useUser = () => useContext(UserContext)

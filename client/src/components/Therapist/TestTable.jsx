@@ -1,5 +1,4 @@
 import {React, useState, useEffect} from 'react'
-
 import { Link } from 'react-router'
 import ManageStyles from './ManageApptTab.module.css'
 import MockPxPhoto from '../../assets/aw_mock-px.png'
@@ -9,105 +8,56 @@ import { Button } from '@mui/material';
 import { useGetAllAppt, useUpdateApptStatus } from '../../queries/useEmployees' 
 import Pagination from '../../features/Pagination.jsx'
 
-
 import {useGetAvatar} from '../../queries/users.js'
-import Filters from '../../filter/Filters.jsx'
-import {getCoreRowModel, useReactTable, flexRender, getFilteredRowModel} from "@tanstack/react-table";
-const ManageAppt = () => {
 
-  
-const [columnFilters, setColumnFilters] = useState([]);
+import {getCoreRowModel, useReactTable} from "@tanstack/react-table";
+const TestTable = () => {
+
   const {mutate: updateApptStatus } = useUpdateApptStatus();
   const { data: allApptData, isLoading: allAptDataIsLoading, error: allAptDataError} = useGetAllAppt();
-
+  console.log(allApptData)
   const apptData = allApptData?.allActiveAppt
-    console.log(apptData)
   const columns = [
     {
       accessorKey: 'patient_name',
       header: "Patient Name",
-      size:300,
-
-      cell: (props) => {
-    const value = props.getValue();
-    return (
-      <p>
-        {typeof value === 'string'
-          ? value.charAt(0).toUpperCase() + value.slice(1)
-          : value}
-      </p>
-    );
-  },
+      cell: (props) => <p>{props.getValue}</p>
     },
     {
       accessorKey: 'appt_date',
       header: "Date",
-      cell: (props) => <p>{props.getValue()}</p>,
+      cell: (props) => <p>{props.getValue}</p>
     },
     {
       accessorKey: 'appt_start',
       header: "Time",
-      cell: (props) => <p>{props.getValue()}</p>
+      cell: (props) => <p>{props.getValue}</p>
     },
     {
       accessorKey: 'therapist_name',
       header: "Therapist",
-      cell: (props) => {
-    const value = props.getValue();
-    return (
-      <p>
-        {typeof value === 'string'
-          ? value.charAt(0).toUpperCase() + value.slice(1)
-          : value}
-      </p>
-    );
-  },
+      cell: (props) => <p>{props.getValue}</p>
     },
     {
       accessorKey: 'mode_of_payment',
       header: "Payment",
-      cell: (props) => <p>{props.getValue()}</p>
+      cell: (props) => <p>{props.getValue}</p>
     },
     {
-        accessorKey: 'appt_status',
-  header: "Status",
-  cell: ({ getValue }) => {
-    const value = getValue()
-
-    const formatted =
-      typeof value === 'string'
-        ? value.charAt(0).toUpperCase() + value.slice(1)
-        : value
-
-    return <p>{formatted}</p>
-  },
-  filterFn: (row, columnId, filterValue) => {
-    if (!filterValue || filterValue.length === 0) return true
-    return filterValue.includes(row.getValue(columnId))
-  }
+      accessorKey: 'appt_status',
+      header: "Status",
+      cell: (props) => <p>{props.getValue}</p>
     },
     {
-      accessorKey: 'action',
+      accessorKey: 'patient_name',
       header: "Action",
-      cell: (props) => <p>{props.getValue()}</p>
+      cell: (props) => <p>{props.getValue}</p>
     },
   ]
-    const table = useReactTable({ 
-    data: apptData,
+    const table = useReactTable({
+    apptData,
     columns,
-    state : {
-      columnFilters
-    },
-    getCoreRowModel: getCoreRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    // columnResizeMode:'onChange',
-    meta: {
-      updateData : (rowIndex, columnId, value) => 
-        setData((prev)=> prev.map((row,index) => index === rowIndex ?{
-          ...prev[rowIndex],
-          [columnId] : value,
-        } : row)) 
-    }
+    getCoreRowModel: getCoreRowModel()
   })
 
   const [rowData, setRowData] = useState([]);
@@ -150,63 +100,24 @@ const [columnFilters, setColumnFilters] = useState([]);
   const lastPostIndex = currentPage * postsPerPage;
   const firstPostIndex = lastPostIndex - postsPerPage;
   const currentPosts = rowData?.slice(firstPostIndex, lastPostIndex);
+  
   return (
     <div className={ManageStyles.container}>
-        
+
         <div className={ManageStyles.apptDashboard}>
-            <div className={ManageStyles.filterContainer}>
-              <h2 style={{color:'#454545'}}>ALL APPOINTMENTS</h2>
-              <Filters
-                columnFilters={columnFilters}
-                setColumnFilters={setColumnFilters}
-              ></Filters>
-            </div>
+            <h2 style={{color:'#454545'}}>ALL APPOINTMENTS</h2>
             <div className={ManageStyles.apptListContainer}>
-              {table.getHeaderGroups().map(headerGroup => <div key={headerGroup.id} className={ManageStyles.apptDataHeader}>
-                {headerGroup.headers.map(header => (
-                  <span className={ManageStyles.pxDataItem} key={header.id} style={{width:header.getSize()}}>{header.column.columnDef.header}
-                  <div 
-                  // onMouseDown={header.getResizeHandler()}
-                  // onTouchhhStart={
-                  //   header.getResizeHandler()
-                  // } 
-                   className={`${ManageStyles.resizer} ${header.column.getIsResizing() ? ManageStyles.isResizing : ''}`} ></div>
-                  </span>
-                  
-                )
-                  
-                )}
+                <div className={ManageStyles.apptDataHeader}>
+                    <span><p>Patient Name</p></span>
+                    <span>Date</span>
+                    <span>Time</span>
+                    <span>Therapist</span>
+                    <span>Payment</span>
+                    <span>Status</span>
+                    <span>Action</span>
                 </div>
-                )}
-                {table.getRowModel().rows.map(row => <div key={row.id} className={ManageStyles.apptDataRow}>
-                  {row.getVisibleCells().map(cell => 
-                    <span className={ManageStyles.pxDataItem}  style={{width:cell.column.getSize()}}>
-                      {cell.column.id === 'patient_name' ? (
-                        <>
-                        <div className={ManageStyles.pxPhotoContainer} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                           <div className={ManageStyles.generatedProfile}>{row.original?.patient_name.slice(0,1)}
-                        </div>
-                          
-                        </div>
-                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                        </>
-                      ) : ( cell.column.id === 'action'
-                        ?<Link to={`edit-appointment/${row.original?.appt_id}`}>                            
-                              <Button variant='contained' > 
-                                View
-                              </Button>
-                            </Link> 
-                        : flexRender(cell.column.columnDef.cell, cell.getContext())
-                        
-                      )}
 
-
-                    </span>
-                  )}
-                    </div>
-                  )
-                }
-                {/* {currentPosts?.map((data, index)=>(
+                {currentPosts?.map((data, index)=>(
                     <div key={data.appt_id} className={ManageStyles.apptDataRow}>
                         <span className={ManageStyles.pxDataItem}>
                         <div className={ManageStyles.pxPhotoContainer}>
@@ -218,33 +129,30 @@ const [columnFilters, setColumnFilters] = useState([]);
                                 <p className={ManageStyles.pxIdText}>Patient ID: {data.patient_id}</p>
                             </div>
                         </span>
-
                         <span>{data.appt_date}</span>
-
                         <span>{data.appt_start}</span>
-
                         <span className={ManageStyles.therapistContainer}>
                           <div className={ManageStyles.pxPhotoContainer}>
                             <img src={MockPxPhoto} className={ManageStyles.pxPhoto} alt="" />
                         </div>
                           <p>PT {data.therapist_name.slice(0,1).toUpperCase() + data.therapist_name.slice(1)}</p>
                         </span>
-
                         <span>{data?.mode_of_payment || 'N/A' }</span>
-
                         <span className={ManageStyles.apptStatusIndicator}>
-
+                          {/* Commented out code below places a circle indicator */}
                           <div className={ManageStyles.circleStatusIndicator} style={getApptStatusIndicator(data.appt_status)}></div>
                           {data.appt_status.toUpperCase()}
                         </span>
-
                         <span className={ManageStyles.actionBtnsContainer}>
-
+                            {/* <span className={ManageStyles.viewBtn}>
+                              <FaEye className={ManageStyles.icon}/>
+                            </span> */}
                             <Button disabled={ data.appt_status === 'completed' || data.appt_status === 'scheduled' || data.appt_status === 'approved' || data.appt_status === 'cancelled' } onClick={()=> apptStatusHandler(data.appt_id)}
                             variant='contained' > Approve
                             </Button>
 
-
+                            {/* // onClick={handleSaveProfile} 
+                            // disabled={loading}>{loading ? 'Saving...' : 'Save Profile'} */}
                             <Link to={`edit-appointment/${data.appt_id}`}>                            
                               <Button variant='contained' > 
                                 View
@@ -252,9 +160,8 @@ const [columnFilters, setColumnFilters] = useState([]);
                             </Link>
 
                         </span>
-
                     </div>
-                ))} */}
+                ))}
             </div>
         </div>
         <div className={ManageStyles.paginationContainer}>
@@ -269,4 +176,4 @@ const [columnFilters, setColumnFilters] = useState([]);
   )
 }
 
-export default ManageAppt
+export default TestTable

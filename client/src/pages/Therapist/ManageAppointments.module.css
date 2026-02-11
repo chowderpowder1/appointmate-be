@@ -3,8 +3,8 @@
     display:flex;
     flex-direction:column;
     gap:2rem;
-    width:fit-content;
-    max-width:100%;
+    width:100%;
+    max-width:90%;
     height:fit-content;
     align-items: center;
     justify-content: center;
@@ -63,7 +63,7 @@
     border: 1px solid var(--primary-contrast);
 }
 .slidesContainer{
-    width: fit-content;
+    width: 100%;
     background-color: white;
     border:1px solid var(--border-color);
     border-radius:15px;
@@ -81,7 +81,7 @@
     margin:0;
     display:none;
     opacity:0;
-    width: fit-content;
+    width: 100%;
 }
 .branchSlideActive{
     max-height:fit-content;

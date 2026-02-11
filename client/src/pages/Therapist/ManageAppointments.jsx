@@ -3,6 +3,7 @@ import ManageStyles from './ManageAppointments.module.css'
 import NotificationBelt from '../../components/Therapist/NotificationBelt.jsx'
 import ManageTab from '../../components/Therapist/ManageApptTab'
 import AddApptTab from '../../components/Therapist/AddApptTab'
+import ManageServicePlans from '../../components/Therapist/ManageServicePlans'
 
 
 const ManageAppointments = () => {
@@ -25,15 +26,15 @@ const ManageAppointments = () => {
               Manage Appointments
             </div>
 
-            {/* <div onClick={ ()=> toggleTab(1)} className={`${ManageStyles.tabItem} ${activeTab === 1 ? ManageStyles.tabActive:''}`}>
+            <div onClick={ ()=> toggleTab(1)} className={`${ManageStyles.tabItem} ${activeTab === 1 ? ManageStyles.tabActive:''}`}>
               Schedule Appointments
-            </div> */}
-{/*             
-            <div onClick={ ()=> toggleTab(2)} className={`${ManageStyles.tabItem} ${activeTab === 2 ? ManageStyles.tabActive:''}`}>
-              Reschedule Appointments
             </div>
             
-            <div onClick={ ()=> toggleTab(3)} className={`${ManageStyles.tabItem} ${activeTab === 3 ? ManageStyles.tabActive:''}`}>
+            <div onClick={ ()=> toggleTab(2)} className={`${ManageStyles.tabItem} ${activeTab === 2 ? ManageStyles.tabActive:''}`}>
+              Manage Service Plans
+            </div>
+            
+            {/* <div onClick={ ()=> toggleTab(3)} className={`${ManageStyles.tabItem} ${activeTab === 3 ? ManageStyles.tabActive:''}`}>
               Cancel Appointments
             </div> */}
         </div>
@@ -49,6 +50,7 @@ const ManageAppointments = () => {
           </div>
 
           <div className={`${ManageStyles.branchSlide} ${ activeTab === 2 ? `${ManageStyles.branchSlideActive}` : ''}`}>
+            <ManageServicePlans/>
           </div>
 
           <div className={`${ManageStyles.branchSlide} ${ activeTab === 3 ? `${ManageStyles.branchSlideActive}` : ''}`}>

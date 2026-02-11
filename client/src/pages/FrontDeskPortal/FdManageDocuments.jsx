@@ -83,7 +83,6 @@ const FdManageDocuments = () => {
                       </div>
                       <div style={{alignItems:'center', display:'flex'}}>
                         <p>{data.patientName}</p>
-                        <p>{data.patientId}</p>
                       </div>
                     </div>
                   </td>

@@ -2,7 +2,7 @@ import e from 'express';
 import dbConnection from '../db.js';
 import dayjs from 'dayjs';
 import { v2 as cloudinary} from 'cloudinary';
-
+import {searchService} from '../../server/utils/getService.js'
 import utc from 'dayjs/plugin/utc.js';
 import timezone from 'dayjs/plugin/timezone.js'
 
@@ -696,15 +696,15 @@ async function getAllUpcomingAppts(req, res) {
             const isAuthorized = await dbConnection.query(`SELECT user_role from awp_users_tbl WHERE user_id=$1`, [req.session.user.id])
            if( isAuthorized.rows[0].user_role < 5){
 
-            const result = await dbConnection.query(`SELECT appt_id, patient_id, appt_status, appt_date, appt_start, appt_end FROM awp_appt_tbl WHERE appt_status=$1 AND appt_start > NOW() ORDER BY appt_start DESC`,['scheduled'])
-
+            const result = await dbConnection.query(`SELECT appt_id, patient_id, appt_status, appt_date, appt_start, appt_end FROM awp_appt_tbl WHERE appt_status!=$1 AND appt_date>NOW() ORDER BY created_at DESC`,['cancelled'])
+            console.log('PUTANGINAN NG LAHAT', result.rows[0])
             const scheduledAppts = await Promise.all(result.rows.map(async (p) => {
 
                 const patientUserIdQuery = await dbConnection.query(`SELECT user_id from awp_patient_tbl WHERE patient_id=$1`,[p.patient_id]);
                 const patientUserId = patientUserIdQuery.rows[0].user_id;
                 const patientName = await dbConnection.query(`SELECT user_fname, user_lname FROM awp_users_tbl WHERE user_id=$1`,[patientUserId]);
                 const patientAvatar = await dbConnection.query(`SELECT image_url FROM user_avatars WHERE user_id=$1`,[patientUserId]);            
-                
+                // console.log(patientName.rows[0])
                 return{
                     patientName: `${patientName.rows[0].user_fname} ${patientName.rows[0].user_lname}`,
                     patientAvatar:patientAvatar?.rows[0]?.image_url || '',
@@ -1002,10 +1002,13 @@ async function getApptServicePlan (req,res){
         console.log('upload service plan appt id:', appointmentId)
         const sessionQuery = await dbConnection.query(`SELECT * from awp_apptsession_tbl WHERE appt_id=$1`,[appointmentId])
         if(sessionQuery.rowCount === 0){
-            return res.json({success:true, message:'This appointment is not assigned to a service plan.'})
+            return res.json({success:false, message:'This appointment is not assigned to a service plan.'})
         }
         const sessionResult = sessionQuery.rows[0].session_id
-        return res.json({success: true, sessionId: sessionResult})
+        const sessionService = sessionQuery.rows[0].service_id
+        const service = await searchService(sessionService)
+        console.log('This is the service', service)
+        return res.json({success: true, sessionId: sessionResult, serviceName:service})
     }catch(err){
         if(err.code == 23505)
         {

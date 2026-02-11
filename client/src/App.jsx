@@ -40,9 +40,9 @@ import RBAC from './pages/AdminPortal/RbacPage'
 import InvalidToken from './pages/InvalidToken'
 
 import NotFound from './pages/NotFound'
+import ProtectedRoutes from './utils/ProtectedRoutes'
 
-
-
+import AuthLayout from './layouts/AuthLayout'
 import {
   useQuery,
   useMutation,
@@ -67,29 +67,36 @@ function App() {
       <Route path='/reset-password/' element={<PasswordResetPage/>}/>
     </Route>
 
+  <Route element={<AuthLayout requiredRole={5}/>}>
     <Route path='/patient' element={<PatientDashboardLayout/>}>
-      <Route path='dashboard' element={<PatientDashboard/>}/>
-      <Route path='profile' element={<PatientProfile/>}/>
-      <Route path='profile/update-my-info' element={<UpdatePatientInfo/>}/>
-      <Route path='treatment-progress' element={<PatientTreatmentProgress/>}/>
-      <Route path='treatment-progress/appointment-details/:id' element={<PatientAppointmentDetails/>}/>
-      <Route path='patient-record' element={<PatientRecord/>}/>
-      <Route path='documents' element={<MyDocuments/>}/>
-      <Route path='reports' element={<Reports/>}/>
-      <Route path='test' element={<OnboardingPage/>}/>
+        <Route path='dashboard' element={<PatientDashboard/>}/>
+      
+        <Route path='profile' element={<PatientProfile/>}/>
+        <Route path='profile/update-my-info' element={<UpdatePatientInfo/>}/>
+        <Route path='treatment-progress' element={<PatientTreatmentProgress/>}/>
+        <Route path='treatment-progress/appointment-details/:id' element={<PatientAppointmentDetails/>}/>
+        <Route path='patient-record' element={<PatientRecord/>}/>
+        <Route path='documents' element={<MyDocuments/>}/>
+        <Route path='reports' element={<Reports/>}/>
+        <Route path='test' element={<OnboardingPage/>}/>
     </Route>
-
+  </Route>
+  
+<Route element={<AuthLayout requiredRole={3}/>}>
     <Route path='/therapist' element={<TherapistLayout/>}>
-      <Route path='dashboard' element={<TherapistDashboard/>}/>
-      <Route path='manage-appointments' element={<ManageAppointments/>}/>
-      <Route path='manage-appointments/edit-appointment/:id' element={<EditAppointments/>}/>
-      <Route path='patient-records' element={<PatientRecordsOverview/>}/>
-      <Route path='patient-records/add-patient-record' element={<AddPatientRecord/>}/>
-      <Route path='patient-records/initial-eval/:id' element={<EditPatientRecord/>}/>
-      <Route path='patient-records/view-patient-record/:id' element={<ViewPatientRecord/>}/>
-      <Route path='my-documents' element={<TherapistDocuments/>}/>
+      
+        <Route path='dashboard' element={<TherapistDashboard/>}/>
+        <Route path='manage-appointments' element={<ManageAppointments/>}/>
+        <Route path='manage-appointments/edit-appointment/:id' element={<EditAppointments/>}/>
+        <Route path='patient-records' element={<PatientRecordsOverview/>}/>
+        <Route path='patient-records/add-patient-record' element={<AddPatientRecord/>}/>
+        <Route path='patient-records/initial-eval/:id' element={<EditPatientRecord/>}/>
+        <Route path='patient-records/view-patient-record/:id' element={<ViewPatientRecord/>}/>
+        <Route path='my-documents' element={<TherapistDocuments/>}/>
+      </Route>
     </Route>
 
+  <Route element={<AuthLayout requiredRole={4}/>}>
     <Route path='/front-desk' element={<FrontDeskLayout/>}>
       <Route path='dashboard' element={<FdDashboard/>}/>
       <Route path='manage-appointments' element={<FdManageAppt/>}/>
@@ -100,10 +107,13 @@ function App() {
       <Route path='manage-documents' element={<FdManageDocuments/>}/>
       <Route path='manage-documents/view-patient-document/:id' element={<FdManageDocuments/>}/>
     </Route>
+  </Route>
 
+<Route element={<AuthLayout requiredRole={1}/>}>
     <Route path='/admin' element={<AdminLayout/>}>
       <Route path='manage-roles' element={<RBAC/>}/>
     </Route>
+</Route>
 
     <Route path='/login' element={<WelcomePage/>}/>
 

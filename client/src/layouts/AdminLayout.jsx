@@ -6,6 +6,7 @@ import TherapistTopNav from '../components/Therapist/TherapistNavBar'
 const TherapistLayout = () => {
   return (
     <div style={{display:'flex', backgroundColor:'#F5F5F5'}}>
+      
         <AdminSideNav/>
         <div style={{width:'100%'}}>
             <TherapistTopNav/>

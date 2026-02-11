@@ -6,6 +6,7 @@ import Box from '@mui/material/Box';
 import { FaFacebook, FaInstagram } from "react-icons/fa";
 import AppointmentBg from '../../assets/appointmentBg.png'
 import { Link } from 'react-router';
+import FormHelperText from '@mui/material/FormHelperText';
 
 // Date Picker Dependencies
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
@@ -407,9 +408,15 @@ required
       <p>CASH</p>
     </ToggleButton>
 </ToggleButtonGroup>
-                </Box>
+                </Box >
 
-                 <FormControl sx={{flexDirection:'row', gap:'1rem'}} fullWidth>
+                <FormHelperText>
+                  {appointmentForm.mop === 'HMO' && !appointmentForm.hmo
+                    ? 'HMOs not listed here are not affiliated with the Clinic.'
+                    : ''}
+                </FormHelperText>
+
+                 <FormControl sx={{flexDirection:'column', gap:'1rem'}} fullWidth>
                 <InputLabel fullWidth id="demo-simple-select-label">HMO Provider</InputLabel>
                 <Select fullWidth
                 required={ appointmentForm.mop == 'HMO' ? true : false}
@@ -420,6 +427,7 @@ required
                   name='hmoProvider'
                   label="HMO Provider"
                   onChange={inputHandler}
+                  helperText='he'
                 >
                   {hmoProvider.map((e)=>(
                     <MenuItem 
@@ -427,6 +435,7 @@ required
                     value={e.Hmo}>{(e.Hmo).toUpperCase()}</MenuItem>
                   ))}
                 </Select>
+
               </FormControl>
             <Button type="submit" sx={{padding:'1rem'}} variant="contained">Book My Appointment</Button>
           </Box>

@@ -8,26 +8,27 @@ import PxAttachment from '../../components/Therapist/EditAppt/PatientAttachments
 import UpdateApptStatus from '../../components/Therapist/EditAppt/UpdateApptStatus'
 import UpdateServicePlan from '../../components/Therapist/EditAppt/UpdateServicePlan'
 import CreateServicePlan from '../../components/Therapist/EditAppt/CreateServicePlan.jsx'
+import OpenPatientSession from '../../components/Therapist/EditAppt/OpenPatientSession.jsx'
 import { IoIosArrowBack } from "react-icons/io";
 import { IoCalendarClear } from "react-icons/io5";
 import { IoIosArrowForward } from "react-icons/io";
 
 import { useParams } from "react-router";
-import { useGetApptDetailsOverview, useGetApptDocuments,  } from '../../queries/useEmployees'
+import { useGetApptDetailsOverview, useGetApptDocuments, useGetApptServicePlan } from '../../queries/useEmployees'
 import {useUsers} from '../../queries/users'
 
 const EditAppt = () => {
   const { id } = useParams();
   const { data: apptDetailsData, isLoading: apptDetailsDataIsLoading, error: apptDetailsDataError} = useGetApptDetailsOverview(id);
-  
+    const { data: apptServiceData, isLoading: apptServiceDataIsLoading, error: apptServiceDataError} = useGetApptServicePlan(apptDetailsData?.apptId);
+
   const { data: myData, isLoading: myDataIsLoading, error: myDataError} = useUsers();
   
   const { data: apptDocuments, isLoading: apptDocumentsDataIsLoading, error: apptDocumentsDataError} = useGetApptDocuments(apptDetailsData?.patientID);
 
-  if (apptDetailsDataIsLoading || apptDocumentsDataIsLoading) return <div>Loading...</div>;
-  if (apptDetailsDataError || apptDocumentsDataError) return <div>⚠ Error: {apptDetailsDataError.message}</div>;
+  if (apptDetailsDataIsLoading || apptDocumentsDataIsLoading || apptServiceDataIsLoading) return <div>Loading...</div>;
+  if (apptDetailsDataError || apptDocumentsDataError || apptServiceDataError) return <div>⚠ Error: {apptDetailsDataError.message}</div>;
   
-
   return (
     <div className={EditStyles.mainContainer}>
       {/* <div className={EditStyles.directoryContainer}> <IoCalendarClear/> <p>Appointments</p> <IoIosArrowForward/> <p>Edit Appointments</p></div> */}
@@ -39,7 +40,7 @@ const EditAppt = () => {
             <h2>Edit appointment</h2>
           </Link>
           <div className={EditStyles.sessionIdContainer}>
-            <p><b>Session ID:</b> Approval Needed</p>
+            <p><b>Session ID:</b> {apptServiceData.sessionId}</p>
           </div>
         </div>
         <AssignedPt apptData={apptDetailsData} apptID={id}/>
@@ -53,9 +54,11 @@ const EditAppt = () => {
         {/* <button className={EditStyles.applyBtn}> Apply Changes</button> */}
       </div>
       <div className={EditStyles.rowTwo}>
+        <OpenPatientSession />
         <UpdateApptStatus apptData={apptDetailsData} userData={myData}/>
-        <UpdateServicePlan apptData={apptDetailsData} userData={myData}/>
+        <UpdateServicePlan apptData={apptDetailsData} userData={myData} serviceData={apptServiceData}/>
         <CreateServicePlan apptData={apptDetailsData} userData={myData}/>
+        
       </div>
 
     </div>

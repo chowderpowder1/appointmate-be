@@ -1,0 +1,41 @@
+.container{
+    width:50%;
+    height:fit-content;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius:25px;
+    margin:auto auto;
+    padding:1rem;
+    display:flex;
+    flex-flow:column;
+    align-items: center;
+    background-color: #f4f9ff;
+    box-shadow: rgba(100, 100, 111, 0.1) 0px 7px 29px 0px;
+    margin:2rem;
+}
+.vectorContainer{
+    width:400px;
+    height:400px;
+    margin-bottom:3rem;
+}
+.vector{
+    width:100%;
+    height:auto;
+}
+.header{
+    color:#1976D5;
+    font-size:5rem;
+}
+.body{
+    font-size:1.5rem;
+    color:#1976D5;
+}
+.button{
+    background-color:#1976D5;
+    color:White;
+    font-weight:500;
+    padding: .5rem 1rem;
+    border-radius:10px;
+}

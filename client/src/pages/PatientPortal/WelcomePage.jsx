@@ -242,6 +242,11 @@ z
         e.preventDefault();
         submitLoginMutation(loginForm, {
             onSuccess: (data) => {
+                console.log('failed')
+                if(!data.success){
+                    console.log('failed')
+                    toast.error(data.message)
+                }
                 console.log('success', data.requireOtp)
                 setIsVerified(data.requireOtp)
                 if(data.gmailAccount){

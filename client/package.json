@@ -11,6 +11,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@chakra-ui/react": "^3.32.0",
+    "@chakra-ui/styled-system": "^2.12.0",
+    "@chakra-ui/theme": "^3.4.6",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
     "@fontsource/roboto": "^5.2.6",
@@ -19,10 +22,12 @@
     "@mui/x-date-pickers": "^8.26.0",
     "@react-oauth/google": "^0.12.2",
     "@tanstack/react-query": "^5.85.5",
+    "@tanstack/react-table": "^8.21.3",
     "@yusifaliyevpro/countries": "^2.2.2",
     "axios": "^1.11.0",
     "clsx": "^2.1.1",
     "dayjs": "^1.11.19",
+    "framer-motion": "^12.34.0",
     "react": "^19.1.0",
     "react-circular-progressbar": "^2.2.0",
     "react-dom": "^19.1.0",

@@ -67,8 +67,10 @@ async function login(req, res){
         }
         const isSame = await bcrypt.compare(password, dbUser.password_hash);
         if (!isSame) {
-            return res.status(401).send("Incorrect Password");
+            console.log('incorrect password')
+            return res.json({success:false, message:"Incorrect Password"});
         }
+        console.log('Password Correct')
         req.session.user = {
           id: user.rows[0].user_id,
         //   pxId: patientId,
@@ -91,7 +93,7 @@ async function login(req, res){
             console.log('redirecting to Patient Landing Page')
             return res.status(200).json({redirectTo: 'http://localhost:5173/patient/dashboard'})
         }
-        return res.send("User Logged in");
+        return res.json({success:true, message: "User Logged in"});
 
     } catch(err){
         console.log(err);
@@ -143,7 +145,6 @@ async function session (req, res) {
     // Role Fetch - not sure if this logic is necessary yet, was planning to use this on comparative operators
     // const userRoles = await dbConnection.query(`SELECT * from awp_urole_tbl`)
     // const userRolesRow = userRoles.rows[0]
-    (console.log('session endpoint'))
     try{
 
     if (req.session.user || req.user) {
@@ -158,6 +159,7 @@ async function session (req, res) {
                 firstName: employeeUserData.rows[0].user_fname,
                 userRole: 'Front-Desk',
                 userRoleId:4,
+                role:4,
                 userId: currentUserID
             })
         }
@@ -167,6 +169,7 @@ async function session (req, res) {
                 firstName: employeeUserData.rows[0].user_fname,
                 userRole: 'Therapist',
                 userRoleId:3,
+                role:3,
                 userId: currentUserID
             })
         }
@@ -174,12 +177,11 @@ async function session (req, res) {
         // Patient
         
         const id = req.session?.user?.id || req.user?.id || null;
-        console.log(id)
         const userData = await dbConnection.query('SELECT * FROM awp_users_tbl WHERE user_id = $1', [id]);
         
         const userId= userData.rows[0].user_id
 
-        const isComplete = await dbConnection.query(`SELECT a.user_logemail AS email, a.user_id AS id, b.patient_id AS pxId, a.user_fname AS firstName, a.user_mname AS middleName, a.user_lname AS lastName, c.contact_value AS contact_number, a.is_profile_complete FROM awp_users_tbl AS a LEFT JOIN awp_patient_tbl AS b ON a.user_id = b.user_id LEFT JOIN awp_ucontacts_tbl AS c ON a.user_id = c.user_id WHERE a.user_id=$1;`, [userId])
+        const isComplete = await dbConnection.query(`SELECT a.user_role, a.user_logemail AS email, a.user_id AS id, b.patient_id AS pxId, a.user_fname AS firstName, a.user_mname AS middleName, a.user_lname AS lastName, c.contact_value AS contact_number, a.is_profile_complete FROM awp_users_tbl AS a LEFT JOIN awp_patient_tbl AS b ON a.user_id = b.user_id LEFT JOIN awp_ucontacts_tbl AS c ON a.user_id = c.user_id WHERE a.user_id=$1;`, [userId])
         const rows = isComplete.rows[0]
         if (!rows) {
             console.log('User Record Incomplete')
@@ -194,6 +196,7 @@ async function session (req, res) {
     return res.json({
         loggedIn: true,
         email: rows.email,
+        role:rows.user_role,
         id: rows.id,
         pxId: rows.pxid,
         firstName: rows.firstname,

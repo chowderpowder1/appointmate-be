@@ -19,7 +19,7 @@ import { FaExternalLinkAlt } from "react-icons/fa";
 import { useUsers, usePatientData } from '../../queries/users.js'
 
 const PatientDashboard = () => {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(null);
   const {data : userData, isLoading: userDataIsLoading, error: userDataError} = useUsers();
   const {data : patientData, isLoading: patientDataIsLoading, error: patientDataError} = usePatientData();
 

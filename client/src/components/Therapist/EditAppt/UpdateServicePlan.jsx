@@ -7,11 +7,12 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import { FormHelperText } from '@mui/material';
 import {useGetServicesList, useGetTherapists, usePatchReschedule, useGetApptServicePlan} from '../../../queries/useEmployees'
 
 import Modal from '../../../components/Ui/Modal'
 
-const UpdateServicePlan = ({apptData, userData}) => {
+const UpdateServicePlan = ({apptData, userData, serviceData}) => {
 
   // Modal state control :DDDDDD meow meow meow
   const [isOpen, setIsOpen] = useState(false);
@@ -20,7 +21,6 @@ const UpdateServicePlan = ({apptData, userData}) => {
   const { data: therapistData, isLoading: therapistDataIsLoading, error: therapistDataError} = useGetTherapists();
   const { data: servicesData, isLoading: servicesDataIsLoading, error: servicesDataError} = useGetServicesList();
   const { data: apptServiceData, isLoading: apptServiceDataIsLoading, error: apptServiceDataError} = useGetApptServicePlan(apptData?.apptId);
-
   const [apptStatus, setapptStatus] = useState('');
   const [apptForm, setApptForm] = useState(
     {
@@ -64,13 +64,11 @@ const UpdateServicePlan = ({apptData, userData}) => {
   
   if (therapistDataIsLoading || apptServiceDataIsLoading ) return <div>Loading...</div>;
   if (therapistDataError || apptServiceDataError) return <div>Error: {therapistDataError.message}</div>;
-  console.log(apptServiceData)
-  console.log(Array.isArray(apptServiceData))
+
   
   return (
     <div className={UpdateStyles.container}>
         <p className={UpdateStyles.headerText} style={{color:''}}>Patient Service Plan</p>
-        {!Array.isArray(apptServiceData) ? <p>Patient has no ongoing service plan</p>: ''}
 
         <Box component="form" onSubmit={handleSubmit} sx={{ minWidth: 120 }}>
          <FormControl sx={{ display: 'flex', gap: '1rem' }} fullWidth>
@@ -80,14 +78,15 @@ const UpdateServicePlan = ({apptData, userData}) => {
     labelId="appt-status-label"
     id="appt-status-select"
     name='apptStatus'
-    // value='Session ID: 85684'
+    value={apptForm.apptStatus}
     // error='true'
     // {apptForm.apptStatus}
-    disabled={!Array.isArray(apptServiceData)}
+    disabled={serviceData.sessionId}
     label="Is this the 1st Appointment?"
     onChange={inputHandler} 
+    error={serviceData.sessionId ? true : false}
   >
-    {Array.isArray(apptServiceData) ?( apptServiceData.map((p)=> (
+    {Array.isArray(serviceData) ?( serviceData.map((p)=> (
       <MenuItem key={p.sessionId} value={p.sessionId}>{p.sessionId}</MenuItem>
     ))):
       <MenuItem disabled></MenuItem>
@@ -98,7 +97,7 @@ const UpdateServicePlan = ({apptData, userData}) => {
     <MenuItem value={'cancelled'}>Cancelled</MenuItem>
     <MenuItem value={'reschedule'}>Request for Reschedule</MenuItem> */}
   </Select>
-
+{serviceData.sessionId && <FormHelperText>Appointment already assigned</FormHelperText>}
 </FormControl>
 {/* Change Therapist */}
 
@@ -107,7 +106,7 @@ const UpdateServicePlan = ({apptData, userData}) => {
           
 
             <Button type='submit' sx={{ borderRadius:'10px', boxShadow:'none'}}variant="contained"
-            disabled={!Array.isArray(apptServiceData)}
+            disabled={!Array.isArray(serviceData)}
             >Submit Changes</Button>
           </FormControl>
         </Box>
