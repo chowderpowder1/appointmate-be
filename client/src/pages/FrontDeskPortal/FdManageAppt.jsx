@@ -28,9 +28,9 @@ const FdManageAppt = () => {
               Manage Appointments
             </div>
 
-            <div onClick={ ()=> toggleTab(3)} className={`${ManageStyles.tabItem} ${activeTab === 3 ? ManageStyles.tabActive:''}`}>
+            {/* <div onClick={ ()=> toggleTab(3)} className={`${ManageStyles.tabItem} ${activeTab === 3 ? ManageStyles.tabActive:''}`}>
               Manage Service Plans
-            </div>
+            </div> */}
 
             <div onClick={ ()=> toggleTab(1)} className={`${ManageStyles.tabItem} ${activeTab === 1 ? ManageStyles.tabActive:''}`}>
               Schedule Appointments

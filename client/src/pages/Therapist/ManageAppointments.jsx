@@ -30,9 +30,9 @@ const ManageAppointments = () => {
               Schedule Appointments
             </div>
             
-            <div onClick={ ()=> toggleTab(2)} className={`${ManageStyles.tabItem} ${activeTab === 2 ? ManageStyles.tabActive:''}`}>
+            {/* <div onClick={ ()=> toggleTab(2)} className={`${ManageStyles.tabItem} ${activeTab === 2 ? ManageStyles.tabActive:''}`}>
               Manage Service Plans
-            </div>
+            </div> */}
             
             {/* <div onClick={ ()=> toggleTab(3)} className={`${ManageStyles.tabItem} ${activeTab === 3 ? ManageStyles.tabActive:''}`}>
               Cancel Appointments
@@ -49,9 +49,9 @@ const ManageAppointments = () => {
             <AddApptTab/>
           </div>
 
-          <div className={`${ManageStyles.branchSlide} ${ activeTab === 2 ? `${ManageStyles.branchSlideActive}` : ''}`}>
+          {/* <div className={`${ManageStyles.branchSlide} ${ activeTab === 2 ? `${ManageStyles.branchSlideActive}` : ''}`}>
             <ManageServicePlans/>
-          </div>
+          </div> */}
 
           <div className={`${ManageStyles.branchSlide} ${ activeTab === 3 ? `${ManageStyles.branchSlideActive}` : ''}`}>
           </div>
